@@ -4,9 +4,20 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 
+DEBUG_CFLAGS="-O2 -DNDEBUG"
+dnl This mechanism allows one to enable debug compilations...
+AC_ARG_ENABLE(debug,
+[  --enable-debug     enable debugging and disable optimization],
+[  if test "$enable_debug" = "yes"; then
+      DEBUG_CFLAGS="-g3 -DDEBUG"
+   fi
+]
+)
+AM_CONDITIONAL(ENABLE_DEBUG, test "$enable_debug" = "yes")
+CXXFLAGS="$DEBUG_CFLAGS $CXXFLAGS"
+
 # Checks for programs.
 AC_LANG_CPLUSPLUS
-
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -21,6 +32,8 @@ AC_CHECK_HEADERS([string cstdlib fstream],,AC_MSG_ERROR(required file is missing
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
 AC_C_CONST
+#AC_CHECK_HEADERS([wchar.h])
+AC_CHECK_TYPE([wchar_t],,[ AC_MSG_ERROR([Type wchar_t not found.]) ])
 
 # Checks for library functions.
 

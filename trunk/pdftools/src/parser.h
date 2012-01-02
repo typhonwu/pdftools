@@ -10,6 +10,7 @@ private:
     Scanner *m_scanner;
     Token *token;
     bool m_valid;
+    const char *version;
 
 public:
     Parser();
@@ -21,7 +22,7 @@ public:
 
 private:
     void next_token();
-    void verify_version();
+    bool verify_version();
     long find_xref();
     bool match(TokenType type);
 };

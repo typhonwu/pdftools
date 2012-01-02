@@ -1,14 +1,19 @@
 #include "scanner.h"
 #include <fstream>
-
-using namespace std;
+#include <locale>
 
 #if HAVE_CONFIG_H
 #include <config.h>
 #endif
 
+#ifdef DEBUG
+#include <iostream>
+#endif
+
+using namespace std;
+
 enum StateType {
-    START, INNUM, INNAME, INBOOL, INSTRING, INHEXSTR, DONE
+    START, INNUM, INNAME, INSTRING, INHEXSTR, DONE
 };
 
 Scanner::Scanner() : m_error(NULL)
@@ -42,10 +47,11 @@ bool Scanner::open_file(const char *path)
 wchar_t Scanner::next_char()
 {
     static bool new_char = false;
-
     wchar_t ret = NULL;
-    if (!m_filein.good()) {
-        ret = m_filein.get();
+    locale loc;
+    
+    if (m_filein.good()) {
+        ret = use_facet< ctype<wchar_t> >(loc).widen((char)m_filein.get());
         if (new_char) {
             if (ret == L'\n' || ret == L'\r') {
                 new_char = false;
@@ -72,6 +78,11 @@ void Scanner::unget_char()
     m_filein.unget();
 }
 
+bool Scanner::is_space(const wchar_t c)
+{
+    return (c == L' ') || (c == L'\r') || (c == L'\n') || (c == L'\t') || (c == L'\f');
+}
+
 Token *Scanner::next_token()
 {
     string token_string;
@@ -82,6 +93,9 @@ Token *Scanner::next_token()
     bool save;
     while (state != DONE) {
         wchar_t c = next_char();
+        if (!c) {
+            return NULL;
+        }
         save = true;
         switch (state) {
         case START:
@@ -91,8 +105,8 @@ Token *Scanner::next_token()
                 current_token = PERCENT;
                 state = DONE;
             } else if (c == L'/') {
-                save = false;
-                state = INNAME;
+                save = true;
+                state = DONE;
             } else if (c == L'(') {
                 save = false;
                 state = INSTRING;
@@ -105,11 +119,11 @@ Token *Scanner::next_token()
                 } else {
                     // TODO Array
                 }
-            } else if ((c == L' ') || (c == L'\r') || (c == L'\n') || (c == L'\t') || (c == L'\f')) {
+            } else if (is_space(c)) {
                 save = false;
-            } else if ((c == L't') || (c == L'f')) {
-                save = false;
-                state = INBOOL;
+            } else if (iswalpha(c)) {
+                save = true;
+                state = INNAME;
             } else {
                 state = DONE;
                 save = false;
@@ -130,6 +144,13 @@ Token *Scanner::next_token()
                 save = false;
                 state = DONE;
                 current_token = STRING;
+            }
+            break;
+        case INNAME:
+            if (is_space(c)) {
+                save = false;
+                state = DONE;
+                current_token = NAME;
             }
             break;
         case DONE:

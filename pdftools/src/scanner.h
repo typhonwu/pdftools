@@ -23,6 +23,7 @@ public:
 private:
     void close_file();
     void unget_char();
+    bool is_space(const wchar_t c);
     wchar_t next_char();
 };
 

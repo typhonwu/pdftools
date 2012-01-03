@@ -1,6 +1,8 @@
 #include "scanner.h"
 #include <fstream>
 #include <locale>
+#include <sstream>
+#include <cstring>
 
 #if HAVE_CONFIG_H
 #include <config.h>
@@ -40,7 +42,7 @@ bool Scanner::is_open()
 bool Scanner::open_file(const char *path)
 {
     close_file();
-    m_filein.open(path, ios::binary);
+    m_filein.open(path);
     return is_open();
 }
 
@@ -49,9 +51,9 @@ wchar_t Scanner::next_char()
     static bool new_char = false;
     wchar_t ret = NULL;
     locale loc;
-    
+
     if (m_filein.good()) {
-        ret = use_facet< ctype<wchar_t> >(loc).widen((char)m_filein.get());
+        ret = use_facet < ctype<wchar_t> >(loc).widen((char) m_filein.get());
         if (new_char) {
             if (ret == L'\n' || ret == L'\r') {
                 new_char = false;
@@ -66,6 +68,16 @@ wchar_t Scanner::next_char()
         }
     }
     return ret;
+}
+
+bool Scanner::good()
+{
+    return m_filein.good();
+}
+
+void Scanner::ignore_line()
+{
+    get_line();
 }
 
 const wchar_t *Scanner::error()
@@ -85,7 +97,7 @@ bool Scanner::is_space(const wchar_t c)
 
 Token *Scanner::next_token()
 {
-    string token_string;
+    wstring token_string;
     TokenType current_token;
     StateType state = START;
     m_error = NULL;
@@ -147,7 +159,7 @@ Token *Scanner::next_token()
             }
             break;
         case INNAME:
-            if (is_space(c)) {
+            if (is_space(c) || c == L'<' || c == L'\\') {
                 save = false;
                 state = DONE;
                 current_token = NAME;
@@ -163,8 +175,47 @@ Token *Scanner::next_token()
             break;
         }
         if (save) {
-            token_string += (char) c;
+            token_string += c;
         }
     }
     return new Token(current_token, token_string.c_str());
+}
+
+const wchar_t *Scanner::get_line()
+{
+    wstring _buffer;
+    register bool starting = true;
+
+    while (m_filein.good()) {
+        wchar_t c = next_char();
+        if ((c == '\n' || c == '\r')) {
+            if (starting) {
+                continue;
+            } else {
+                break;
+            }
+        }
+        _buffer += c;
+        starting = false;
+    }
+    return _buffer.c_str();
+}
+
+void Scanner::find_last_xref()
+{
+    register long xref = 0;
+    const wchar_t *_line;
+
+    while (m_filein.good()) {
+        _line = get_line();
+
+        if (!wcscmp(_line, L"startxref")) {
+            _line = get_line();
+            wstringstream(_line) >> xref;
+#ifdef DEBUG
+            wcout << L"XRef: " << xref << L" in pos " << _line << endl;
+#endif
+        }
+    }
+
 }

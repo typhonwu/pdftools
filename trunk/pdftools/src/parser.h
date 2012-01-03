@@ -8,9 +8,9 @@ class Scanner;
 class Parser {
 private:
     Scanner *m_scanner;
-    Token *token;
+    Token *m_token;
     bool m_valid;
-    const char *version;
+    const wchar_t *m_version;
 
 public:
     Parser();

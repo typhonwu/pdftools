@@ -18,11 +18,16 @@ public:
     Token *next_token();
     bool open_file(const char *path);
     bool is_open();
+    bool good();
     const wchar_t *error();
-
+    
+    void ignore_line();
+    void find_last_xref();
+    
 private:
     void close_file();
     void unget_char();
+    const wchar_t *get_line();
     bool is_space(const wchar_t c);
     wchar_t next_char();
 };

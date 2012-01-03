@@ -5,37 +5,26 @@
 
 using namespace std;
 
-const char *_pdf_versions[] = {
-    "PDF-1.1",
-    "PDF-1.2",
-    "PDF-1.3",
-    "PDF-1.4",
-    "PDF-1.5",
-    "PDF-1.6",
-    "PDF-1.7"
+const wchar_t *_pdf_versions[] = {
+    L"PDF-1.1",
+    L"PDF-1.2",
+    L"PDF-1.3",
+    L"PDF-1.4",
+    L"PDF-1.5",
+    L"PDF-1.6",
+    L"PDF-1.7"
 };
 
-Parser::Parser() : token(NULL), m_valid(false)
+Parser::Parser() : m_token(NULL), m_valid(false)
 {
-    //string line;
-    //while (m_filein.good()) {
-    //	getline(m_filein, line);
-    //	cout << line << endl;
-    //}
-    //verify_version();
-    //long xref = find_xref();
-    //if (!xref) {
-    //	throw runtime_error("XRef not found.");
-    //}
-    //cout << "XRef: " << xref << endl;
     m_scanner = new Scanner();
 }
 
 Parser::~Parser()
 {
     delete m_scanner;
-    if (token) {
-        delete token;
+    if (m_token) {
+        delete m_token;
     }
 }
 
@@ -50,18 +39,18 @@ bool Parser::open_file(const char *path)
 
 void Parser::next_token()
 {
-    if (token) {
-        delete token;
+    if (m_token) {
+        delete m_token;
     }
-    token = m_scanner->next_token();
+    m_token = m_scanner->next_token();
 }
 
 bool Parser::match(TokenType type)
 {
-    if (token && token->type() == type) {
+    if (m_token && m_token->type() == type) {
         next_token();
     } else {
-        cerr << "unexpected token: " << token->value() << endl;
+        wcerr << L"unexpected token: " << m_token->value() << endl;
         return false;
     }
     return true;
@@ -71,13 +60,23 @@ void Parser::parse()
 {
     match(PERCENT);
     if (verify_version()) {
-        cout << "File version: " << version << endl;
-        next_token();
-        
-        find_xref();
-        // TODO parse the file
+        wcout << L"File version: " << m_version << endl;
+         
+        while(m_scanner->good()) {
+            next_token();
+            if (m_token == NULL) {
+                break;
+            }
+            switch(m_token->type()) {
+            case PERCENT:
+                m_scanner->ignore_line();
+                break;
+            default:
+                wcout << L"Token: " << m_token->value() << endl;                
+            }
+        }
     } else {
-        cerr << "File not supported." << endl;
+        wcerr << L"File not supported." << endl;
     }
 }
 
@@ -89,10 +88,10 @@ bool Parser::is_valid()
 bool Parser::verify_version()
 {
     int loop;
-    string line = token->value();
+    wstring line = m_token->value();
     for (loop = 0; loop < 7; loop++) {
         if (line == _pdf_versions[loop]) {
-            version = _pdf_versions[loop];
+            m_version = _pdf_versions[loop];
             return true;
         }
     }
@@ -101,16 +100,7 @@ bool Parser::verify_version()
 
 long Parser::find_xref()
 {
-    /*string line;
-    long xref = 0;
-    while (m_filein.good()) {
-        getline(m_filein, line);
-        if (line == "startxref") {
-            getline(m_filein, line);
-            stringstream(line) >> xref;
-        }
-        //cout << line << endl;
-    }
-    return xref;*/
+    m_scanner->find_last_xref();
+    
     return 0;
 }

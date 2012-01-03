@@ -3,13 +3,13 @@
 
 using namespace std;
 
-Token::Token(TokenType type, string value)
+Token::Token(TokenType type, wstring value)
 {
     m_type = type;
     m_value = value;
 }
 
-string Token::value()
+wstring Token::value()
 {
     return m_value;
 }

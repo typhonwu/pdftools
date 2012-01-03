@@ -16,12 +16,12 @@ struct ReservedWords {
 class Token {
 private:
     TokenType m_type;
-    std::string m_value;
+    std::wstring m_value;
 
 public:
-    Token(TokenType type, std::string value);
+    Token(TokenType type, std::wstring value);
 
-    std::string value();
+    std::wstring value();
     TokenType type();
 };
 

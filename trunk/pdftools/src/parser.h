@@ -25,6 +25,8 @@ private:
     bool verify_version();
     long find_xref();
     bool match(TokenType type);
+    
+    void object_sequence();
 };
 
 #endif

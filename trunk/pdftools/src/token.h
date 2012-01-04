@@ -5,7 +5,7 @@
 
 enum TokenType {
     ENDFILE, ERROR,
-    NAME, NUM, STRING, PERCENT
+    NAME, NUM, STRING, PERCENT, START_ARRAY, END_ARRAY
 };
 
 struct ReservedWords {

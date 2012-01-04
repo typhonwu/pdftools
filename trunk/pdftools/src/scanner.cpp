@@ -20,6 +20,7 @@ enum StateType {
 
 Scanner::Scanner() : m_error(NULL)
 {
+    //m_reserved[L"IF"] = IF;
 }
 
 Scanner::~Scanner()
@@ -95,6 +96,17 @@ bool Scanner::is_space(const wchar_t c)
     return (c == L' ') || (c == L'\r') || (c == L'\n') || (c == L'\t') || (c == L'\f');
 }
 
+TokenType Scanner::reserved_lookup(const wchar_t *s)
+{
+    map<const wchar_t *, TokenType>::iterator i;
+    for (i = m_reserved.begin(); i != m_reserved.end(); i++) {
+        if (!wcscmp(s, (*i).first)) {
+            return (*i).second;
+        }
+    }
+    return NAME;
+}
+
 Token *Scanner::next_token()
 {
     wstring token_string;
@@ -116,9 +128,6 @@ Token *Scanner::next_token()
             } else if (c == L'%') {
                 current_token = PERCENT;
                 state = DONE;
-            } else if (c == L'/') {
-                save = true;
-                state = DONE;
             } else if (c == L'(') {
                 save = false;
                 state = INSTRING;
@@ -129,14 +138,16 @@ Token *Scanner::next_token()
                     save = false;
                     state = INHEXSTR;
                 } else {
-                    // TODO Array
+                    token_string += L'<';
+                    state = DONE;
+                    current_token = START_ARRAY;
                 }
             } else if (is_space(c)) {
                 save = false;
-            } else if (iswalpha(c)) {
-                save = true;
+            } else if (iswalpha(c) || c == L'/') {
                 state = INNAME;
             } else {
+                wcerr << L"Error " << c << endl;
                 state = DONE;
                 save = false;
                 current_token = ERROR;
@@ -161,6 +172,7 @@ Token *Scanner::next_token()
         case INNAME:
             if (is_space(c) || c == L'<' || c == L'\\') {
                 save = false;
+                unget_char();
                 state = DONE;
                 current_token = NAME;
             }
@@ -178,6 +190,7 @@ Token *Scanner::next_token()
             token_string += c;
         }
     }
+    wcout << "Token: " << token_string << endl;
     return new Token(current_token, token_string.c_str());
 }
 

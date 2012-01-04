@@ -8,7 +8,7 @@
 class Scanner {
 private:
     std::ifstream m_filein;
-    std::map<const wchar_t *, TokenType> reservedWords;
+    std::map<const wchar_t *, TokenType> m_reserved;
     const wchar_t *m_error;
     
 public:
@@ -30,6 +30,7 @@ private:
     const wchar_t *get_line();
     bool is_space(const wchar_t c);
     wchar_t next_char();
+    TokenType reserved_lookup(const wchar_t *s);
 };
 
 #endif

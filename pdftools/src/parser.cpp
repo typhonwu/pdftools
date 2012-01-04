@@ -58,26 +58,43 @@ bool Parser::match(TokenType type)
 
 void Parser::parse()
 {
+    bool error = false;
     match(PERCENT);
     if (verify_version()) {
         wcout << L"File version: " << m_version << endl;
-         
-        while(m_scanner->good()) {
+
+        while (m_scanner->good() && !error) {
             next_token();
             if (m_token == NULL) {
                 break;
             }
-            switch(m_token->type()) {
+            switch (m_token->type()) {
             case PERCENT:
                 m_scanner->ignore_line();
                 break;
+            case NUM:
+                object_sequence();
+                break;
             default:
-                wcout << L"Token: " << m_token->value() << endl;                
+                //wcout << L"Token: " << m_token->value() << endl;
+                error = true;
             }
         }
     } else {
         wcerr << L"File not supported." << endl;
     }
+}
+
+void Parser::object_sequence()
+{
+    wstring first = m_token->value();
+    match(NUM);
+    wstring sec = m_token->value();
+    match(NUM);
+    if (m_token->value() != L"obj") {
+        wcerr << L"Not obj." << endl;
+    }
+    match(NAME);
 }
 
 bool Parser::is_valid()
@@ -101,6 +118,6 @@ bool Parser::verify_version()
 long Parser::find_xref()
 {
     m_scanner->find_last_xref();
-    
+
     return 0;
 }

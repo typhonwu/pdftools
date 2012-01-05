@@ -1,5 +1,9 @@
 pdftools (0.1) unstable; urgency=low
 
+  [ Fernando Ribeiro ]
   * Initial release
 
- -- Fernando Ribeiro <fernando.ribeiro@gmail.com>  Thu, 05 Jan 2012 10:58:53 -0200
+  [ Leonardo Alves da Costa ]
+  * Change configure.in options 
+
+ -- Leonardo Alves da Costa <leonhad@gmail.com>  Thu, 05 Jan 2012 15:50:02 -0200

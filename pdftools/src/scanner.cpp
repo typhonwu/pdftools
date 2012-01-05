@@ -147,7 +147,9 @@ Token *Scanner::next_token()
             } else if (iswalpha(c) || c == L'/') {
                 state = INNAME;
             } else {
+#ifdef DEBUG
                 wcerr << L"Error " << c << endl;
+#endif
                 state = DONE;
                 save = false;
                 current_token = ERROR;
@@ -190,7 +192,9 @@ Token *Scanner::next_token()
             token_string += c;
         }
     }
+#ifdef DEBUG
     wcout << "Token: " << token_string << endl;
+#endif
     return new Token(current_token, token_string.c_str());
 }
 

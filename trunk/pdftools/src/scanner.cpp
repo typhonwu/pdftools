@@ -192,9 +192,6 @@ Token *Scanner::next_token()
             token_string += c;
         }
     }
-#ifdef DEBUG
-    wcout << "Token: " << token_string << endl;
-#endif
     return new Token(current_token, token_string.c_str());
 }
 

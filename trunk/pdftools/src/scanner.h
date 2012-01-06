@@ -22,7 +22,6 @@ public:
     const wchar_t *error();
     
     void ignore_line();
-    void find_last_xref();
     
 private:
     void close_file();

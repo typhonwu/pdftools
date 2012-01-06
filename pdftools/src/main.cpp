@@ -4,6 +4,7 @@
 #include <config.h>
 #endif
 
+#include "utils.h"
 #include "parser.h"
 #include <iostream>
 #include <string>
@@ -16,22 +17,10 @@ using namespace std;
 
 static int verbose_flag = 0;
 
-static wchar_t *program_name = NULL;
-
-void set_program_name(char *name)
-{
-    program_name = new wchar_t[strlen(name) + 1];
-    mbstowcs(program_name, name, strlen(name));
-}
-
-void error_message(const wchar_t *msg)
-{
-    wcerr << program_name << L": " << msg << endl;
-}
-
 int main(int argc, char *argv[])
 {
     int c;
+    const char *fileout = NULL;
     const char *filein = NULL;
 
     set_program_name(argv[0]);
@@ -58,7 +47,7 @@ int main(int argc, char *argv[])
         switch (c) {
         case 'o':
             if (optarg) {
-                filein = optarg;
+                fileout = optarg;
             }
             break;
 
@@ -80,38 +69,24 @@ int main(int argc, char *argv[])
         }
     }
 
-    /* Instead of reporting ‘--verbose’
-       and ‘--brief’ as they are encountered,
-       we report the final status resulting from them. */
-    if (verbose_flag)
-        puts("verbose flag is set");
+    //if (verbose_flag)
+    //    puts("verbose flag is set");
 
-    /* Print any remaining command line arguments (not options). */
     if (optind < argc) {
         wstring msg = L"unknow option";
-
-        //error_message()
-        //printf("non-option ARGV-elements: ");
-        while (optind < argc) {
-            wchar_t *temp = new wchar_t[strlen(argv[optind]) + 1];
-            mbstowcs(temp, argv[optind], strlen(argv[optind]));
-            msg += L" ";
-            //msg += temp;
-            optind++;
-        }
-        error_message(msg.c_str());
+        filein = argv[optind++];
     }
-
-    /*
- if (argc < 3) {
-     cout << "Use " << argv[0] << " filein fileout" << endl;
- } else {
-     Parser parser;
-     if (parser.open_file(argv[1])) {
-         parser.parse();
-     } else {
-         cerr << "File " << argv[1] << " could not be opened." << endl;
-     }
- }*/
+    if (optind < argc) {
+        error_message(L"can't parse more than one input file");
+    } else if (!filein) {
+        error_message(L"no input file");
+    } else {
+        Parser parser;
+        if (!parser.open_file(filein)) {
+            error_message(L"file not found");
+        } else {
+            parser.parse();
+        }
+    }
     return EXIT_SUCCESS;
 }

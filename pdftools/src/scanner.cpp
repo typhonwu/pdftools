@@ -1,4 +1,5 @@
 #include "scanner.h"
+#include "utils.h"
 #include <fstream>
 #include <locale>
 #include <sstream>
@@ -147,9 +148,9 @@ Token *Scanner::next_token()
             } else if (iswalpha(c) || c == L'/') {
                 state = INNAME;
             } else {
-#ifdef DEBUG
-                wcerr << L"Error " << c << endl;
-#endif
+                wstring msg = L"Invalid char ";
+                msg += c;
+                error_message(msg.c_str());
                 state = DONE;
                 save = false;
                 current_token = ERROR;
@@ -183,7 +184,7 @@ Token *Scanner::next_token()
             break;
         default:
             /* should never happen */
-            m_error = L"Invalid scanner state";
+            error_message(L"Invalid scanner state");
             state = DONE;
             current_token = ERROR;
             break;
@@ -202,7 +203,7 @@ const wchar_t *Scanner::get_line()
 
     while (m_filein.good()) {
         wchar_t c = next_char();
-        if ((c == '\n' || c == '\r')) {
+        if ((c == L'\n' || c == L'\r')) {
             if (starting) {
                 continue;
             } else {
@@ -213,23 +214,4 @@ const wchar_t *Scanner::get_line()
         starting = false;
     }
     return _buffer.c_str();
-}
-
-void Scanner::find_last_xref()
-{
-    register long xref = 0;
-    const wchar_t *_line;
-
-    while (m_filein.good()) {
-        _line = get_line();
-
-        if (!wcscmp(_line, L"startxref")) {
-            _line = get_line();
-            wstringstream(_line) >> xref;
-#ifdef DEBUG
-            wcout << L"XRef: " << xref << L" in pos " << _line << endl;
-#endif
-        }
-    }
-
 }

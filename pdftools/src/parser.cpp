@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "scanner.h"
+#include "utils.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -50,7 +51,9 @@ bool Parser::match(TokenType type)
     if (m_token && m_token->type() == type) {
         next_token();
     } else {
-        wcerr << L"unexpected token: " << m_token->value() << endl;
+        wstring msg = L"unexpected token: ";
+        msg += m_token->value();
+        error_message(msg.c_str());
         return false;
     }
     return true;
@@ -61,8 +64,6 @@ void Parser::parse()
     bool error = false;
     match(PERCENT);
     if (verify_version()) {
-        wcout << L"File version: " << m_version << endl;
-
         while (m_scanner->good() && !error) {
             next_token();
             if (m_token == NULL) {
@@ -81,7 +82,7 @@ void Parser::parse()
             }
         }
     } else {
-        wcerr << L"File not supported." << endl;
+        error_message(L"invalid input file");
     }
 }
 
@@ -92,7 +93,9 @@ void Parser::object_sequence()
     wstring sec = m_token->value();
     match(NUM);
     if (m_token->value() != L"obj") {
-        wcerr << L"Not obj." << endl;
+        wstring msg = L"unexpected token in obj parser: ";
+        msg += m_token->value();
+        error_message(msg.c_str());
     }
     match(NAME);
 }
@@ -115,9 +118,3 @@ bool Parser::verify_version()
     return false;
 }
 
-long Parser::find_xref()
-{
-    m_scanner->find_last_xref();
-
-    return 0;
-}

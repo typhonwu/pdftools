@@ -46,7 +46,7 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_pdftools_OBJECTS = main.$(OBJEXT) parser.$(OBJEXT) \
-	scanner.$(OBJEXT) token.$(OBJEXT)
+	scanner.$(OBJEXT) token.$(OBJEXT) utils.$(OBJEXT)
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
 pdftools_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
@@ -154,12 +154,14 @@ top_srcdir = @top_srcdir@
 pdftools_SOURCES = main.cpp \
 	parser.cpp \
 	scanner.cpp \
-	token.cpp
+	token.cpp \
+	utils.cpp
 
 noinst_HEADERS = \
 	parser.h \
 	scanner.h \
-	token.h
+	token.h \
+	utils.h
 
 all: all-am
 
@@ -231,6 +233,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/token.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

@@ -15,7 +15,7 @@
 
 using namespace std;
 
-static int verbose_flag = 0;
+int verbose_flag = 0;
 
 int main(int argc, char *argv[])
 {
@@ -27,14 +27,12 @@ int main(int argc, char *argv[])
 
     while (true) {
         static struct option long_options[] = {
-            /* These options set a flag. */
             {"verbose", no_argument, &verbose_flag, 1},
             {"help", no_argument, 0, 'h'},
             {"o", required_argument, 0, 'o'},
             {"format", required_argument, 0, 'f'},
             {0, 0, 0, 0}
         };
-        /* getopt_long stores the option index here. */
         int option_index = 0;
 
         c = getopt_long(argc, argv, "h:o:f:",
@@ -60,7 +58,6 @@ int main(int argc, char *argv[])
             break;
 
         case '?':
-            /* getopt_long already printed an error message. */
             return -1;
             break;
 

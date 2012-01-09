@@ -21,7 +21,11 @@ enum StateType {
 
 Scanner::Scanner() : m_error(NULL)
 {
-    //m_reserved[L"IF"] = IF;
+    m_reserved[L"obj"] = OBJ;
+    m_reserved[L"endobj"] = END_OBJ;
+    m_reserved[L"xref"] = XREF;
+    m_reserved[L"treiler"] = TREILER;
+    m_reserved[L"/Linearized"] = LINEARIZED;
 }
 
 Scanner::~Scanner()
@@ -129,6 +133,24 @@ Token *Scanner::next_token()
             } else if (c == L'%') {
                 current_token = PERCENT;
                 state = DONE;
+            } else if (c == L'[') {
+                current_token = START_ARRAY;
+                state = DONE;
+            } else if (c == L']') {
+                current_token = END_ARRAY;
+                state = DONE;
+            } else if (c == L'>') {
+                wchar_t next = next_char();
+                if (next != L'>') {
+                    unget_char();
+                    save = false;
+                    current_token = ERROR;
+                } else {
+                    token_string += L'>';
+                    state = DONE;
+                    current_token = END_DICT;
+                }
+                state = DONE;
             } else if (c == L'(') {
                 save = false;
                 state = INSTRING;
@@ -141,7 +163,7 @@ Token *Scanner::next_token()
                 } else {
                     token_string += L'<';
                     state = DONE;
-                    current_token = START_ARRAY;
+                    current_token = START_DICT;
                 }
             } else if (is_space(c)) {
                 save = false;
@@ -177,7 +199,7 @@ Token *Scanner::next_token()
                 save = false;
                 unget_char();
                 state = DONE;
-                current_token = NAME;
+                current_token = reserved_lookup(token_string.c_str());
             }
             break;
         case DONE:

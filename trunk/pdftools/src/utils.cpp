@@ -1,5 +1,8 @@
 #include "utils.h"
 #include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <locale>
 
 using namespace std;
 

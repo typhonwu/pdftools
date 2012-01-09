@@ -4,8 +4,10 @@
 #include <string>
 
 enum TokenType {
-    ENDFILE, ERROR,
-    NAME, NUM, STRING, PERCENT, START_ARRAY, END_ARRAY
+    ENDFILE, ERROR, START_ARRAY, END_ARRAY,
+    NAME, NUM, STRING, PERCENT, START_DICT, END_DICT,
+    
+    OBJ, END_OBJ, LINEARIZED, XREF, TREILER
 };
 
 struct ReservedWords {

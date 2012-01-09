@@ -10,6 +10,7 @@ private:
     Scanner *m_scanner;
     Token *m_token;
     bool m_valid;
+    bool m_linear;
     const wchar_t *m_version;
 
 public:
@@ -23,9 +24,12 @@ public:
 private:
     void next_token();
     bool verify_version();
-    bool match(TokenType type);
+    bool match(TokenType type, bool readNext = true);
     
+    void comment_sequence();
     void object_sequence();
+    void linear_sequence();
+    void xref_sequence();
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include "token.h"
 
 class Scanner;
+class TreeNode;
 
 class Parser {
 private:

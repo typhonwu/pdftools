@@ -55,7 +55,7 @@ bool Scanner::open_file(const char *path)
 wchar_t Scanner::next_char()
 {
     static bool new_char = false;
-    wchar_t ret = NULL;
+    wchar_t ret = L'\0';
     locale loc;
 
     if (m_filein.good()) {

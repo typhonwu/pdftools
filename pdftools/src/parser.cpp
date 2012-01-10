@@ -1,6 +1,7 @@
 #include "parser.h"
 #include "scanner.h"
 #include "utils.h"
+#include "treenode.h"
 #include <iostream>
 #include <cstdlib>
 #include <string>

@@ -69,12 +69,12 @@ int main(int argc, char *argv[])
         case 'v':
             wcout << PACKAGE_STRING << endl;
             wcout << endl;
-            wcout << "Copyright (C) 2012 Leonardo Alves da Costa." << endl;
-            wcout << "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>" << endl;
-            wcout << "This is free software: you are free to change and redistribute it." << endl;
-            wcout << "There is NO WARRANTY, to the extent permitted by law." << endl;
+            wcout << L"Copyright (C) 2012 Leonardo Alves da Costa." << endl;
+            wcout << L"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>" << endl;
+            wcout << L"This is free software: you are free to change and redistribute it." << endl;
+            wcout << L"There is NO WARRANTY, to the extent permitted by law." << endl;
             wcout << endl;
-            wcout << "Written by Leonardo Alves da Costa." << endl;
+            wcout << L"Written by Leonardo Alves da Costa." << endl;
             return EXIT_SUCCESS;
         case 'f':
             format = optarg;

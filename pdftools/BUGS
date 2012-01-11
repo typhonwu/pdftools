@@ -1,0 +1,19 @@
+-*- outline -*-
+
+This file lists the bugs you must be aware of.  Be sure to check this
+file before using PDFTools, and especially svn versions of PDFTools.
+
+
+	Copyright (C) 2012 Leonardo Alves da Costa.
+
+	Copying and distribution of this file, with or without
+	modification, are permitted in any medium without royalty provided
+	the copyright notice and this notice are preserved.  This file is
+	offered as-is, without warranty of any kind.
+
+PDFTools must not be used in production if there are ``Serious'' bugs,
+and use with caution an PDFTools with ``Important bugs''.
+
+* Status
+
+    This tool is under development state (alpha) and is not ready to use.

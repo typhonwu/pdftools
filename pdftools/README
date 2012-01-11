@@ -1,1 +1,30 @@
-Informações
+-*- text -*-
+
+PDFTools
+
+PDFTools is high level tools to convert PDF files to AZW or EPUB formats.
+
+Be sure to read BUGS and INSTALL.
+
+Mail suggestions and report bugs to leonhad@gmail.com.
+Always include the PDFTools version number, which you can get by
+running `pdftools --version'.  More info can be found at
+<http://code.google.com/p/pdftools/>.
+
+Licensing
+
+PDFTools is released under the General Public License version 3 (GPLv3+).
+Additionally, Autoconf includes a licensing exception in some of its
+source files.
+
+For more licensing information, see
+<http://www.gnu.org/licenses/gpl-faq.html>.
+
+-----
+
+Copyright (C) 2012 Leonardo Alves da Costa.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without warranty of any kind.

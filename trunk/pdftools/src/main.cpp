@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
             wcout << L"  --verbose\t\t\t\trun in verbose mode" << endl;
             wcout << endl;
             wcout << L"Report bugs to " << PACKAGE_BUGREPORT << endl;
-            wcout << PACKAGE_NAME << L" home page: <" << PACKAGE_URL << L">" << endl;
+            wcout << PACKAGE_NAME << L" home page: <http://code.google.com/p/pdftools/issues/list>" << endl;
             return EXIT_SUCCESS;
         case 'v':
             wcout << PACKAGE_STRING << endl;

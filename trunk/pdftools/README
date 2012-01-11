@@ -6,7 +6,8 @@ PDFTools is high level tools to convert PDF files to AZW or EPUB formats.
 
 Be sure to read BUGS and INSTALL.
 
-Mail suggestions and report bugs to leonhad@gmail.com.
+Mail suggestions to leonhad@gmail.com. Reports bugs on 
+<http://code.google.com/p/pdftools/issues/list>
 Always include the PDFTools version number, which you can get by
 running `pdftools --version'.  More info can be found at
 <http://code.google.com/p/pdftools/>.

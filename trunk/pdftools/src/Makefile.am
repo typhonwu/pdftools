@@ -15,5 +15,7 @@ noinst_HEADERS = \
 	utils.h \
 	treenode.h
 
+if HELP2MAN
 pdftools.1: pdftools
-	help2man -N ./pdftools > pdftools.1
+	-$(HELP2MAN) --output=$@ -N ./pdftools
+endif

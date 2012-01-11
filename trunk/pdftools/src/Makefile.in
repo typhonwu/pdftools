@@ -114,6 +114,7 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 GREP = @GREP@
+HELP2MAN = @HELP2MAN@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -551,8 +552,8 @@ uninstall-man: uninstall-man1
 	uninstall-man uninstall-man1
 
 
-pdftools.1: pdftools
-	help2man -N ./pdftools > pdftools.1
+@HELP2MAN_TRUE@pdftools.1: pdftools
+@HELP2MAN_TRUE@	-$(HELP2MAN) --output=$@ -N ./pdftools
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

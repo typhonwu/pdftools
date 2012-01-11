@@ -1,7 +1,8 @@
 Source: pdftools
 Section: utils
 Priority: optional
-Maintainer: Fernando Ribeiro <fernando.ribeiro@gmail.com>
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Original-Maintainer: Fernando Ribeiro da Silva <fernando.ribeiro@gmail.com>
 Homepage: http://code.google.com/p/pdftools/
 Build-Depends: debhelper (>= 7), autotools-dev, autoconf
 Standards-Version: 3.9.1

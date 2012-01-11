@@ -553,7 +553,7 @@ uninstall-man: uninstall-man1
 
 
 @HELP2MAN_TRUE@pdftools.1: pdftools
-@HELP2MAN_TRUE@	-$(HELP2MAN) --output=$@ -N ./pdftools
+@HELP2MAN_TRUE@	-$(HELP2MAN) --output=$@ -N -n "is a high level tools to convert PDF files to AZW or ePUB formats." ./pdftools
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

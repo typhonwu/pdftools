@@ -17,5 +17,5 @@ noinst_HEADERS = \
 
 if HELP2MAN
 pdftools.1: pdftools
-	-$(HELP2MAN) --output=$@ -N ./pdftools
+	-$(HELP2MAN) --output=$@ -N -n "is a high level tools to convert PDF files to AZW or ePUB formats." ./pdftools
 endif

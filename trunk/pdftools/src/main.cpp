@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
             }
             break;
         case 'h':
-            wcout << PACKAGE_NAME << L" is high level tools to convert PDF files to AZW or EPUB formats." << endl;
+            wcout << PACKAGE_NAME << L" is a high level tools to convert PDF files to AZW or ePUB formats." << endl;
             wcout << endl;
             wcout << L"Usage: " << argv[0] << L" [options] file..." << endl;
             wcout << L"Options:" << endl;

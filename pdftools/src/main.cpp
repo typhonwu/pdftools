@@ -23,10 +23,9 @@ int main(int argc, char *argv[])
     int verbose_flag = 0;
     bool error = false;
     const char *fileout = NULL;
-    const char *filein = NULL;
     const char *format = NULL;
 
-    set_program_name(argv[0]);
+    set_program_name(to_unicode(argv[0]));
 
     while (true) {
         static struct option long_options[] = {
@@ -90,23 +89,27 @@ int main(int argc, char *argv[])
         set_verbose_mode(true);
     }
 
-    if (optind < argc) {
-        error_message(L"can't parse more than one input file");
-        error = true;
-    } else if (!filein && !error) {
+    if (optind >= argc && !error) {
         error_message(L"no input file");
         error = true;
     }
-
     if (error) {
         wcout << L"Try `" << argv[0] << L" --help' for usage." << endl;
         return -1;
     } else {
-        Parser parser;
-        if (!parser.open_file(filein)) {
-            error_message(L"file not found");
-        } else {
-            parser.parse();
+        while (optind < argc) {
+            if (verbose_mode()) {
+                wstring msg = L"parsing file ";
+                msg += to_unicode(argv[optind]);
+                verbose_message(msg.c_str());
+            }
+            Parser parser;
+            if (!parser.open_file(argv[optind])) {
+                error_message(L"file not found");
+            } else {
+                parser.parse();
+            }
+            optind++;
         }
     }
     return EXIT_SUCCESS;

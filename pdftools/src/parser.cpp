@@ -84,7 +84,7 @@ TreeNode *Parser::parse()
                 xref_sequence();
                 break;
             default:
-                wcout << L"Token: " << m_token->value() << endl;
+                wcout << L"token: " << m_token->value() << endl;
                 error = true;
             }
         }
@@ -103,14 +103,15 @@ TreeNode * Parser::xref_sequence()
 {
     match(XREF);
 
-    while (m_token->type() != TREILER) {
+    do {
         wstring start = m_token->value();
         match(NUM);
         wstring count = m_token->value();
         match(NUM);
         
         // for ...
-    }
+        next_token();
+    } while((m_token->type() != TREILER));
     return NULL;
 }
 

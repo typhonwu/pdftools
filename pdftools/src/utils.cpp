@@ -6,13 +6,26 @@
 
 using namespace std;
 
-static wchar_t *_program_name = NULL;
+static const wchar_t *_program_name = NULL;
 static bool _verbose = false;
 
-void set_program_name(const char *name)
+void verbose_message(const wchar_t *msg)
 {
-    _program_name = new wchar_t[strlen(name) + 1];
-    mbstowcs(_program_name, name, strlen(name));
+    if (verbose_mode()) {
+        wcout << _program_name << ": " << msg << endl;
+    }
+}
+
+void set_program_name(const wchar_t *name)
+{
+    _program_name = name;
+}
+
+wchar_t *to_unicode(const char *str)
+{
+    wchar_t *string = new wchar_t[strlen(str) + 1];
+    mbstowcs(string, str, strlen(str));
+    return string;
 }
 
 void error_message(const wchar_t *msg)

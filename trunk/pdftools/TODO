@@ -1,8 +1,18 @@
-PDFTools NEWS - User visible changes.
+-*- outline -*-
 
-* No notable news yet
+* Soon
 
------
+** Finish the source code
+
+
+* Later
+
+** Add output formats:
+
+- AZW (Amazon Kindle)
+- MOBI (MobiPocket)
+
+------------------------------------------------------------------------------
 
 Copyright (C) 2012 Leonardo Alves da Costa.
 
@@ -10,7 +20,3 @@ Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
 notice and this notice are preserved.  This file is offered as-is,
 without warranty of any kind.
-
-Local Variables:
-mode: outline
-End:

@@ -53,23 +53,28 @@ int main(int argc, char *argv[])
             }
             break;
         case 'h':
+            wcout << PACKAGE_NAME << L" is high level tools to convert PDF files to AZW or EPUB formats." << endl;
+            wcout << endl;
             wcout << L"Usage: " << argv[0] << L" [options] file..." << endl;
             wcout << L"Options:" << endl;
             wcout << L"  -f <format>, --format=<format>\toutput file format [epub]" << endl;
-            wcout << L"  -h\t\t\t\t\tdisplay this information and quit" << endl;
+            wcout << L"  -h, --help\t\t\t\tdisplay this information and quit" << endl;
             wcout << L"  -o <file>\t\t\t\tset the output file" << endl;
             wcout << L"  -v, --version\t\t\t\tdisplay the version information" << endl;
             wcout << L"  --verbose\t\t\t\trun in verbose mode" << endl;
-            wcout << endl;            
+            wcout << endl;
             wcout << L"Report bugs to " << PACKAGE_BUGREPORT << endl;
             wcout << PACKAGE_NAME << L" home page: <" << PACKAGE_URL << L">" << endl;
             return EXIT_SUCCESS;
         case 'v':
             wcout << PACKAGE_STRING << endl;
-            wcout << "Copyright (C) 2007 Free Software Foundation, Inc." << endl;
+            wcout << endl;
+            wcout << "Copyright (C) 2012 Leonardo Alves da Costa." << endl;
             wcout << "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>" << endl;
             wcout << "This is free software: you are free to change and redistribute it." << endl;
             wcout << "There is NO WARRANTY, to the extent permitted by law." << endl;
+            wcout << endl;
+            wcout << "Written by Leonardo Alves da Costa." << endl;
             return EXIT_SUCCESS;
         case 'f':
             format = optarg;

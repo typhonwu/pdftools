@@ -1,10 +1,18 @@
-Authors of PDFTools.
+PDFTools THANKS file
 
-Leonardo Alves da Costa     leonhad@gmail.com                   2012-01-01
-Fernando Ribeiro da Silva   fernando.ribeiro@gmail.com          2012-01-01
-Edson Alves da Costa Júnior edsomjr@gmail.com                   2012-01-01
+PDFTools was originally written by Leonardo Alves da Costa.  It would
+not be what it is today without the invaluable help of these people,
+who have reported problems, suggested improvements, or submitted
+actual code.  Please help us keep this list complete and free from
+errors.  Also see the AUTHORS file for the list of people with
+contributions significant enough to warrant copyright assignment.
 
-========================================================================
+Daniel Torres Cavalcante    danieltc@gmail.com
+
+Many people are not named here because we lost track of them.  We
+thank them!  Please, help us keep this list up to date.
+
+================
 
 Local Variables:
 mode: text

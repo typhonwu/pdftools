@@ -1,3 +1,7 @@
+2012-01-11  Leonardo Alves da Costa <leonhad@gmail.com>
+
+        * Create the autotools infraestructure
+
 2012-01-05  Fernando Ribeiro  <fernando.ribeiro@gmail.com>
 
-        * Initial release
+        * Project debianized

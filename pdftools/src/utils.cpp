@@ -6,15 +6,26 @@
 
 using namespace std;
 
-static wchar_t *program_name = NULL;
+static wchar_t *_program_name = NULL;
+static bool _verbose = false;
 
 void set_program_name(const char *name)
 {
-    program_name = new wchar_t[strlen(name) + 1];
-    mbstowcs(program_name, name, strlen(name));
+    _program_name = new wchar_t[strlen(name) + 1];
+    mbstowcs(_program_name, name, strlen(name));
 }
 
 void error_message(const wchar_t *msg)
 {
-    wcerr << program_name << L": " << msg << endl;
+    wcerr << _program_name << L": " << msg << endl;
+}
+
+void set_verbose_mode(const bool verbose)
+{
+    _verbose = verbose;
+}
+
+bool verbose_mode()
+{
+    return _verbose;
 }

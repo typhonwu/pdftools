@@ -63,7 +63,7 @@ bool Parser::match(TokenType type, bool readNext)
     return true;
 }
 
-void Parser::parse()
+TreeNode *Parser::parse()
 {
     bool error = false;
     match(PERCENT);
@@ -91,6 +91,7 @@ void Parser::parse()
     } else {
         error_message(L"invalid input file");
     }
+    return NULL;
 }
 
 void Parser::comment_sequence()
@@ -98,7 +99,7 @@ void Parser::comment_sequence()
     m_scanner->ignore_line();
 }
 
-void Parser::xref_sequence()
+TreeNode * Parser::xref_sequence()
 {
     match(XREF);
 
@@ -110,9 +111,10 @@ void Parser::xref_sequence()
         
         // for ...
     }
+    return NULL;
 }
 
-void Parser::object_sequence()
+TreeNode *Parser::object_sequence()
 {
     wstring number = m_token->value();
     match(NUM);
@@ -127,9 +129,11 @@ void Parser::object_sequence()
         break;
     }
     match(END_OBJ, false);
+    
+    return NULL;
 }
 
-void Parser::linear_sequence()
+TreeNode *Parser::linear_sequence()
 {
     match(LINEARIZED);
     wstring version = m_token->value();
@@ -162,10 +166,12 @@ void Parser::linear_sequence()
             match(NUM);
         } else {
             error_message(L"error parsing the linear mode");
-            return;
+            return NULL;
         }
     }
     match(END_DICT);
+    
+    return NULL;
 }
 
 bool Parser::is_valid()

@@ -19,7 +19,7 @@ public:
     ~Parser();
 
     bool open_file(const char *path);
-    void parse();
+    TreeNode *parse();
     bool is_valid();
 
 private:
@@ -28,9 +28,9 @@ private:
     bool match(TokenType type, bool readNext = true);
     
     void comment_sequence();
-    void object_sequence();
-    void linear_sequence();
-    void xref_sequence();
+    TreeNode *object_sequence();
+    TreeNode *linear_sequence();
+    TreeNode *xref_sequence();
 };
 
 #endif

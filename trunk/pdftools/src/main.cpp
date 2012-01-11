@@ -2,6 +2,8 @@
 
 #if HAVE_CONFIG_H
 #include <config.h>
+#else
+#error the config.h file is mandatory
 #endif
 
 #include "utils.h"
@@ -15,11 +17,10 @@
 
 using namespace std;
 
-int verbose_flag = 0;
-
 int main(int argc, char *argv[])
 {
     int c;
+    int verbose_flag = 0;
     bool error = false;
     const char *fileout = NULL;
     const char *filein = NULL;
@@ -52,7 +53,16 @@ int main(int argc, char *argv[])
             }
             break;
         case 'h':
-            printf("help 2\n");
+            wcout << L"Usage: " << argv[0] << L" [options] file..." << endl;
+            wcout << L"Options:" << endl;
+            wcout << L"  -f <format>, --format=<format>\toutput file format [epub]" << endl;
+            wcout << L"  -h\t\t\t\t\tdisplay this information and quit" << endl;
+            wcout << L"  -o <file>\t\t\t\tset the output file" << endl;
+            wcout << L"  -v, --version\t\t\t\tdisplay the version information" << endl;
+            wcout << L"  --verbose\t\t\t\trun in verbose mode" << endl;
+            wcout << endl;            
+            wcout << L"Report bugs to " << PACKAGE_BUGREPORT << endl;
+            wcout << PACKAGE_NAME << L" home page: <" << PACKAGE_URL << L">" << endl;
             return EXIT_SUCCESS;
         case 'v':
             wcout << PACKAGE_STRING << endl;
@@ -63,24 +73,18 @@ int main(int argc, char *argv[])
             return EXIT_SUCCESS;
         case 'f':
             format = optarg;
+            wcout << format << endl;
             break;
         case '?':
             error = true;
             break;
-        default:
-            error = true;
-            error_message(L"internal error");
         }
     }
 
-    //if (verbose_flag)
-    //    puts("verbose flag is set");
-
-    if (optind < argc) {
-        wstring msg = L"unknow option";
-        filein = argv[optind++];
-        error = true;
+    if (verbose_flag) {
+        set_verbose_mode(true);
     }
+
     if (optind < argc) {
         error_message(L"can't parse more than one input file");
         error = true;

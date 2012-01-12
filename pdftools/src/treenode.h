@@ -6,12 +6,14 @@
 
 class TreeNode {
 private:
-    std::vector<TreeNode *> child;
-    TreeNode *sibling;
+    std::vector<TreeNode *> m_child;
+    TreeNode *m_sibling;
 
 public:
     TreeNode();
     virtual ~TreeNode();
+    
+    void add_child(TreeNode *child);
 };
 
 #endif

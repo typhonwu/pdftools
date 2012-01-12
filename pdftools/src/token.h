@@ -23,6 +23,7 @@ private:
 public:
     Token(TokenType type, std::wstring value);
 
+    double to_number();
     std::wstring value();
     TokenType type();
 };

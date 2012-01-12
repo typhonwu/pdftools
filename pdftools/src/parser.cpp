@@ -2,6 +2,7 @@
 #include "scanner.h"
 #include "utils.h"
 #include "treenode.h"
+#include "objnode.h"
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -65,6 +66,7 @@ bool Parser::match(TokenType type, bool readNext)
 
 TreeNode *Parser::parse()
 {
+    TreeNode *root = new TreeNode();
     bool error = false;
     match(PERCENT);
     if (verify_version()) {
@@ -78,10 +80,10 @@ TreeNode *Parser::parse()
                 comment_sequence();
                 break;
             case NUM:
-                object_sequence();
+                root->add_child(object_sequence());
                 break;
             case XREF:
-                xref_sequence();
+                root->add_child(xref_sequence());
                 break;
             default:
                 wcout << L"token: " << m_token->value() << endl;
@@ -91,7 +93,7 @@ TreeNode *Parser::parse()
     } else {
         error_message(L"invalid input file");
     }
-    return NULL;
+    return root;
 }
 
 void Parser::comment_sequence()
@@ -108,30 +110,39 @@ TreeNode * Parser::xref_sequence()
         match(NUM);
         wstring count = m_token->value();
         match(NUM);
-        
+
         // for ...
         next_token();
-    } while((m_token->type() != TREILER));
+    } while ((m_token->type() != TREILER));
     return NULL;
 }
 
 TreeNode *Parser::object_sequence()
 {
-    wstring number = m_token->value();
+    float number = m_token->to_number();
     match(NUM);
-    wstring generation_nunber = m_token->value();
+    float generation_nunber = m_token->to_number();
     match(NUM);
-    match(OBJ);
-    match(START_DICT);
 
-    switch (m_token->type()) {
-    case LINEARIZED:
-        linear_sequence();
-        break;
+    ObjNode *node = new ObjNode((int) number, (int) generation_nunber);
+
+    match(OBJ);
+    if (m_token->type() == START_DICT) {
+        match(START_DICT);
+
+        switch (m_token->type()) {
+        case LINEARIZED:
+            node->add_child(linear_sequence());
+            break;
+        default:
+            error_message(L"unexpected token");
+            break;
+        }
+        match(END_DICT);
     }
     match(END_OBJ, false);
-    
-    return NULL;
+
+    return node;
 }
 
 TreeNode *Parser::linear_sequence()
@@ -171,7 +182,7 @@ TreeNode *Parser::linear_sequence()
         }
     }
     match(END_DICT);
-    
+
     return NULL;
 }
 

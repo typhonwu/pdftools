@@ -4,7 +4,8 @@ pdftools_SOURCES = main.cpp \
 	scanner.cpp \
 	token.cpp \
 	utils.cpp \
-	treenode.cpp
+	treenode.cpp \
+	objnode.cpp
 	
 dist_man_MANS = pdftools.1
 
@@ -13,9 +14,11 @@ noinst_HEADERS = \
 	scanner.h \
 	token.h \
 	utils.h \
-	treenode.h
+	treenode.h \
+	objnode.h
 
 if HELP2MAN
 pdftools.1: pdftools
-	-$(HELP2MAN) --output=$@ -N -n "is a high level tools to convert PDF files to AZW or ePUB formats." ./pdftools
+	@echo generating help file...
+	@$(HELP2MAN) --output=$@ -N -n "is a high level tools to convert PDF files to AZW or ePUB formats." ./pdftools
 endif

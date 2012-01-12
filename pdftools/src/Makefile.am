@@ -20,5 +20,7 @@ noinst_HEADERS = \
 if HELP2MAN
 pdftools.1: pdftools$(EXEEXT)
 	@echo generating help file $@...
-	@$(HELP2MAN) --output=$@ -N -n "is a high level tools to convert PDF files to AZW or ePUB formats." ./pdftools$(EXEEXT)
+	@$(HELP2MAN) --output=$@ -N -i pdftools.h2m ./pdftools$(EXEEXT)
 endif
+
+EXTRA_DIST = pdftools.h2m

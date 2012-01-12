@@ -18,7 +18,7 @@ noinst_HEADERS = \
 	objnode.h
 
 if HELP2MAN
-pdftools.1: pdftools
-	@echo generating help file...
-	@$(HELP2MAN) --output=$@ -N -n "is a high level tools to convert PDF files to AZW or ePUB formats." ./pdftools
+pdftools.1: pdftools$(EXEEXT)
+	@echo generating help file $@...
+	@$(HELP2MAN) --output=$@ -N -n "is a high level tools to convert PDF files to AZW or ePUB formats." ./pdftools$(EXEEXT)
 endif

@@ -25,8 +25,6 @@ int main(int argc, char *argv[])
     const char *fileout = NULL;
     const char *format = NULL;
 
-    set_program_name(to_unicode(argv[0]));
-
     while (true) {
         static struct option long_options[] = {
             {"verbose", no_argument, &verbose_flag, 1},
@@ -54,7 +52,7 @@ int main(int argc, char *argv[])
         case 'h':
             wcout << PACKAGE_NAME << L" is a high level tools to convert PDF files to AZW or ePUB formats." << endl;
             wcout << endl;
-            wcout << L"Usage: " << argv[0] << L" [options] file..." << endl;
+            wcout << L"Usage: " << PACKAGE_NAME << L" [options] file..." << endl;
             wcout << L"Options:" << endl;
             wcout << L"  -f <format>, --format=<format>\toutput file format [epub]" << endl;
             wcout << L"  -h, --help\t\t\t\tdisplay this information and quit" << endl;
@@ -94,7 +92,7 @@ int main(int argc, char *argv[])
         error = true;
     }
     if (error) {
-        wcout << L"Try `" << argv[0] << L" --help' for usage." << endl;
+        wcout << L"Try `" << PACKAGE_NAME << L" --help' for usage." << endl;
         return -1;
     } else {
         while (optind < argc) {

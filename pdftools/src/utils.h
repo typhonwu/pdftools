@@ -1,7 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-void set_program_name(const wchar_t *name);
 void error_message(const wchar_t *msg);
 void verbose_message(const wchar_t *msg);
 void set_verbose_mode(const bool verbose);

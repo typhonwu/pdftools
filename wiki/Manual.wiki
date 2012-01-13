@@ -30,7 +30,7 @@
        Written by Leonardo Alves da Costa.
 
 = REPORTING BUGS =
-       Report bugs to leonhad@gmail.com pdftools home page: http://code.google.com/p/pdftools/issues/list
+       Report bugs to http://code.google.com/p/pdftools/issues/list
 
 = COPYRIGHT =
        Copyright © 2012 Leonardo Alves da Costa.  License GPLv3+: GNU GPL version 3 or later http://gnu.org/licenses/gpl.html

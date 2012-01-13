@@ -39,5 +39,6 @@ AC_C_CONST
 AC_CHECK_TYPE([wchar_t],,[ AC_MSG_ERROR([Type wchar_t not found.]) ])
 
 AC_CONFIG_FILES([Makefile
-                 src/Makefile])
+                 src/Makefile
+                 src/pdftools.h2m])
 AC_OUTPUT

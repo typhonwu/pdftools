@@ -18,7 +18,7 @@ noinst_HEADERS = \
 	objnode.h
 
 if HELP2MAN
-pdftools.1: pdftools$(EXEEXT)
+pdftools.1: pdftools$(EXEEXT) pdftools.h2m
 	@echo generating help file $@...
 	@$(HELP2MAN) --output=$@ -N -i pdftools.h2m ./pdftools$(EXEEXT)
 endif

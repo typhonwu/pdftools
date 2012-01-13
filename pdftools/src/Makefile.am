@@ -5,7 +5,8 @@ pdftools_SOURCES = main.cpp \
 	token.cpp \
 	utils.cpp \
 	treenode.cpp \
-	objnode.cpp
+	nodes/objnode.cpp \
+	nodes/xrefnode.cpp
 	
 dist_man_MANS = pdftools.1
 
@@ -15,7 +16,10 @@ noinst_HEADERS = \
 	token.h \
 	utils.h \
 	treenode.h \
-	objnode.h
+	nodes/objnode.h \
+	nodes/xrefnode.h
+
+pdftools_CXXFLAGS = -Inodes
 
 if HELP2MAN
 pdftools.1: pdftools$(EXEEXT) pdftools.h2m

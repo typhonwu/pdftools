@@ -27,6 +27,7 @@ AC_CHECK_TOOL(HELP2MAN, help2man, :)
 AM_CONDITIONAL(HELP2MAN, [test "$HELP2MAN" != :])
 
 # Checks for libraries.
+AC_CHECK_LIB([z], [gzread], , [AC_MSG_ERROR([zlib not found, see http://www.zlib.net])])
 
 # Checks for header files.
 AC_HEADER_STDC

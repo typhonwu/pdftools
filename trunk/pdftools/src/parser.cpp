@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "treenode.h"
 #include "objnode.h"
+#include "xrefnode.h"
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -71,7 +72,6 @@ TreeNode *Parser::parse()
     match(PERCENT);
     if (verify_version()) {
         while (m_scanner->good() && !error) {
-            next_token();
             if (m_token == NULL) {
                 break;
             }
@@ -86,7 +86,7 @@ TreeNode *Parser::parse()
                 root->add_child(xref_sequence());
                 break;
             default:
-                wcout << L"token: " << m_token->value() << endl;
+                next_token();
                 error = true;
             }
         }
@@ -99,22 +99,47 @@ TreeNode *Parser::parse()
 void Parser::comment_sequence()
 {
     m_scanner->ignore_line();
+    next_token();
 }
 
 TreeNode * Parser::xref_sequence()
 {
+    XREFNode *xref = new XREFNode;
     match(XREF);
 
     do {
-        wstring start = m_token->value();
+        uint16_t id = (uint16_t) m_token->to_number();
         match(NUM);
-        wstring count = m_token->value();
+        int count = (int) m_token->to_number();
         match(NUM);
 
-        // for ...
+        for (int loop = 0; loop < count; loop++) {
+            uint32_t address = (int) m_token->to_number();
+            match(NUM);
+            uint16_t generation = (int) m_token->to_number();
+            match(NUM);
+            wstring name = m_token->value();
+            match(NAME);
+            xref->add_node(id, generation, address, name.at(0));
+            id++;
+        }
+    } while ((m_token->type() != TRAILER));
+    match(TRAILER);
+    match(START_DICT);
+    //FIXME trailer
+    while(m_token->type() != END_DICT) {
         next_token();
-    } while ((m_token->type() != TREILER));
-    return NULL;
+    }
+    match(END_DICT);
+    match(START_XREF);
+    
+    xref->set_start_address(m_token->to_number());
+    match(NUM);
+    
+    match(PERCENT);
+    match(PERCENT);
+    match(END_PDF);
+    return xref;
 }
 
 TreeNode *Parser::object_sequence()
@@ -140,7 +165,7 @@ TreeNode *Parser::object_sequence()
         }
         match(END_DICT);
     }
-    match(END_OBJ, false);
+    match(END_OBJ);
 
     return node;
 }
@@ -181,8 +206,6 @@ TreeNode *Parser::linear_sequence()
             return NULL;
         }
     }
-    match(END_DICT);
-
     return NULL;
 }
 
@@ -199,6 +222,7 @@ bool Parser::verify_version()
     for (loop = 0; loop < 7; loop++) {
         if (line == _pdf_versions[loop]) {
             m_version = _pdf_versions[loop];
+            match(NAME);
             return true;
         }
     }

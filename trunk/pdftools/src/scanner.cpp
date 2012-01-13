@@ -23,8 +23,10 @@ Scanner::Scanner() : m_error(NULL)
 {
     m_reserved[L"obj"] = OBJ;
     m_reserved[L"endobj"] = END_OBJ;
+    m_reserved[L"EOF"] = END_PDF;
     m_reserved[L"xref"] = XREF;
-    m_reserved[L"treiler"] = TREILER;
+    m_reserved[L"startxref"] = START_XREF;
+    m_reserved[L"trailer"] = TRAILER;
     m_reserved[L"/Linearized"] = LINEARIZED;
 }
 
@@ -185,6 +187,13 @@ Token *Scanner::next_token()
                 save = false;
                 state = DONE;
                 current_token = NUM;
+            }
+            break;
+        case INHEXSTR:
+            if (c == '>') {
+                save = false;
+                state = DONE;
+                current_token = STRING;
             }
             break;
         case INSTRING:

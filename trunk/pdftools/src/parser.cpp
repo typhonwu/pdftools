@@ -5,6 +5,10 @@
 #include "objnode.h"
 #include "xrefnode.h"
 #include "mapnode.h"
+#include "namenode.h"
+#include "numbernode.h"
+#include "refnode.h"
+#include "stringnode.h"
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -126,14 +130,9 @@ TreeNode * Parser::xref_sequence()
         }
     } while ((m_token->type() != TRAILER));
     match(TRAILER);
-    //match(START_DICT);
-    //FIXME trailer
-    while (m_token->type() != END_DICT) {
-        TreeNode *trailer = value_sequence();
-    }
-    //match(END_DICT);
+    xref->set_trailer(value_sequence());
+    
     match(START_XREF);
-
     xref->set_start_address(m_token->to_number());
     match(NUM);
 
@@ -152,7 +151,6 @@ TreeNode *Parser::value_sequence()
         while (m_token->type() != END_DICT) {
             wstring name = m_token->value();
             match(NAME);
-            
             TreeNode *value = value_sequence();
             map->push(name, value);
         }
@@ -161,24 +159,30 @@ TreeNode *Parser::value_sequence()
     } else if (m_token->type() == NAME) {
         wstring name = m_token->value();
         match(NAME);
+        return new NameNode(name);
+    } else if (m_token->type() == STRING) {
+        wstring value = m_token->value();
+        match(STRING);
+        return new StringNode(value);
     } else if (m_token->type() == NUM) {
         double value = m_token->to_number();
+        int pos = m_scanner->pos();
         match(NUM);
         
-        int pos = m_scanner->pos();
         if (m_token->type() == NUM) {
             double generation = m_token->to_number();
             match(NUM);
             if (m_token->type() == NAME && m_token->value() == L"R")  {
-                // Referencia
+                match(NAME);
+                return new RefNode(value, generation);
             } else {
                 m_scanner->to_pos(pos);
-                next_token();
             }
         } else {
             m_scanner->to_pos(pos);
-            next_token();
         }
+        next_token();
+        return new NumberNode(value);
     } else if (m_token->type() == START_ARRAY) {
         match(START_ARRAY);
         while(m_token->type() != END_ARRAY) {

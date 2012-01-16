@@ -29,8 +29,8 @@ private:
     
     void comment_sequence();
     TreeNode *object_sequence();
-    TreeNode *linear_sequence();
     TreeNode *xref_sequence();
+    TreeNode *value_sequence();
 };
 
 #endif

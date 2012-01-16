@@ -15,6 +15,14 @@
 
 using namespace std;
 
+inline unsigned int xtod(wchar_t c)
+{
+    if (c >= L'0' && c <= L'9') return c - L'0';
+    if (c >= L'A' && c <= L'F') return c - L'A' + 10;
+    if (c >= L'a' && c <= L'f') return c - L'a' + 10;
+    return 0; // not Hex digit
+}
+
 enum StateType {
     START, INNUM, INNAME, INSTRING, INHEXSTR, DONE
 };
@@ -27,7 +35,6 @@ Scanner::Scanner() : m_error(NULL)
     m_reserved[L"xref"] = XREF;
     m_reserved[L"startxref"] = START_XREF;
     m_reserved[L"trailer"] = TRAILER;
-    m_reserved[L"/Linearized"] = LINEARIZED;
 }
 
 Scanner::~Scanner()
@@ -52,6 +59,16 @@ bool Scanner::open_file(const char *path)
     close_file();
     m_filein.open(path);
     return is_open();
+}
+
+int Scanner::pos()
+{
+    return m_filein.tellg();
+}
+
+void Scanner::to_pos(int pos)
+{
+    m_filein.seekg(pos);
 }
 
 wchar_t Scanner::next_char()
@@ -193,6 +210,20 @@ Token *Scanner::next_token()
             if (c == '>') {
                 save = false;
                 state = DONE;
+
+                unsigned int loop;
+                wstring string;
+
+                for (loop = 0; loop < token_string.length(); loop++) {
+                    unsigned int h = xtod(token_string.at(loop)) << 4;
+                    unsigned int l = 0;
+                    loop++;
+                    if (loop < token_string.length()) {
+                        l = xtod(token_string.at(loop));
+                    }
+                    string += (wchar_t)(h + l);
+                }
+                token_string = string;
                 current_token = STRING;
             }
             break;

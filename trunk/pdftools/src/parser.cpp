@@ -4,6 +4,7 @@
 #include "treenode.h"
 #include "objnode.h"
 #include "xrefnode.h"
+#include "mapnode.h"
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -125,21 +126,68 @@ TreeNode * Parser::xref_sequence()
         }
     } while ((m_token->type() != TRAILER));
     match(TRAILER);
-    match(START_DICT);
+    //match(START_DICT);
     //FIXME trailer
-    while(m_token->type() != END_DICT) {
-        next_token();
+    while (m_token->type() != END_DICT) {
+        TreeNode *trailer = value_sequence();
     }
-    match(END_DICT);
+    //match(END_DICT);
     match(START_XREF);
-    
+
     xref->set_start_address(m_token->to_number());
     match(NUM);
-    
+
     match(PERCENT);
     match(PERCENT);
     match(END_PDF);
     return xref;
+}
+
+TreeNode *Parser::value_sequence()
+{
+    if (m_token->type() == START_DICT) {
+        match(START_DICT);
+        MapNode *map = new MapNode;
+
+        while (m_token->type() != END_DICT) {
+            wstring name = m_token->value();
+            match(NAME);
+            
+            TreeNode *value = value_sequence();
+            map->push(name, value);
+        }
+        match(END_DICT);
+        return map;
+    } else if (m_token->type() == NAME) {
+        wstring name = m_token->value();
+        match(NAME);
+    } else if (m_token->type() == NUM) {
+        double value = m_token->to_number();
+        match(NUM);
+        
+        int pos = m_scanner->pos();
+        if (m_token->type() == NUM) {
+            double generation = m_token->to_number();
+            match(NUM);
+            if (m_token->type() == NAME && m_token->value() == L"R")  {
+                // Referencia
+            } else {
+                m_scanner->to_pos(pos);
+                next_token();
+            }
+        } else {
+            m_scanner->to_pos(pos);
+            next_token();
+        }
+    } else if (m_token->type() == START_ARRAY) {
+        match(START_ARRAY);
+        while(m_token->type() != END_ARRAY) {
+            // bla bla bla
+            TreeNode * value = value_sequence();
+        }
+        match(END_ARRAY);
+    }
+    return NULL;
 }
 
 TreeNode *Parser::object_sequence()
@@ -150,63 +198,11 @@ TreeNode *Parser::object_sequence()
     match(NUM);
 
     ObjNode *node = new ObjNode((int) number, (int) generation_nunber);
-
     match(OBJ);
-    if (m_token->type() == START_DICT) {
-        match(START_DICT);
-
-        switch (m_token->type()) {
-        case LINEARIZED:
-            node->add_child(linear_sequence());
-            break;
-        default:
-            error_message(L"unexpected token");
-            break;
-        }
-        match(END_DICT);
-    }
+    node->set_value(value_sequence());
     match(END_OBJ);
 
     return node;
-}
-
-TreeNode *Parser::linear_sequence()
-{
-    match(LINEARIZED);
-    wstring version = m_token->value();
-    match(NUM);
-
-    while (m_token->type() != END_DICT) {
-        if (m_token->value() == L"/L") {
-            // File length
-            match(NAME);
-            match(NUM);
-        } else if (m_token->value() == L"/H") {
-            match(NAME);
-            match(START_ARRAY);
-            match(NUM);
-            match(NUM);
-            match(END_ARRAY);
-        } else if (m_token->value() == L"/O") {
-            // Fist page object
-            match(NAME);
-            match(NUM);
-        } else if (m_token->value() == L"/E") {
-            match(NAME);
-            match(NUM);
-        } else if (m_token->value() == L"/N") {
-            // Pages in document
-            match(NAME);
-            match(NUM);
-        } else if (m_token->value() == L"/T") {
-            match(NAME);
-            match(NUM);
-        } else {
-            error_message(L"error parsing the linear mode");
-            return NULL;
-        }
-    }
-    return NULL;
 }
 
 bool Parser::is_valid()

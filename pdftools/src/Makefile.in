@@ -51,7 +51,7 @@ am_pdftools_OBJECTS = pdftools-main.$(OBJEXT) \
 	pdftools-parser.$(OBJEXT) pdftools-scanner.$(OBJEXT) \
 	pdftools-token.$(OBJEXT) pdftools-utils.$(OBJEXT) \
 	pdftools-treenode.$(OBJEXT) pdftools-objnode.$(OBJEXT) \
-	pdftools-xrefnode.$(OBJEXT)
+	pdftools-xrefnode.$(OBJEXT) pdftools-mapnode.$(OBJEXT)
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
 pdftools_LDADD = $(LDADD)
 pdftools_LINK = $(CXXLD) $(pdftools_CXXFLAGS) $(CXXFLAGS) \
@@ -193,7 +193,8 @@ pdftools_SOURCES = main.cpp \
 	utils.cpp \
 	treenode.cpp \
 	nodes/objnode.cpp \
-	nodes/xrefnode.cpp
+	nodes/xrefnode.cpp \
+	nodes/mapnode.cpp
 
 dist_man_MANS = pdftools.1
 noinst_HEADERS = \
@@ -203,7 +204,8 @@ noinst_HEADERS = \
 	utils.h \
 	treenode.h \
 	nodes/objnode.h \
-	nodes/xrefnode.h
+	nodes/xrefnode.h \
+	nodes/mapnode.h
 
 pdftools_CXXFLAGS = -Inodes
 EXTRA_DIST = pdftools.h2m
@@ -291,6 +293,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-mapnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-objnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-parser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-scanner.Po@am__quote@
@@ -424,6 +427,20 @@ pdftools-xrefnode.obj: nodes/xrefnode.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='nodes/xrefnode.cpp' object='pdftools-xrefnode.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -c -o pdftools-xrefnode.obj `if test -f 'nodes/xrefnode.cpp'; then $(CYGPATH_W) 'nodes/xrefnode.cpp'; else $(CYGPATH_W) '$(srcdir)/nodes/xrefnode.cpp'; fi`
+
+pdftools-mapnode.o: nodes/mapnode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -MT pdftools-mapnode.o -MD -MP -MF $(DEPDIR)/pdftools-mapnode.Tpo -c -o pdftools-mapnode.o `test -f 'nodes/mapnode.cpp' || echo '$(srcdir)/'`nodes/mapnode.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pdftools-mapnode.Tpo $(DEPDIR)/pdftools-mapnode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='nodes/mapnode.cpp' object='pdftools-mapnode.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -c -o pdftools-mapnode.o `test -f 'nodes/mapnode.cpp' || echo '$(srcdir)/'`nodes/mapnode.cpp
+
+pdftools-mapnode.obj: nodes/mapnode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -MT pdftools-mapnode.obj -MD -MP -MF $(DEPDIR)/pdftools-mapnode.Tpo -c -o pdftools-mapnode.obj `if test -f 'nodes/mapnode.cpp'; then $(CYGPATH_W) 'nodes/mapnode.cpp'; else $(CYGPATH_W) '$(srcdir)/nodes/mapnode.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pdftools-mapnode.Tpo $(DEPDIR)/pdftools-mapnode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='nodes/mapnode.cpp' object='pdftools-mapnode.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -c -o pdftools-mapnode.obj `if test -f 'nodes/mapnode.cpp'; then $(CYGPATH_W) 'nodes/mapnode.cpp'; else $(CYGPATH_W) '$(srcdir)/nodes/mapnode.cpp'; fi`
 install-man1: $(dist_man_MANS)
 	@$(NORMAL_INSTALL)
 	test -z "$(man1dir)" || $(MKDIR_P) "$(DESTDIR)$(man1dir)"

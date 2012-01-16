@@ -2,6 +2,7 @@
 #define SCANNER_H
 
 #include <fstream>
+#include <ios>
 #include <map>
 #include "token.h"
 
@@ -22,6 +23,8 @@ public:
     const wchar_t *error();
     
     void ignore_line();
+    int pos();
+    void to_pos(int pos);
     
 private:
     void close_file();

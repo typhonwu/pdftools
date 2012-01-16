@@ -7,7 +7,11 @@ pdftools_SOURCES = main.cpp \
 	treenode.cpp \
 	nodes/objnode.cpp \
 	nodes/xrefnode.cpp \
-	nodes/mapnode.cpp
+	nodes/mapnode.cpp \
+	nodes/stringnode.cpp \
+	nodes/namenode.cpp \
+	nodes/refnode.cpp \
+	nodes/numbernode.cpp
 
 dist_man_MANS = pdftools.1
 
@@ -19,7 +23,11 @@ noinst_HEADERS = \
 	treenode.h \
 	nodes/objnode.h \
 	nodes/xrefnode.h \
-	nodes/mapnode.h
+	nodes/mapnode.h \
+	nodes/stringnode.h \
+	nodes/namenode.h \
+	nodes/refnode.h \
+	nodes/numbernode.h
 
 pdftools_CXXFLAGS = -Inodes
 

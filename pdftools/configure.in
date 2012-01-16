@@ -36,7 +36,6 @@ AC_CHECK_HEADERS([string cstdlib fstream],,AC_MSG_ERROR(required file is missing
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
 AC_C_CONST
-#AC_CHECK_HEADERS([wchar.h])
 AC_CHECK_TYPE([wchar_t],,[ AC_MSG_ERROR([Type wchar_t not found.]) ])
 
 AC_CONFIG_FILES([Makefile

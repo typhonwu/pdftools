@@ -235,7 +235,7 @@ Token *Scanner::next_token()
             }
             break;
         case INNAME:
-            if (is_space(c) || c == L'<' || c == L'\\') {
+            if (is_space(c) || c == L'<' || c == L'\\' || c == L'//' || c == L'[') {
                 save = false;
                 unget_char();
                 state = DONE;

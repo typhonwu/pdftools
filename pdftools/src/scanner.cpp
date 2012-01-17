@@ -109,13 +109,15 @@ void Scanner::to_pos(int pos)
 
 wchar_t Scanner::next_char()
 {
-    wchar_t ret = L'\0';
+    wchar_t ret = EOF;
     locale loc;
 
-    if (m_filein.good()) {
-        ret = use_facet < ctype<wchar_t> >(loc).widen((char) m_filein.get());
+    if (m_filein.good() && !m_filein.eof()) {
+        //ret = use_facet < ctype<wchar_t> >(loc).widen((char) m_filein.get());
+        ret = m_filein.get();
         if (ret == L'\r') {
-            wchar_t second = use_facet < ctype<wchar_t> >(loc).widen((char) m_filein.get());
+            //wchar_t second = use_facet < ctype<wchar_t> >(loc).widen((char) m_filein.get());
+            wchar_t second = m_filein.get();
             if (second == L'\n') {
                 return L'\n';
             }
@@ -225,6 +227,8 @@ Token *Scanner::next_token()
                 wstring msg = L"Invalid char ";
                 msg += c;
                 error_message(msg.c_str());
+                cout << "'" << c << "'" << endl;
+                cout << "'" << pos() << "'" << endl;
                 state = DONE;
                 save = false;
                 current_token = ERROR;

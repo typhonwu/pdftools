@@ -9,7 +9,7 @@ private:
 
 public:
     NumberNode(double value);
-    ~NumberNode();
+    virtual ~NumberNode();
 };
 
 #endif

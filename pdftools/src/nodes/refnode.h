@@ -10,7 +10,7 @@ private:
 
 public:
     RefNode(int id, int generation);
-    ~RefNode();
+    virtual ~RefNode();
 };
 
 #endif

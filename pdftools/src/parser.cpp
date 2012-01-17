@@ -1,14 +1,7 @@
 #include "parser.h"
 #include "scanner.h"
 #include "utils.h"
-#include "treenode.h"
-#include "objnode.h"
-#include "xrefnode.h"
-#include "mapnode.h"
-#include "namenode.h"
-#include "numbernode.h"
-#include "refnode.h"
-#include "stringnode.h"
+#include <nodes.h>
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -55,24 +48,23 @@ void Parser::next_token()
     m_token = m_scanner->next_token();
 }
 
-bool Parser::match(TokenType type, bool readNext)
+bool Parser::match(TokenType type)
 {
     if (m_token && m_token->type() == type) {
-        if (readNext) {
-            next_token();
-        }
+        next_token();
     } else {
         wstring msg = L"unexpected token: ";
         msg += m_token->value();
         error_message(msg.c_str());
+        next_token();
         return false;
     }
     return true;
 }
 
-TreeNode *Parser::parse()
+RootNode *Parser::parse()
 {
-    TreeNode *root = new TreeNode();
+    RootNode *root = new RootNode();
     bool error = false;
     match(PERCENT);
     if (verify_version()) {
@@ -131,7 +123,7 @@ TreeNode * Parser::xref_sequence()
     } while (m_scanner->good() && (m_token->type() != TRAILER));
     match(TRAILER);
     xref->set_trailer(value_sequence());
-    
+
     match(START_XREF);
     xref->set_start_address(m_token->to_number());
     match(NUM);
@@ -168,11 +160,11 @@ TreeNode *Parser::value_sequence()
         double value = m_token->to_number();
         int pos = m_scanner->pos();
         match(NUM);
-        
+
         if (m_token->type() == NUM) {
             double generation = m_token->to_number();
             match(NUM);
-            if (m_token->type() == NAME && m_token->value() == L"R")  {
+            if (m_token->type() == NAME && m_token->value() == L"R") {
                 match(NAME);
                 return new RefNode(value, generation);
             } else {
@@ -184,12 +176,13 @@ TreeNode *Parser::value_sequence()
         next_token();
         return new NumberNode(value);
     } else if (m_token->type() == START_ARRAY) {
+        ArrayNode *array = new ArrayNode;
         match(START_ARRAY);
-        while(m_scanner->good() && m_token->type() != END_ARRAY) {
-            // bla bla bla
-            TreeNode * value = value_sequence();
+        while (m_scanner->good() && m_token->type() != END_ARRAY) {
+            array->push(value_sequence());
         }
         match(END_ARRAY);
+        return array;
     }
     return NULL;
 }
@@ -204,6 +197,11 @@ TreeNode *Parser::object_sequence()
     ObjNode *node = new ObjNode((int) number, (int) generation_nunber);
     match(OBJ);
     node->set_value(value_sequence());
+    if (m_token->type() == STREAM) {
+        node->set_stream(m_scanner->get_stream());
+        next_token();
+        match(END_STREAM);
+    }
     match(END_OBJ);
 
     return node;

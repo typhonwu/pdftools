@@ -4,6 +4,8 @@
 #include <locale>
 #include <sstream>
 #include <cstring>
+#include <algorithm>
+#include <vector>
 
 #if HAVE_CONFIG_H
 #include <config.h>
@@ -33,6 +35,8 @@ Scanner::Scanner() : m_error(NULL)
     m_reserved[L"endobj"] = END_OBJ;
     m_reserved[L"EOF"] = END_PDF;
     m_reserved[L"xref"] = XREF;
+    m_reserved[L"stream"] = STREAM;
+    m_reserved[L"endstream"] = END_STREAM;
     m_reserved[L"startxref"] = START_XREF;
     m_reserved[L"trailer"] = TRAILER;
 }
@@ -71,25 +75,51 @@ void Scanner::to_pos(int pos)
     m_filein.seekg(pos);
 }
 
+uint8_t *Scanner::get_stream()
+{
+    vector<uint8_t> stream;
+
+    // Ignore first new line
+    while (m_filein.good() && m_filein.get() != L'\n');
+
+    while (m_filein.good()) {
+        uint8_t ret = m_filein.get();
+        if ((ret == '\n' || ret == '\r') && m_filein.good()) {
+            int pos = m_filein.tellg();
+            int next = m_filein.get();
+            if (next == 'e') {
+                m_filein.unget();
+                Token *token = next_token();
+                if (token != NULL && token->type() == END_STREAM) {
+                    // endstream: do not save the and char 
+                    // and return the token start position
+                    m_filein.seekg(pos);
+                    break;
+                }
+            }
+            // not endstream
+            m_filein.seekg(pos);
+        }
+        stream.push_back(ret);
+    }
+    uint8_t *ret = new uint8_t[stream.size()];
+    copy(stream.begin(), stream.end(), ret);
+    return ret;
+}
+
 wchar_t Scanner::next_char()
 {
-    static bool new_char = false;
     wchar_t ret = L'\0';
     locale loc;
 
     if (m_filein.good()) {
         ret = use_facet < ctype<wchar_t> >(loc).widen((char) m_filein.get());
-        if (new_char) {
-            if (ret == L'\n' || ret == L'\r') {
-                new_char = false;
-                return next_char();
+        if (ret == L'\r') {
+            wchar_t second = use_facet < ctype<wchar_t> >(loc).widen((char) m_filein.get());
+            if (second == L'\n') {
+                return L'\n';
             }
-        }
-        if (ret == L'\n') {
-            new_char = true;
-        } else if (ret == L'\r') {
-            new_char = true;
-            ret = L'\n';
+            m_filein.unget();
         }
     }
     return ret;
@@ -198,7 +228,7 @@ Token *Scanner::next_token()
             }
             break;
         case INNUM:
-            if (!isdigit(c)) {
+            if (!isdigit(c) && (c != L'.')) {
                 /* backup in the input */
                 unget_char();
                 save = false;
@@ -235,7 +265,7 @@ Token *Scanner::next_token()
             }
             break;
         case INNAME:
-            if (is_space(c) || c == L'<' || c == L'\\' || c == L'//' || c == L'[') {
+            if (is_space(c) || c == L'<' || c == L'//' || c == L'[' || c == L']' || c == L'>') {
                 save = false;
                 unget_char();
                 state = DONE;

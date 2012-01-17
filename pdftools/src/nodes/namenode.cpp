@@ -1,6 +1,6 @@
 #include "namenode.h"
 
-NameNode::NameNode(std::wstring name)
+NameNode::NameNode(std::wstring name) : TreeNode()
 {
     m_name = name;
 }

@@ -7,7 +7,9 @@ libnodes_a_SOURCES = \
 	namenode.cpp \
 	refnode.cpp \
 	numbernode.cpp \
-	treenode.cpp
+	treenode.cpp \
+	arraynode.cpp \
+	rootnode.cpp
 
 noinst_HEADERS = \
 	objnode.h \
@@ -17,6 +19,8 @@ noinst_HEADERS = \
 	namenode.h \
 	refnode.h \
 	numbernode.h \
-	treenode.h
+	treenode.h \
+	arraynode.h \
+	rootnode.h
 
 libnodes_a_CXXFLAGS = -I..

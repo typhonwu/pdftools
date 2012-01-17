@@ -10,7 +10,7 @@ private:
 
 public:
     NameNode(std::wstring name);
-    ~NameNode();
+    virtual ~NameNode();
 };
 
 #endif

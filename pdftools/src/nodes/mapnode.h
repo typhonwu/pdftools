@@ -3,6 +3,7 @@
 
 #include "treenode.h"
 #include <map>
+#include <string>
 
 class MapNode : public TreeNode {
 private:

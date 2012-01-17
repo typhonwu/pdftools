@@ -4,6 +4,7 @@
 #include "token.h"
 
 class Scanner;
+class RootNode;
 class TreeNode;
 
 class Parser {
@@ -19,13 +20,13 @@ public:
     ~Parser();
 
     bool open_file(const char *path);
-    TreeNode *parse();
+    RootNode *parse();
     bool is_valid();
 
 private:
     void next_token();
     bool verify_version();
-    bool match(TokenType type, bool readNext = true);
+    bool match(TokenType type);
     
     void comment_sequence();
     TreeNode *object_sequence();

@@ -2710,7 +2710,7 @@ DEBUG_CFLAGS="-O3 -DNDEBUG -Wall"
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
   enableval=$enable_debug;   if test "$enable_debug" = "yes"; then
-      DEBUG_CFLAGS="-g3 -O0 -DDEBUG -Wall -fno-inline -fno-eliminate-unused-debug-types "
+      DEBUG_CFLAGS="-g3 -O0 -DDEBUG -Wall -fno-inline -fno-eliminate-unused-debug-types"
    fi
 
 

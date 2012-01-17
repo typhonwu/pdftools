@@ -24,4 +24,3 @@ pdftools.1: pdftools$(EXEEXT) pdftools.h2m
 	@$(HELP2MAN) --output=$@ -N -i pdftools.h2m ./pdftools$(EXEEXT)
 endif
 
-EXTRA_DIST = pdftools.h2m

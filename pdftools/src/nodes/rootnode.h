@@ -7,7 +7,6 @@
 class RootNode : TreeNode {
 private:
     std::vector<TreeNode *> m_child;
-    TreeNode *m_sibling;
 
 public:
     RootNode();

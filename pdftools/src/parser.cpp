@@ -187,7 +187,7 @@ TreeNode *Parser::value_sequence()
     return NULL;
 }
 
-TreeNode *Parser::object_sequence()
+ TreeNode *Parser::object_sequence()
 {
     float number = m_token->to_number();
     match(NUM);
@@ -198,7 +198,9 @@ TreeNode *Parser::object_sequence()
     match(OBJ);
     node->set_value(value_sequence());
     if (m_token->type() == STREAM) {
-        node->set_stream(m_scanner->get_stream());
+        vector<uint8_t> stream = m_scanner->get_stream();
+        node->set_stream(stream);
+        stream.clear();
         next_token();
         match(END_STREAM);
     }

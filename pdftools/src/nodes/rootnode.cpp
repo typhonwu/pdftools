@@ -9,9 +9,11 @@ RootNode::RootNode() : TreeNode()
 
 RootNode::~RootNode()
 {
-    vector<TreeNode*>::iterator i;
-    for (i = m_child.begin(); i != m_child.end(); i++) {
+    vector<TreeNode*>::iterator i = m_child.begin();
+    while (i != m_child.end()) {
         delete *i;
+        *i = NULL;
+        i = m_child.erase(i);
     }
 }
 

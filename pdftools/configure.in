@@ -4,7 +4,7 @@ AM_INIT_AUTOMAKE([-Wall tar-ustar])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 
-DEBUG_CFLAGS="-O2 -DNDEBUG -Wall"
+DEBUG_CFLAGS="-O3 -DNDEBUG -Wall"
 dnl This mechanism allows one to enable debug compilations...
 AC_ARG_ENABLE(debug,
 [  --enable-debug     enable debugging and disable optimization],

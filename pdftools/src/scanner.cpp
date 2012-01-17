@@ -75,7 +75,7 @@ void Scanner::to_pos(int pos)
     m_filein.seekg(pos);
 }
 
-uint8_t *Scanner::get_stream()
+ vector<uint8_t> Scanner::get_stream()
 {
     vector<uint8_t> stream;
 
@@ -94,17 +94,17 @@ uint8_t *Scanner::get_stream()
                     // endstream: do not save the and char 
                     // and return the token start position
                     m_filein.seekg(pos);
+                    delete token;
                     break;
                 }
+                delete token;
             }
             // not endstream
             m_filein.seekg(pos);
         }
         stream.push_back(ret);
     }
-    uint8_t *ret = new uint8_t[stream.size()];
-    copy(stream.begin(), stream.end(), ret);
-    return ret;
+    return stream;
 }
 
 wchar_t Scanner::next_char()

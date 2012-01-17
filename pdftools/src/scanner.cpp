@@ -169,7 +169,7 @@ Token *Scanner::next_token()
     m_error = NULL;
 
     bool save;
-    while (state != DONE) {
+    while (state != DONE && m_filein.good()) {
         wchar_t c = next_char();
         if (!c) {
             return NULL;
@@ -218,6 +218,9 @@ Token *Scanner::next_token()
                 save = false;
             } else if (iswalpha(c) || c == L'/') {
                 state = INNAME;
+            } else if (c == EOF) {
+                state = DONE;
+                current_token = ENDFILE;
             } else {
                 wstring msg = L"Invalid char ";
                 msg += c;
@@ -225,6 +228,8 @@ Token *Scanner::next_token()
                 state = DONE;
                 save = false;
                 current_token = ERROR;
+                
+                cout << (int)c << endl;
             }
             break;
         case INNUM:
@@ -258,14 +263,18 @@ Token *Scanner::next_token()
             }
             break;
         case INSTRING:
-            if (c == '"') {
+            if (c == L'\\') {
+                // save the next char
+                c = next_char();
+            } else if (c == L')') {
                 save = false;
                 state = DONE;
                 current_token = STRING;
             }
             break;
         case INNAME:
-            if (is_space(c) || c == L'<' || c == L'//' || c == L'[' || c == L']' || c == L'>') {
+            if (is_space(c) || c == L'<' || c == L'(' || c == L')' 
+                    || c == L'/' || c == L'[' || c == L']' || c == L'>') {
                 save = false;
                 unget_char();
                 state = DONE;

@@ -128,7 +128,7 @@ TreeNode * Parser::xref_sequence()
             xref->add_node(id, generation, address, name.at(0));
             id++;
         }
-    } while ((m_token->type() != TRAILER));
+    } while (m_scanner->good() && (m_token->type() != TRAILER));
     match(TRAILER);
     xref->set_trailer(value_sequence());
     
@@ -148,7 +148,7 @@ TreeNode *Parser::value_sequence()
         match(START_DICT);
         MapNode *map = new MapNode;
 
-        while (m_token->type() != END_DICT) {
+        while (m_scanner->good() && m_token->type() != END_DICT) {
             wstring name = m_token->value();
             match(NAME);
             TreeNode *value = value_sequence();
@@ -185,7 +185,7 @@ TreeNode *Parser::value_sequence()
         return new NumberNode(value);
     } else if (m_token->type() == START_ARRAY) {
         match(START_ARRAY);
-        while(m_token->type() != END_ARRAY) {
+        while(m_scanner->good() && m_token->type() != END_ARRAY) {
             // bla bla bla
             TreeNode * value = value_sequence();
         }

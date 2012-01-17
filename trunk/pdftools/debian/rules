@@ -5,7 +5,7 @@ package = pdftools
 CXXFLAGS = -Wall
 
 ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-  CXXFLAGS += -O2
+  CXXFLAGS += -O3
 endif
 
 clean:

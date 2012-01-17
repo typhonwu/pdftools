@@ -1,5 +1,5 @@
 AC_PREREQ(2.61)
-AC_INIT([pdftools], 0.1, [leonhad@gmail.com], [pdftools], [http://code.google.com/p/pdftools/])
+AC_INIT([pdftools],[0.1],[leonhad@gmail.com],[pdftools],[http://code.google.com/p/pdftools/])
 AM_INIT_AUTOMAKE([-Wall tar-ustar])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
@@ -17,7 +17,7 @@ AM_CONDITIONAL(ENABLE_DEBUG, test "$enable_debug" = "yes")
 CXXFLAGS="$DEBUG_CFLAGS $CXXFLAGS"
 
 # Checks for programs.
-AC_LANG_CPLUSPLUS
+AC_LANG([C++])
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL

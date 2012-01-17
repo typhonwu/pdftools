@@ -2,9 +2,9 @@
 #define PARSER_H
 
 #include "token.h"
+#include "rootnode.h"
 
 class Scanner;
-class RootNode;
 class TreeNode;
 
 class Parser {

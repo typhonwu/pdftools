@@ -104,7 +104,8 @@ int main(int argc, char *argv[])
             if (!parser.open_file(argv[optind])) {
                 error_message(L"file not found");
             } else {
-                parser.parse();
+                RootNode *root = parser.parse();
+                delete root;
             }
             optind++;
         }

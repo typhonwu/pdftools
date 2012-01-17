@@ -164,7 +164,7 @@ TokenType Scanner::reserved_lookup(const wchar_t *s)
 Token *Scanner::next_token()
 {
     wstring token_string;
-    TokenType current_token;
+    TokenType current_token = ENDFILE;
     StateType state = START;
     m_error = NULL;
 
@@ -228,8 +228,6 @@ Token *Scanner::next_token()
                 state = DONE;
                 save = false;
                 current_token = ERROR;
-                
-                cout << (int)c << endl;
             }
             break;
         case INNUM:
@@ -256,7 +254,7 @@ Token *Scanner::next_token()
                     if (loop < token_string.length()) {
                         l = xtod(token_string.at(loop));
                     }
-                    string += (wchar_t)(h + l);
+                    string.push_back(h + l);
                 }
                 token_string = string;
                 current_token = STRING;
@@ -291,10 +289,10 @@ Token *Scanner::next_token()
             break;
         }
         if (save) {
-            token_string += c;
+            token_string.push_back(c);
         }
     }
-    return new Token(current_token, token_string.c_str());
+    return new Token(current_token, token_string);
 }
 
 const wchar_t *Scanner::get_line()

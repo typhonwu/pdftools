@@ -10,7 +10,7 @@ private:
 
 public:
     StringNode(std::wstring value);
-    ~StringNode();
+    virtual ~StringNode();
 };
 
 #endif

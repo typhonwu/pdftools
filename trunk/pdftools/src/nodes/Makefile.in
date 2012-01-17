@@ -50,7 +50,8 @@ am_libnodes_a_OBJECTS = libnodes_a-objnode.$(OBJEXT) \
 	libnodes_a-xrefnode.$(OBJEXT) libnodes_a-mapnode.$(OBJEXT) \
 	libnodes_a-stringnode.$(OBJEXT) libnodes_a-namenode.$(OBJEXT) \
 	libnodes_a-refnode.$(OBJEXT) libnodes_a-numbernode.$(OBJEXT) \
-	libnodes_a-treenode.$(OBJEXT)
+	libnodes_a-treenode.$(OBJEXT) libnodes_a-arraynode.$(OBJEXT) \
+	libnodes_a-rootnode.$(OBJEXT)
 libnodes_a_OBJECTS = $(am_libnodes_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -167,7 +168,9 @@ libnodes_a_SOURCES = \
 	namenode.cpp \
 	refnode.cpp \
 	numbernode.cpp \
-	treenode.cpp
+	treenode.cpp \
+	arraynode.cpp \
+	rootnode.cpp
 
 noinst_HEADERS = \
 	objnode.h \
@@ -177,7 +180,9 @@ noinst_HEADERS = \
 	namenode.h \
 	refnode.h \
 	numbernode.h \
-	treenode.h
+	treenode.h \
+	arraynode.h \
+	rootnode.h
 
 libnodes_a_CXXFLAGS = -I..
 all: all-am
@@ -227,11 +232,13 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-arraynode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-mapnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-namenode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-numbernode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-objnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-refnode.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-rootnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-stringnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-treenode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-xrefnode.Po@am__quote@
@@ -361,6 +368,34 @@ libnodes_a-treenode.obj: treenode.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='treenode.cpp' object='libnodes_a-treenode.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-treenode.obj `if test -f 'treenode.cpp'; then $(CYGPATH_W) 'treenode.cpp'; else $(CYGPATH_W) '$(srcdir)/treenode.cpp'; fi`
+
+libnodes_a-arraynode.o: arraynode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-arraynode.o -MD -MP -MF $(DEPDIR)/libnodes_a-arraynode.Tpo -c -o libnodes_a-arraynode.o `test -f 'arraynode.cpp' || echo '$(srcdir)/'`arraynode.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libnodes_a-arraynode.Tpo $(DEPDIR)/libnodes_a-arraynode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='arraynode.cpp' object='libnodes_a-arraynode.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-arraynode.o `test -f 'arraynode.cpp' || echo '$(srcdir)/'`arraynode.cpp
+
+libnodes_a-arraynode.obj: arraynode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-arraynode.obj -MD -MP -MF $(DEPDIR)/libnodes_a-arraynode.Tpo -c -o libnodes_a-arraynode.obj `if test -f 'arraynode.cpp'; then $(CYGPATH_W) 'arraynode.cpp'; else $(CYGPATH_W) '$(srcdir)/arraynode.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libnodes_a-arraynode.Tpo $(DEPDIR)/libnodes_a-arraynode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='arraynode.cpp' object='libnodes_a-arraynode.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-arraynode.obj `if test -f 'arraynode.cpp'; then $(CYGPATH_W) 'arraynode.cpp'; else $(CYGPATH_W) '$(srcdir)/arraynode.cpp'; fi`
+
+libnodes_a-rootnode.o: rootnode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-rootnode.o -MD -MP -MF $(DEPDIR)/libnodes_a-rootnode.Tpo -c -o libnodes_a-rootnode.o `test -f 'rootnode.cpp' || echo '$(srcdir)/'`rootnode.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libnodes_a-rootnode.Tpo $(DEPDIR)/libnodes_a-rootnode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='rootnode.cpp' object='libnodes_a-rootnode.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-rootnode.o `test -f 'rootnode.cpp' || echo '$(srcdir)/'`rootnode.cpp
+
+libnodes_a-rootnode.obj: rootnode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-rootnode.obj -MD -MP -MF $(DEPDIR)/libnodes_a-rootnode.Tpo -c -o libnodes_a-rootnode.obj `if test -f 'rootnode.cpp'; then $(CYGPATH_W) 'rootnode.cpp'; else $(CYGPATH_W) '$(srcdir)/rootnode.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libnodes_a-rootnode.Tpo $(DEPDIR)/libnodes_a-rootnode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='rootnode.cpp' object='libnodes_a-rootnode.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-rootnode.obj `if test -f 'rootnode.cpp'; then $(CYGPATH_W) 'rootnode.cpp'; else $(CYGPATH_W) '$(srcdir)/rootnode.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

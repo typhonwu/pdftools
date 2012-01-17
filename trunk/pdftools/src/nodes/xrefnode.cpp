@@ -1,12 +1,18 @@
 #include "xrefnode.h"
 
+using namespace std;
+
 XREFNode::XREFNode() : TreeNode()
 {
     m_start_address = NULL;
+    m_trailer = NULL;
 }
 
 XREFNode::~XREFNode()
 {
+    if (m_trailer) {
+        delete m_trailer;
+    }
     m_references.clear();
 }
 

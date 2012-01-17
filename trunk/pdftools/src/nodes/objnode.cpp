@@ -1,6 +1,8 @@
 #include "objnode.h"
 #include <cstdlib>
 
+using namespace std;
+
 ObjNode::ObjNode(int id, int generator) : TreeNode()
 {
     this->id = id;
@@ -15,7 +17,7 @@ ObjNode::~ObjNode()
         delete m_value;
     }
     if (m_stream) {
-        delete m_stream;
+        delete [] m_stream;
     }
 }
 
@@ -24,7 +26,8 @@ void ObjNode::set_value(TreeNode *value)
     m_value = value;
 }
 
-void ObjNode::set_stream(uint8_t *stream)
+void ObjNode::set_stream(vector<uint8_t> stream)
 {
-    m_stream = stream;
+    m_stream = new uint8_t[stream.size()];
+    copy(stream.begin(), stream.end(), m_stream);
 }

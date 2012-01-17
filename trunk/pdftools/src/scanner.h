@@ -4,6 +4,7 @@
 #include <fstream>
 #include <ios>
 #include <map>
+#include <vector>
 #include <stdint.h>
 #include "token.h"
 
@@ -26,7 +27,7 @@ public:
     void ignore_line();
     int pos();
     void to_pos(int pos);
-    uint8_t *get_stream();
+    std::vector<uint8_t> get_stream();
     
 private:
     void close_file();

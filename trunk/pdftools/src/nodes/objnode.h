@@ -2,6 +2,7 @@
 #define OBJNODE_H
 
 #include "treenode.h"
+#include <vector>
 #include <stdint.h>
 
 class ObjNode : public TreeNode {
@@ -16,7 +17,7 @@ public:
     virtual ~ObjNode();
     
     void set_value(TreeNode *value);
-    void set_stream(uint8_t *stream);
+    void set_stream(std::vector<uint8_t> stream);
 };
 
 #endif

@@ -10,9 +10,10 @@ MapNode::MapNode() : TreeNode()
 
 MapNode::~MapNode()
 {
-    map<wstring, TreeNode*>::iterator i;
-    for (i = m_values.begin(); i != m_values.end(); i++) {
+    map<wstring, TreeNode*>::iterator i = m_values.begin();
+    while (i != m_values.end()) {
         delete (*i).second;
+        i++;
     }
     m_values.clear();
 }

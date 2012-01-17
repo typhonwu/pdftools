@@ -2706,7 +2706,7 @@ $as_echo "$am_cv_prog_tar_ustar" >&6; }
 ac_config_headers="$ac_config_headers config.h"
 
 
-DEBUG_CFLAGS="-O2 -DNDEBUG -Wall"
+DEBUG_CFLAGS="-O3 -DNDEBUG -Wall"
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
   enableval=$enable_debug;   if test "$enable_debug" = "yes"; then

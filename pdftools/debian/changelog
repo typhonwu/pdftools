@@ -1,9 +1,12 @@
+pdftools (0.2ubuntu1) lucid; urgency=low
+
+  * Finished the parser and scanner
+
+ -- Leonardo Alves da Costa <leonhad@gmail.com>  Tue, 17 Jan 2012 15:05:26 -0200
+
 pdftools (0.1ubuntu1) lucid; urgency=low
 
-  [ Fernando Ribeiro ]
   * Initial release
-
-  [ Leonardo Alves da Costa ]
   * Change configure.in options 
 
- -- Leonardo Alves da Costa <leonhad@gmail.com>  Thu, 05 Jan 2012 15:50:02 -0200
+ -- Fernando Ribeiro da Silva <fernando.ribeiro@gmail.com>  Thu, 05 Jan 2012 15:50:02 -0200

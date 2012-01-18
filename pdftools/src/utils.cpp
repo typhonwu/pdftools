@@ -12,7 +12,7 @@ static bool _verbose = false;
 void verbose_message(const wchar_t *msg)
 {
     if (verbose_mode()) {
-        wcout << PACKAGE_NAME << ": " << msg << endl;
+        wcout << PACKAGE_NAME << L": " << msg << endl;
     }
 }
 
@@ -20,6 +20,7 @@ wchar_t *to_unicode(const char *str)
 {
     wchar_t *string = new wchar_t[strlen(str) + 1];
     mbstowcs(string, str, strlen(str));
+    string[strlen(str)] = 0;
     return string;
 }
 

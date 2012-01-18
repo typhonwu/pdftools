@@ -8,18 +8,21 @@
 
 using namespace std;
 
-const wchar_t *_pdf_versions[] = {
-    L"PDF-1.1",
-    L"PDF-1.2",
-    L"PDF-1.3",
-    L"PDF-1.4",
-    L"PDF-1.5",
-    L"PDF-1.6",
-    L"PDF-1.7"
+const char *_pdf_versions[] = {
+    "PDF-1.1",
+    "PDF-1.2",
+    "PDF-1.3",
+    "PDF-1.4",
+    "PDF-1.5",
+    "PDF-1.6",
+    "PDF-1.7"
 };
 
-Parser::Parser() : m_token(NULL), m_valid(false), m_linear(false)
+Parser::Parser()
 {
+    m_token = NULL;
+    m_valid = false;
+    m_linear = false;
     m_scanner = new Scanner();
 }
 
@@ -53,7 +56,7 @@ bool Parser::match(TokenType type)
     if (m_token && m_token->type() == type) {
         next_token();
     } else {
-        wstring msg = L"unexpected token: ";
+        string msg = "unexpected token: ";
         msg += m_token->value();
         error_message(msg.c_str());
         next_token();
@@ -88,7 +91,7 @@ RootNode *Parser::parse()
             }
         }
     } else {
-        error_message(L"invalid input file");
+        error_message("invalid input file");
     }
     return root;
 }
@@ -115,7 +118,7 @@ TreeNode * Parser::xref_sequence()
             match(NUM);
             uint16_t generation = (int) m_token->to_number();
             match(NUM);
-            wstring name = m_token->value();
+            string name = m_token->value();
             match(NAME);
             xref->add_node(id, generation, address, name.at(0));
             id++;
@@ -141,7 +144,7 @@ TreeNode *Parser::value_sequence()
         MapNode *map = new MapNode;
 
         while (m_scanner->good() && m_token->type() != END_DICT) {
-            wstring name = m_token->value();
+            string name = m_token->value();
             match(NAME);
             TreeNode *value = value_sequence();
             map->push(name, value);
@@ -149,11 +152,11 @@ TreeNode *Parser::value_sequence()
         match(END_DICT);
         return map;
     } else if (m_token->type() == NAME) {
-        wstring name = m_token->value();
+        string name = m_token->value();
         match(NAME);
         return new NameNode(name);
     } else if (m_token->type() == STRING) {
-        wstring value = m_token->value();
+        string value = m_token->value();
         match(STRING);
         return new StringNode(value);
     } else if (m_token->type() == NUM) {
@@ -164,7 +167,7 @@ TreeNode *Parser::value_sequence()
         if (m_token->type() == NUM) {
             double generation = m_token->to_number();
             match(NUM);
-            if (m_token->type() == NAME && m_token->value() == L"R") {
+            if (m_token->type() == NAME && m_token->value() == "R") {
                 match(NAME);
                 return new RefNode(value, generation);
             } else {
@@ -217,7 +220,7 @@ bool Parser::is_valid()
 bool Parser::verify_version()
 {
     int loop;
-    wstring line = m_token->value();
+    string line = m_token->value();
 
     for (loop = 0; loop < 7; loop++) {
         if (line == _pdf_versions[loop]) {

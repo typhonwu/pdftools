@@ -9,7 +9,7 @@ typedef struct {
     uint32_t address;
     uint16_t id;
     uint16_t generation;
-    wchar_t status;
+    char status;
 } object_reference;
 
 class XREFNode : public TreeNode {
@@ -22,7 +22,7 @@ public:
     XREFNode();
     virtual ~XREFNode();
     
-    void add_node(uint16_t id, uint16_t generation, uint32_t address, wchar_t status);
+    void add_node(uint16_t id, uint16_t generation, uint32_t address, char status);
     void set_start_address(long address);
     void set_trailer(TreeNode *trailer);
 };

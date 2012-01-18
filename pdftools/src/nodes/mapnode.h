@@ -7,13 +7,13 @@
 
 class MapNode : public TreeNode {
 private:
-    std::map<std::wstring, TreeNode *> m_values;
+    std::map<std::string, TreeNode *> m_values;
     
 public:
     MapNode();
     ~MapNode();
     
-    void push(std::wstring name, TreeNode *value);
+    void push(std::string name, TreeNode *value);
 };
 
 #endif

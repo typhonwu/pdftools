@@ -6,10 +6,10 @@
 
 class NameNode : public TreeNode {
 private:
-    std::wstring m_name;
+    std::string m_name;
 
 public:
-    NameNode(std::wstring name);
+    NameNode(std::string name);
     virtual ~NameNode();
 };
 

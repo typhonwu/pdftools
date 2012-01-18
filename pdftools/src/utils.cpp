@@ -3,30 +3,21 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
-#include <locale>
 
 using namespace std;
 
 static bool _verbose = false;
 
-void verbose_message(const wchar_t *msg)
+void verbose_message(const char *msg)
 {
     if (verbose_mode()) {
-        wcout << PACKAGE_NAME << L": " << msg << endl;
+        cout << PACKAGE_NAME << ": " << msg << endl;
     }
 }
 
-wchar_t *to_unicode(const char *str)
+void error_message(const char *msg)
 {
-    wchar_t *string = new wchar_t[strlen(str) + 1];
-    mbstowcs(string, str, strlen(str));
-    string[strlen(str)] = 0;
-    return string;
-}
-
-void error_message(const wchar_t *msg)
-{
-    wcerr << PACKAGE_NAME << L": " << msg << endl;
+    cerr << PACKAGE_NAME << ": " << msg << endl;
 }
 
 void set_verbose_mode(const bool verbose)

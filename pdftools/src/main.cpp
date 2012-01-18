@@ -50,31 +50,31 @@ int main(int argc, char *argv[])
             }
             break;
         case 'h':
-            wcout << PACKAGE_NAME << L" is a high level tools to convert PDF files to AZW or ePUB formats." << endl;
-            wcout << endl;
-            wcout << L"Usage: " << PACKAGE_NAME << L" [options] file..." << endl;
-            wcout << L"Options:" << endl;
-            wcout << L"  -f <format>, --format=<format>\toutput file format [epub]" << endl;
-            wcout << L"  -h, --help\t\t\t\tdisplay this information and quit" << endl;
-            wcout << L"  -o <file>\t\t\t\tset the output file" << endl;
-            wcout << L"  -v, --version\t\t\t\tdisplay the version information" << endl;
-            wcout << L"  --verbose\t\t\t\trun in verbose mode" << endl;
-            wcout << endl;
-            wcout << L"Report bugs to <http://code.google.com/p/pdftools/issues/list>" << endl;
+            cout << PACKAGE_NAME << " is a high level tools to convert PDF files to AZW or ePUB formats." << endl;
+            cout << endl;
+            cout << "Usage: " << PACKAGE_NAME << " [options] file..." << endl;
+            cout << "Options:" << endl;
+            cout << "  -f <format>, --format=<format>\toutput file format [epub]" << endl;
+            cout << "  -h, --help\t\t\t\tdisplay this information and quit" << endl;
+            cout << "  -o <file>\t\t\t\tset the output file" << endl;
+            cout << "  -v, --version\t\t\t\tdisplay the version information" << endl;
+            cout << "  --verbose\t\t\t\trun in verbose mode" << endl;
+            cout << endl;
+            cout << "Report bugs to <http://code.google.com/p/pdftools/issues/list>" << endl;
             return EXIT_SUCCESS;
         case 'v':
-            wcout << PACKAGE_STRING << endl;
-            wcout << endl;
-            wcout << L"Copyright (C) 2012 Leonardo Alves da Costa." << endl;
-            wcout << L"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>" << endl;
-            wcout << L"This is free software: you are free to change and redistribute it." << endl;
-            wcout << L"There is NO WARRANTY, to the extent permitted by law." << endl;
-            wcout << endl;
-            wcout << L"Written by Leonardo Alves da Costa." << endl;
+            cout << PACKAGE_STRING << endl;
+            cout << endl;
+            cout << "Copyright (C) 2012 Leonardo Alves da Costa." << endl;
+            cout << "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>" << endl;
+            cout << "This is free software: you are free to change and redistribute it." << endl;
+            cout << "There is NO WARRANTY, to the extent permitted by law." << endl;
+            cout << endl;
+            cout << "Written by Leonardo Alves da Costa." << endl;
             return EXIT_SUCCESS;
         case 'f':
             format = optarg;
-            wcout << format << endl;
+            cout << format << endl;
             break;
         case '?':
             error = true;
@@ -87,22 +87,22 @@ int main(int argc, char *argv[])
     }
 
     if (optind >= argc && !error) {
-        error_message(L"no input file");
+        error_message("no input file");
         error = true;
     }
     if (error) {
-        wcout << L"Try `" << PACKAGE_NAME << L" --help' for usage." << endl;
+        cout << "Try `" << PACKAGE_NAME << " --help' for usage." << endl;
         return -1;
     } else {
         while (optind < argc) {
             if (verbose_mode()) {
-                wstring msg = L"parsing file ";
-                msg += to_unicode(argv[optind]);
+                string msg = "parsing file ";
+                msg += argv[optind];
                 verbose_message(msg.c_str());
             }
             Parser parser;
             if (!parser.open_file(argv[optind])) {
-                error_message(L"file not found");
+                error_message("file not found");
             } else {
                 RootNode *root = parser.parse();
                 delete root;

@@ -13,6 +13,7 @@ public:
     virtual ~RootNode();
     
     void add_child(TreeNode *child);
+    std::vector<TreeNode *> child();
 };
 
 #endif

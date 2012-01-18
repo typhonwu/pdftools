@@ -4,8 +4,8 @@ using namespace std;
 
 XREFNode::XREFNode() : TreeNode()
 {
-    m_start_address = NULL;
-    m_trailer = NULL;
+    m_start_address = 0;
+    m_trailer = 0;
 }
 
 XREFNode::~XREFNode()
@@ -24,6 +24,11 @@ void XREFNode::set_start_address(long address)
 void XREFNode::set_trailer(TreeNode *trailer)
 {
     m_trailer = trailer;
+}
+
+long XREFNode::start_address()
+{
+    return m_start_address;
 }
 
 void XREFNode::add_node(uint16_t id, uint16_t generation, uint32_t address, char status)

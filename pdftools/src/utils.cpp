@@ -1,7 +1,9 @@
 #include "utils.h"
 #include "config.h"
+#include <dirent.h>
 #include <iostream>
 #include <cstdlib>
+#include <vector>
 #include <cstring>
 
 using namespace std;

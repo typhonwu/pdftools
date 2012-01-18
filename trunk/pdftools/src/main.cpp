@@ -7,7 +7,7 @@
 #endif
 
 #include "utils.h"
-#include "parser.h"
+#include "converter.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     int verbose_flag = 0;
     bool error = false;
     const char *fileout = NULL;
-    const char *format = NULL;
+    const char *format = "epub";
 
     while (true) {
         static struct option long_options[] = {
@@ -74,7 +74,13 @@ int main(int argc, char *argv[])
             return EXIT_SUCCESS;
         case 'f':
             format = optarg;
-            cout << format << endl;
+            if (strcmp(format, "azw") && strcmp(format, "epub")) {
+                string msg = "format ";
+                msg += format;
+                msg += " not supported.";
+                error_message(msg.c_str());
+                error = true;
+            }
             break;
         case '?':
             error = true;
@@ -100,13 +106,8 @@ int main(int argc, char *argv[])
                 msg += argv[optind];
                 verbose_message(msg.c_str());
             }
-            Parser parser;
-            if (!parser.open_file(argv[optind])) {
-                error_message("file not found");
-            } else {
-                RootNode *root = parser.parse();
-                delete root;
-            }
+            Converter converter(argv[optind], format);
+            converter.convert();
             optind++;
         }
     }

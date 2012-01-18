@@ -49,7 +49,8 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_pdftools_OBJECTS = pdftools-main.$(OBJEXT) \
 	pdftools-parser.$(OBJEXT) pdftools-scanner.$(OBJEXT) \
-	pdftools-token.$(OBJEXT) pdftools-utils.$(OBJEXT)
+	pdftools-token.$(OBJEXT) pdftools-utils.$(OBJEXT) \
+	pdftools-analyze.$(OBJEXT) pdftools-converter.$(OBJEXT)
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
 pdftools_DEPENDENCIES =
 pdftools_LINK = $(CXXLD) $(pdftools_CXXFLAGS) $(CXXFLAGS) \
@@ -223,22 +224,26 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = nodes
+SUBDIRS = nodes semantic
 pdftools_SOURCES = main.cpp \
 	parser.cpp \
 	scanner.cpp \
 	token.cpp \
-	utils.cpp
+	utils.cpp \
+	analyze.cpp \
+	converter.cpp
 
 dist_man_MANS = pdftools.1
 noinst_HEADERS = \
 	parser.h \
 	scanner.h \
 	token.h \
-	utils.h
+	utils.h \
+	analyze.h \
+	converter.h
 
-pdftools_CXXFLAGS = -Inodes
-pdftools_LDADD = -Lnodes -lnodes
+pdftools_CXXFLAGS = -Inodes -Isemantic
+pdftools_LDADD = -Lnodes -lnodes -Lsemantic -lsemantic
 all: all-recursive
 
 .SUFFIXES:
@@ -322,6 +327,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-analyze.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-converter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-parser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pdftools-scanner.Po@am__quote@
@@ -411,6 +418,34 @@ pdftools-utils.obj: utils.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='utils.cpp' object='pdftools-utils.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -c -o pdftools-utils.obj `if test -f 'utils.cpp'; then $(CYGPATH_W) 'utils.cpp'; else $(CYGPATH_W) '$(srcdir)/utils.cpp'; fi`
+
+pdftools-analyze.o: analyze.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -MT pdftools-analyze.o -MD -MP -MF $(DEPDIR)/pdftools-analyze.Tpo -c -o pdftools-analyze.o `test -f 'analyze.cpp' || echo '$(srcdir)/'`analyze.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pdftools-analyze.Tpo $(DEPDIR)/pdftools-analyze.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='analyze.cpp' object='pdftools-analyze.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -c -o pdftools-analyze.o `test -f 'analyze.cpp' || echo '$(srcdir)/'`analyze.cpp
+
+pdftools-analyze.obj: analyze.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -MT pdftools-analyze.obj -MD -MP -MF $(DEPDIR)/pdftools-analyze.Tpo -c -o pdftools-analyze.obj `if test -f 'analyze.cpp'; then $(CYGPATH_W) 'analyze.cpp'; else $(CYGPATH_W) '$(srcdir)/analyze.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pdftools-analyze.Tpo $(DEPDIR)/pdftools-analyze.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='analyze.cpp' object='pdftools-analyze.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -c -o pdftools-analyze.obj `if test -f 'analyze.cpp'; then $(CYGPATH_W) 'analyze.cpp'; else $(CYGPATH_W) '$(srcdir)/analyze.cpp'; fi`
+
+pdftools-converter.o: converter.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -MT pdftools-converter.o -MD -MP -MF $(DEPDIR)/pdftools-converter.Tpo -c -o pdftools-converter.o `test -f 'converter.cpp' || echo '$(srcdir)/'`converter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pdftools-converter.Tpo $(DEPDIR)/pdftools-converter.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='converter.cpp' object='pdftools-converter.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -c -o pdftools-converter.o `test -f 'converter.cpp' || echo '$(srcdir)/'`converter.cpp
+
+pdftools-converter.obj: converter.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -MT pdftools-converter.obj -MD -MP -MF $(DEPDIR)/pdftools-converter.Tpo -c -o pdftools-converter.obj `if test -f 'converter.cpp'; then $(CYGPATH_W) 'converter.cpp'; else $(CYGPATH_W) '$(srcdir)/converter.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pdftools-converter.Tpo $(DEPDIR)/pdftools-converter.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='converter.cpp' object='pdftools-converter.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pdftools_CXXFLAGS) $(CXXFLAGS) -c -o pdftools-converter.obj `if test -f 'converter.cpp'; then $(CYGPATH_W) 'converter.cpp'; else $(CYGPATH_W) '$(srcdir)/converter.cpp'; fi`
 install-man1: $(dist_man_MANS)
 	@$(NORMAL_INSTALL)
 	test -z "$(man1dir)" || $(MKDIR_P) "$(DESTDIR)$(man1dir)"

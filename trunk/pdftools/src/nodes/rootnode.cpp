@@ -21,3 +21,8 @@ void RootNode::add_child(TreeNode *child)
 {
     m_child.push_back(child);
 }
+
+vector<TreeNode *> RootNode::child()
+{
+    return m_child;
+}

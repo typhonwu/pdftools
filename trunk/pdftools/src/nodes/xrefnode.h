@@ -25,6 +25,7 @@ public:
     void add_node(uint16_t id, uint16_t generation, uint32_t address, char status);
     void set_start_address(long address);
     void set_trailer(TreeNode *trailer);
+    long start_address();
 };
 
 #endif

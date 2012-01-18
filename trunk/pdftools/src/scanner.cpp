@@ -1,7 +1,6 @@
 #include "scanner.h"
 #include "utils.h"
 #include <fstream>
-#include <locale>
 #include <sstream>
 #include <cstring>
 #include <algorithm>
@@ -17,11 +16,11 @@
 
 using namespace std;
 
-inline unsigned int xtod(wchar_t c)
+inline unsigned int xtod(char c)
 {
-    if (c >= L'0' && c <= L'9') return c - L'0';
-    if (c >= L'A' && c <= L'F') return c - L'A' + 10;
-    if (c >= L'a' && c <= L'f') return c - L'a' + 10;
+    if (c >= '0' && c <= '9') return c - '0';
+    if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+    if (c >= 'a' && c <= 'f') return c - 'a' + 10;
     return 0; // not Hex digit
 }
 
@@ -31,14 +30,14 @@ enum StateType {
 
 Scanner::Scanner() : m_error(NULL)
 {
-    m_reserved[L"obj"] = OBJ;
-    m_reserved[L"endobj"] = END_OBJ;
-    m_reserved[L"EOF"] = END_PDF;
-    m_reserved[L"xref"] = XREF;
-    m_reserved[L"stream"] = STREAM;
-    m_reserved[L"endstream"] = END_STREAM;
-    m_reserved[L"startxref"] = START_XREF;
-    m_reserved[L"trailer"] = TRAILER;
+    m_reserved["obj"] = OBJ;
+    m_reserved["endobj"] = END_OBJ;
+    m_reserved["EOF"] = END_PDF;
+    m_reserved["xref"] = XREF;
+    m_reserved["stream"] = STREAM;
+    m_reserved["endstream"] = END_STREAM;
+    m_reserved["startxref"] = START_XREF;
+    m_reserved["trailer"] = TRAILER;
 }
 
 Scanner::~Scanner()
@@ -80,7 +79,7 @@ void Scanner::to_pos(int pos)
     vector<uint8_t> stream;
 
     // Ignore first new line
-    while (m_filein.good() && m_filein.get() != L'\n');
+    while (m_filein.good() && m_filein.get() != '\n');
 
     while (m_filein.good()) {
         uint8_t ret = m_filein.get();
@@ -107,19 +106,16 @@ void Scanner::to_pos(int pos)
     return stream;
 }
 
-wchar_t Scanner::next_char()
+char Scanner::next_char()
 {
-    wchar_t ret = EOF;
-    locale loc;
+    char ret = EOF;
 
     if (m_filein.good() && !m_filein.eof()) {
-        //ret = use_facet < ctype<wchar_t> >(loc).widen((char) m_filein.get());
         ret = m_filein.get();
-        if (ret == L'\r') {
-            //wchar_t second = use_facet < ctype<wchar_t> >(loc).widen((char) m_filein.get());
-            wchar_t second = m_filein.get();
-            if (second == L'\n') {
-                return L'\n';
+        if (ret == '\r') {
+            char second = m_filein.get();
+            if (second == '\n') {
+                return '\n';
             }
             m_filein.unget();
         }
@@ -137,7 +133,7 @@ void Scanner::ignore_line()
     get_line();
 }
 
-const wchar_t *Scanner::error()
+const char *Scanner::error()
 {
     return m_error;
 }
@@ -149,14 +145,14 @@ void Scanner::unget_char()
 
 bool Scanner::is_space(const wchar_t c)
 {
-    return (c == L' ') || (c == L'\r') || (c == L'\n') || (c == L'\t') || (c == L'\f');
+    return (c == ' ') || (c == '\r') || (c == '\n') || (c == '\t') || (c == '\f');
 }
 
-TokenType Scanner::reserved_lookup(const wchar_t *s)
+TokenType Scanner::reserved_lookup(const char *s)
 {
-    map<const wchar_t *, TokenType>::iterator i;
+    map<const char *, TokenType>::iterator i;
     for (i = m_reserved.begin(); i != m_reserved.end(); i++) {
-        if (!wcscmp(s, (*i).first)) {
+        if (!strcmp(s, (*i).first)) {
             return (*i).second;
         }
     }
@@ -165,77 +161,75 @@ TokenType Scanner::reserved_lookup(const wchar_t *s)
 
 Token *Scanner::next_token()
 {
-    wstring token_string;
+    string token_string;
     TokenType current_token = ENDFILE;
     StateType state = START;
     m_error = NULL;
 
     bool save;
     while (state != DONE && m_filein.good()) {
-        wchar_t c = next_char();
+        char c = next_char();
         if (!c) {
             return NULL;
         }
         save = true;
         switch (state) {
         case START:
-            if (isdigit(c) || (c == L'+') || (c == L'-') || (c == L'.')) {
+            if (isdigit(c) || (c == '+') || (c == '-') || (c == '.')) {
                 state = INNUM;
-            } else if (c == L'%') {
+            } else if (c == '%') {
                 current_token = PERCENT;
                 state = DONE;
-            } else if (c == L'[') {
+            } else if (c == '[') {
                 current_token = START_ARRAY;
                 state = DONE;
-            } else if (c == L']') {
+            } else if (c == ']') {
                 current_token = END_ARRAY;
                 state = DONE;
-            } else if (c == L'>') {
+            } else if (c == '>') {
                 wchar_t next = next_char();
-                if (next != L'>') {
+                if (next != '>') {
                     unget_char();
                     save = false;
                     current_token = ERROR;
                 } else {
-                    token_string += L'>';
+                    token_string += '>';
                     state = DONE;
                     current_token = END_DICT;
                 }
                 state = DONE;
-            } else if (c == L'(') {
+            } else if (c == '(') {
                 save = false;
                 state = INSTRING;
-            } else if (c == L'<') {
+            } else if (c == '<') {
                 wchar_t next = next_char();
-                if (next != L'<') {
+                if (next != '<') {
                     unget_char();
                     save = false;
                     state = INHEXSTR;
                 } else {
-                    token_string += L'<';
+                    token_string += '<';
                     state = DONE;
                     current_token = START_DICT;
                 }
             } else if (is_space(c)) {
                 save = false;
-            } else if (iswalpha(c) || c == L'/') {
+            } else if (isalpha(c) || c == '/') {
                 state = INNAME;
             } else if (c == EOF) {
                 state = DONE;
                 current_token = ENDFILE;
             } else {
-                wstring msg = L"Invalid char ";
+                string msg = "Invalid char ";
                 msg += c;
                 error_message(msg.c_str());
-                cout << "'" << c << "'" << endl;
-                cout << "'" << pos() << "'" << endl;
                 state = DONE;
                 save = false;
                 current_token = ERROR;
             }
             break;
         case INNUM:
-            if (!isdigit(c) && (c != L'.')) {
+            if (!isdigit(c) && (c != '.')) {
                 /* backup in the input */
                 unget_char();
                 save = false;
@@ -249,7 +243,7 @@ Token *Scanner::next_token()
                 state = DONE;
 
                 unsigned int loop;
-                wstring string;
+                string string;
 
                 for (loop = 0; loop < token_string.length(); loop++) {
                     unsigned int h = xtod(token_string.at(loop)) << 4;
@@ -265,18 +259,18 @@ Token *Scanner::next_token()
             }
             break;
         case INSTRING:
-            if (c == L'\\') {
+            if (c == '\\') {
                 // save the next char
                 c = next_char();
-            } else if (c == L')') {
+            } else if (c == ')') {
                 save = false;
                 state = DONE;
                 current_token = STRING;
             }
             break;
         case INNAME:
-            if (is_space(c) || c == L'<' || c == L'(' || c == L')' 
-                    || c == L'/' || c == L'[' || c == L']' || c == L'>') {
+            if (is_space(c) || c == '<' || c == '(' || c == ')' 
+                    || c == '/' || c == '[' || c == ']' || c == '>') {
                 save = false;
                 unget_char();
                 state = DONE;
@@ -287,7 +281,7 @@ Token *Scanner::next_token()
             break;
         default:
             /* should never happen */
-            error_message(L"Invalid scanner state");
+            error_message("Invalid scanner state");
             state = DONE;
             current_token = ERROR;
             break;
@@ -299,14 +293,14 @@ Token *Scanner::next_token()
     return new Token(current_token, token_string);
 }
 
-const wchar_t *Scanner::get_line()
+const char *Scanner::get_line()
 {
-    wstring _buffer;
+    string _buffer;
     register bool starting = true;
 
     while (m_filein.good()) {
         wchar_t c = next_char();
-        if ((c == L'\n' || c == L'\r')) {
+        if ((c == '\n' || c == '\r')) {
             if (starting) {
                 continue;
             } else {

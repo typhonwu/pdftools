@@ -10,7 +10,7 @@ MapNode::MapNode() : TreeNode()
 
 MapNode::~MapNode()
 {
-    map<wstring, TreeNode*>::iterator i = m_values.begin();
+    map<string, TreeNode*>::iterator i = m_values.begin();
     while (i != m_values.end()) {
         delete (*i).second;
         i++;
@@ -18,7 +18,7 @@ MapNode::~MapNode()
     m_values.clear();
 }
 
-void MapNode::push(std::wstring name, TreeNode *value)
+void MapNode::push(std::string name, TreeNode *value)
 {
     m_values[name] = value;
 }

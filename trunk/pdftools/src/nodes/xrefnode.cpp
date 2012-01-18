@@ -26,7 +26,7 @@ void XREFNode::set_trailer(TreeNode *trailer)
     m_trailer = trailer;
 }
 
-void XREFNode::add_node(uint16_t id, uint16_t generation, uint32_t address, wchar_t status)
+void XREFNode::add_node(uint16_t id, uint16_t generation, uint32_t address, char status)
 {
     object_reference xref;
     xref.id = id;

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Token::Token(TokenType type, wstring value)
+Token::Token(TokenType type, string value)
 {
     m_type = type;
     m_value = value;
@@ -15,13 +15,13 @@ double Token::to_number()
     bool negative = false;
     double decimals = 1;
     double value = 0;
-    wstring::iterator it = m_value.begin();
+    string::iterator it = m_value.begin();
 
     while (it != m_value.end()) {
-        if ((*it) >= L'0' && (*it) <= L'9') {
+        if ((*it) >= '0' && (*it) <= '9') {
             if (in_integer) {
                 value *= 10;
-                value += (*it) - L'0';
+                value += (*it) - '0';
             } else {
                 decimals /= 10;
                 value += decimals * (*it);
@@ -39,7 +39,7 @@ double Token::to_number()
     return value;
 }
 
-wstring Token::value()
+string Token::value()
 {
     return m_value;
 }

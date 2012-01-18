@@ -13,7 +13,7 @@ private:
     Token *m_token;
     bool m_valid;
     bool m_linear;
-    const wchar_t *m_version;
+    const char *m_version;
 
 public:
     Parser();

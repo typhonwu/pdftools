@@ -5006,7 +5006,7 @@ $as_echo "#define const /**/" >>confdefs.h
 fi
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/pdftools.h2m src/nodes/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/pdftools.h2m src/nodes/Makefile src/semantic/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5737,6 +5737,7 @@ do
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "src/pdftools.h2m") CONFIG_FILES="$CONFIG_FILES src/pdftools.h2m" ;;
     "src/nodes/Makefile") CONFIG_FILES="$CONFIG_FILES src/nodes/Makefile" ;;
+    "src/semantic/Makefile") CONFIG_FILES="$CONFIG_FILES src/semantic/Makefile" ;;
 
   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

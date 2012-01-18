@@ -41,5 +41,7 @@ AC_C_CONST
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/pdftools.h2m
-                 src/nodes/Makefile])
+                 src/nodes/Makefile
+                 src/semantic/Makefile
+])
 AC_OUTPUT

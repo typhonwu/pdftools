@@ -2,6 +2,7 @@
 #include "parser.h"
 #include "utils.h"
 #include "analyze.h"
+#include <iostream>
 
 using namespace std;
 
@@ -12,8 +13,8 @@ Converter::Converter(const char *filein, const char *format)
     m_format = format;
     m_syntax_tree = NULL;
     m_document = NULL;
-    
-    
+
+
     m_fileout = filein;
     size_t last_dot = m_fileout.find_last_of('.');
     if (last_dot != string::npos) {
@@ -33,11 +34,18 @@ void Converter::convert()
 {
     Parser parser;
     Analyze analyze;
-    
+
     if (!parser.open_file(m_filein)) {
         error_message("file not found");
     } else {
         m_syntax_tree = parser.parse();
-        m_document = analyze.analyseTree(m_syntax_tree);
+        m_document = analyze.analyze_tree(m_syntax_tree);
+        if (m_document) {
+//            cout << "Title: " << m_document->title() << endl;
+//            cout << "Subject: " << m_document->subject() << endl;
+//            cout << "Author: " << m_document->author() << endl;
+        } else {
+            error_message("Invalid file");
+        }
     }
 }

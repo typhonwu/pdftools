@@ -19,7 +19,6 @@ noinst_HEADERS = \
 	analyze.h \
 	converter.h
 
-pdftools_CXXFLAGS = -Inodes -Isemantic
 pdftools_LDADD = -Lnodes -lnodes -Lsemantic -lsemantic
 
 if HELP2MAN

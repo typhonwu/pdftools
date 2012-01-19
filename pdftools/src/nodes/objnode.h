@@ -7,17 +7,21 @@
 
 class ObjNode : public TreeNode {
 private:
-    int id;
-    int generator;
+    int m_id;
+    int m_generation;
     TreeNode *m_value;
     uint8_t *m_stream;
     
 public:
-    ObjNode(int id, int generator);
+    ObjNode(int id, int generation);
     virtual ~ObjNode();
     
     void set_value(TreeNode *value);
     void set_stream(std::vector<uint8_t> stream);
+    
+    TreeNode *value();
+    uint8_t *stream();
+    bool this_object(int id, int generation);
 };
 
 #endif

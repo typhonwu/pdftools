@@ -3,10 +3,10 @@
 
 using namespace std;
 
-ObjNode::ObjNode(int id, int generator) : TreeNode()
+ObjNode::ObjNode(int id, int generation) : TreeNode()
 {
-    this->id = id;
-    this->generator = generator;
+    m_id = id;
+    m_generation = generation;
     m_value = NULL;
     m_stream = NULL;
 }
@@ -19,6 +19,21 @@ ObjNode::~ObjNode()
     if (m_stream) {
         delete [] m_stream;
     }
+}
+
+TreeNode *ObjNode::value()
+{
+    return m_value;
+}
+
+uint8_t *ObjNode::stream()
+{
+    return m_stream;
+}
+
+bool ObjNode::this_object(int id, int generation)
+{
+    return m_id == id && m_generation == generation;            
 }
 
 void ObjNode::set_value(TreeNode *value)

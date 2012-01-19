@@ -33,7 +33,7 @@ private:
     void close_file();
     void unget_char();
     const char *get_line();
-    bool is_space(const wchar_t c);
+    bool is_space(const char c);
     char next_char();
     TokenType reserved_lookup(const char *s);
 };

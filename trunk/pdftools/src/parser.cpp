@@ -140,11 +140,16 @@ TreeNode * Parser::xref_sequence()
 
 TreeNode *Parser::value_sequence()
 {
+    if (!m_token) {
+        // FIXME null token
+        error_message("Should not happen.");
+        return NULL;
+    }
     if (m_token->type() == START_DICT) {
         match(START_DICT);
         MapNode *map = new MapNode;
 
-        while (m_scanner->good() && m_token->type() != END_DICT) {
+        while (m_scanner->good() && m_token && m_token->type() != END_DICT) {
             string name = m_token->value();
             match(NAME);
             TreeNode *value = value_sequence();
@@ -201,7 +206,7 @@ TreeNode *Parser::object_sequence()
     ObjNode *node = new ObjNode((int) number, (int) generation_nunber);
     match(OBJ);
     node->set_value(value_sequence());
-    if (m_token->type() == STREAM) {
+    if (m_token && m_token->type() == STREAM) {
         vector<uint8_t> stream = m_scanner->get_stream();
         node->set_stream(stream);
         stream.clear();

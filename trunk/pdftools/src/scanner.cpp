@@ -149,7 +149,7 @@ void Scanner::unget_char()
 
 bool Scanner::is_space(const char c)
 {
-    return strchr(spaces, c) || c == '\n';
+    return strchr(spaces, c) || (c == '\n') || (c == EOF);
 }
 
 TokenType Scanner::reserved_lookup(const char *s)
@@ -173,9 +173,6 @@ Token *Scanner::next_token()
     bool save;
     while (state != DONE && m_filein.good()) {
         char c = next_char();
-        if (!c) {
-            return NULL;
-        }
         save = true;
         switch (state) {
         case START:

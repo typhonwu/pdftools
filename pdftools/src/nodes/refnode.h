@@ -11,6 +11,9 @@ private:
 public:
     RefNode(int id, int generation);
     virtual ~RefNode();
+    
+    int id();
+    int generation();
 };
 
 #endif

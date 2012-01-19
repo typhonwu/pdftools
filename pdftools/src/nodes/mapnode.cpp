@@ -18,6 +18,11 @@ MapNode::~MapNode()
     m_values.clear();
 }
 
+map<std::string, TreeNode *> MapNode::values()
+{
+    return m_values;
+}
+
 void MapNode::push(std::string name, TreeNode *value)
 {
     m_values[name] = value;

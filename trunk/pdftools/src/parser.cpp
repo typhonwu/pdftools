@@ -1,8 +1,7 @@
 #include "parser.h"
 #include "scanner.h"
 #include "utils.h"
-#include <nodes.h>
-#include <iostream>
+#include "nodes/nodes.h"
 #include <cstdlib>
 #include <string>
 
@@ -57,7 +56,9 @@ bool Parser::match(TokenType type)
         next_token();
     } else {
         string msg = "unexpected token: ";
-        msg += m_token->value();
+        if (m_token) {
+            msg += m_token->value();
+        }
         error_message(msg.c_str());
         next_token();
         return false;
@@ -190,7 +191,7 @@ TreeNode *Parser::value_sequence()
     return NULL;
 }
 
- TreeNode *Parser::object_sequence()
+TreeNode *Parser::object_sequence()
 {
     float number = m_token->to_number();
     match(NUM);
@@ -220,13 +221,14 @@ bool Parser::is_valid()
 bool Parser::verify_version()
 {
     int loop;
-    string line = m_token->value();
-
-    for (loop = 0; loop < 7; loop++) {
-        if (line == _pdf_versions[loop]) {
-            m_version = _pdf_versions[loop];
-            match(NAME);
-            return true;
+    if (m_token) {
+        string line = m_token->value();
+        for (loop = 0; loop < 7; loop++) {
+            if (line == _pdf_versions[loop]) {
+                m_version = _pdf_versions[loop];
+                match(NAME);
+                return true;
+            }
         }
     }
     return false;

@@ -9,3 +9,8 @@ NameNode::~NameNode()
 {
 
 }
+
+string NameNode::name()
+{
+    return m_name;
+}

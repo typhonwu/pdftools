@@ -2,7 +2,7 @@
 #define PARSER_H
 
 #include "token.h"
-#include "rootnode.h"
+#include "nodes/nodes.h"
 
 class Scanner;
 class TreeNode;

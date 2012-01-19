@@ -5,7 +5,6 @@ using namespace std;
 
 MapNode::MapNode() : TreeNode()
 {
-    
 }
 
 MapNode::~MapNode()
@@ -18,12 +17,18 @@ MapNode::~MapNode()
     m_values.clear();
 }
 
-map<std::string, TreeNode *> MapNode::values()
+TreeNode *MapNode::get(string name)
+{
+    return m_values[name];
+}
+
+
+map<string, TreeNode *> MapNode::values()
 {
     return m_values;
 }
 
-void MapNode::push(std::string name, TreeNode *value)
+void MapNode::push(string name, TreeNode *value)
 {
     m_values[name] = value;
 }

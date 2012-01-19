@@ -16,6 +16,14 @@
 
 using namespace std;
 
+static const char *spaces = " \r\t\f";
+static const char *special_chars = "<()/[]>";
+static const char *numbers = "0123456789-+.";
+
+enum StateType {
+    START, INNUM, INNAME, INSTRING, INHEXSTR, DONE
+};
+
 inline unsigned int xtod(char c)
 {
     if (c >= '0' && c <= '9') return c - '0';
@@ -23,10 +31,6 @@ inline unsigned int xtod(char c)
     if (c >= 'a' && c <= 'f') return c - 'a' + 10;
     return 0; // not Hex digit
 }
-
-enum StateType {
-    START, INNUM, INNAME, INSTRING, INHEXSTR, DONE
-};
 
 Scanner::Scanner() : m_error(NULL)
 {
@@ -74,7 +78,7 @@ void Scanner::to_pos(int pos)
     m_filein.seekg(pos);
 }
 
- vector<uint8_t> Scanner::get_stream()
+vector<uint8_t> Scanner::get_stream()
 {
     vector<uint8_t> stream;
 
@@ -143,9 +147,9 @@ void Scanner::unget_char()
     m_filein.unget();
 }
 
-bool Scanner::is_space(const wchar_t c)
+bool Scanner::is_space(const char c)
 {
-    return (c == ' ') || (c == '\r') || (c == '\n') || (c == '\t') || (c == '\f');
+    return strchr(spaces, c) || c == '\n';
 }
 
 TokenType Scanner::reserved_lookup(const char *s)
@@ -175,7 +179,7 @@ Token *Scanner::next_token()
         save = true;
         switch (state) {
         case START:
-            if (isdigit(c) || (c == '+') || (c == '-') || (c == '.')) {
+            if (strchr(numbers, c)) {
                 state = INNUM;
             } else if (c == '%') {
                 current_token = PERCENT;
@@ -238,7 +242,9 @@ Token *Scanner::next_token()
             }
             break;
         case INHEXSTR:
-            if (c == '>') {
+            if (is_space(c)) {
+                save = false;
+            } else if (c == '>') {
                 save = false;
                 state = DONE;
 
@@ -269,8 +275,7 @@ Token *Scanner::next_token()
             }
             break;
         case INNAME:
-            if (is_space(c) || c == '<' || c == '(' || c == ')' 
-                    || c == '/' || c == '[' || c == ']' || c == '>') {
+            if (is_space(c) || strchr(special_chars, c)) {
                 save = false;
                 unget_char();
                 state = DONE;

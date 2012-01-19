@@ -4,13 +4,17 @@
 #include <string>
 #include "treenode.h"
 
+using namespace std;
+
 class StringNode : public TreeNode {
 private:
-    std::string m_value;
+    string m_value;
 
 public:
-    StringNode(std::string value);
+    StringNode(string value);
     virtual ~StringNode();
+    
+    string value();
 };
 
 #endif

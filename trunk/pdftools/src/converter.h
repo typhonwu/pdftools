@@ -2,8 +2,8 @@
 #define CONVERTER_H
 
 #include <string>
-#include "rootnode.h"
-#include "document.h"
+#include "nodes/nodes.h"
+#include "semantic/document.h"
 
 class Converter {
 private:

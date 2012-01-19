@@ -4,15 +4,18 @@
 #include "treenode.h"
 #include <vector>
 
+using namespace std;
+
 class ArrayNode : public TreeNode {
 private:
-    std::vector<TreeNode *> m_values;
+    vector<TreeNode *> m_values;
 
 public:
     ArrayNode();
     virtual ~ArrayNode();
     
     void push(TreeNode *value);
+    vector<TreeNode *> values();
 };
 
 #endif

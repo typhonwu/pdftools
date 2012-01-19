@@ -5,16 +5,20 @@
 #include <map>
 #include <string>
 
+using namespace std;
+
 class MapNode : public TreeNode {
 private:
-    std::map<std::string, TreeNode *> m_values;
+    map<string, TreeNode *> m_values;
     
 public:
     MapNode();
     ~MapNode();
     
-    void push(std::string name, TreeNode *value);
-    std::map<std::string, TreeNode *> values();
+    void push(string name, TreeNode *value);
+    map<string, TreeNode *> values();
+    
+    TreeNode *get(string name);
 };
 
 #endif

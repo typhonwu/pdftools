@@ -26,6 +26,11 @@ void XREFNode::set_trailer(TreeNode *trailer)
     m_trailer = trailer;
 }
 
+TreeNode *XREFNode::trailer()
+{
+    return m_trailer;
+}
+
 long XREFNode::start_address()
 {
     return m_start_address;

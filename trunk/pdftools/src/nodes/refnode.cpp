@@ -10,3 +10,13 @@ RefNode::~RefNode()
 {
 
 }
+
+int RefNode::id()
+{
+    return m_id;
+}
+
+int RefNode::generation()
+{
+    return m_generation;
+}

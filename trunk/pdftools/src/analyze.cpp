@@ -24,7 +24,21 @@ Document *Analyze::analyseTree(RootNode* tree)
     for (i = root.begin(); i < root.end(); i++) {
         XREFNode *ref = dynamic_cast<XREFNode *>(*i);
         if (ref) {
-            cout << "Start address: " << ref->start_address() << endl;
+            MapNode *trailer = dynamic_cast<MapNode *>(ref->trailer());
+            map<string, TreeNode *> values = trailer->values();
+            map<string, TreeNode *>::iterator m = values.begin();
+            
+            while(m != values.end()) {
+                if ((*m).first == "/Root") {
+                    RefNode *ref = dynamic_cast<RefNode *>((*m).second);
+                    cout << "Root " << ref->id() << ":" << ref->generation() << endl;
+                } else if  ((*m).first == "/Info") {
+                    RefNode *ref = dynamic_cast<RefNode *>((*m).second);
+                    cout << "Info " << ref->id() << ":" << ref->generation() << endl;
+                }
+                m++;
+            }
+            cout << endl;
         }
     }
     return NULL;

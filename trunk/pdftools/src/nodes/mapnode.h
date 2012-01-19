@@ -14,6 +14,7 @@ public:
     ~MapNode();
     
     void push(std::string name, TreeNode *value);
+    std::map<std::string, TreeNode *> values();
 };
 
 #endif

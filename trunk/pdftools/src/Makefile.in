@@ -51,7 +51,8 @@ am_pdftools_OBJECTS = main.$(OBJEXT) parser.$(OBJEXT) \
 	scanner.$(OBJEXT) token.$(OBJEXT) utils.$(OBJEXT) \
 	analyze.$(OBJEXT) converter.$(OBJEXT) generator.$(OBJEXT)
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
-pdftools_DEPENDENCIES =
+pdftools_DEPENDENCIES = nodes/libnodes.a semantic/libsemantic.a \
+	epub/libepub.a
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -241,7 +242,7 @@ noinst_HEADERS = \
 	converter.h \
 	generator.h
 
-pdftools_LDADD = -Lnodes -lnodes -Lsemantic -lsemantic -Lepub -lepub
+pdftools_LDADD = nodes/libnodes.a semantic/libsemantic.a epub/libepub.a
 all: all-recursive
 
 .SUFFIXES:

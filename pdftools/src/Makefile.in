@@ -49,7 +49,7 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_pdftools_OBJECTS = main.$(OBJEXT) parser.$(OBJEXT) \
 	scanner.$(OBJEXT) token.$(OBJEXT) utils.$(OBJEXT) \
-	analyze.$(OBJEXT) converter.$(OBJEXT)
+	analyze.$(OBJEXT) converter.$(OBJEXT) generator.$(OBJEXT)
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
 pdftools_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -221,14 +221,15 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = nodes semantic
+SUBDIRS = nodes semantic epub
 pdftools_SOURCES = main.cpp \
 	parser.cpp \
 	scanner.cpp \
 	token.cpp \
 	utils.cpp \
 	analyze.cpp \
-	converter.cpp
+	converter.cpp \
+	generator.cpp
 
 dist_man_MANS = pdftools.1
 noinst_HEADERS = \
@@ -237,9 +238,10 @@ noinst_HEADERS = \
 	token.h \
 	utils.h \
 	analyze.h \
-	converter.h
+	converter.h \
+	generator.h
 
-pdftools_LDADD = -Lnodes -lnodes -Lsemantic -lsemantic
+pdftools_LDADD = -Lnodes -lnodes -Lsemantic -lsemantic -Lepub -lepub
 all: all-recursive
 
 .SUFFIXES:
@@ -325,6 +327,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/analyze.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/converter.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/generator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner.Po@am__quote@

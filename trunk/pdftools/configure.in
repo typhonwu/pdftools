@@ -28,6 +28,7 @@ AM_CONDITIONAL(HELP2MAN, [test "$HELP2MAN" != :])
 
 # Checks for libraries.
 AC_CHECK_LIB([z], [gzread], , [AC_MSG_ERROR([zlib not found, see http://www.zlib.net])])
+AC_CHECK_LIB([zip], [zip_open], , [AC_MSG_ERROR([zlib not found, see http://www.nih.at/libzip])])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -42,5 +43,6 @@ AC_CONFIG_FILES([Makefile
                  src/pdftools.h2m
                  src/nodes/Makefile
                  src/semantic/Makefile
+                 src/epub/Makefile
 ])
 AC_OUTPUT

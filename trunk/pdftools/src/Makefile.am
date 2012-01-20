@@ -1,4 +1,4 @@
-SUBDIRS = nodes semantic
+SUBDIRS = nodes semantic epub
 
 bin_PROGRAMS = pdftools
 pdftools_SOURCES = main.cpp \
@@ -7,7 +7,8 @@ pdftools_SOURCES = main.cpp \
 	token.cpp \
 	utils.cpp \
 	analyze.cpp \
-	converter.cpp
+	converter.cpp \
+	generator.cpp
 
 dist_man_MANS = pdftools.1
 
@@ -17,9 +18,10 @@ noinst_HEADERS = \
 	token.h \
 	utils.h \
 	analyze.h \
-	converter.h
+	converter.h \
+	generator.h
 
-pdftools_LDADD = -Lnodes -lnodes -Lsemantic -lsemantic
+pdftools_LDADD = -Lnodes -lnodes -Lsemantic -lsemantic -Lepub -lepub
 
 if HELP2MAN
 pdftools.1: pdftools$(EXEEXT) pdftools.h2m

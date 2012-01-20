@@ -2,6 +2,7 @@
 #include "parser.h"
 #include "utils.h"
 #include "analyze.h"
+#include "generator.h"
 #include <iostream>
 #include <sstream>
 
@@ -53,6 +54,13 @@ void Converter::convert()
                 msg << m_document->title();
             }
             verbose_message(msg.str());
+
+            // Generate output file
+            Generator *instance = Generator::get_instance(m_format);
+            if (instance) {
+                instance->generate(m_document, m_fileout.c_str());
+                delete instance;
+            }
         } else {
             error_message("Invalid file");
         }

@@ -54,7 +54,7 @@ am_libnodes_a_OBJECTS = libnodes_a-objnode.$(OBJEXT) \
 	libnodes_a-stringnode.$(OBJEXT) libnodes_a-namenode.$(OBJEXT) \
 	libnodes_a-refnode.$(OBJEXT) libnodes_a-numbernode.$(OBJEXT) \
 	libnodes_a-treenode.$(OBJEXT) libnodes_a-arraynode.$(OBJEXT) \
-	libnodes_a-rootnode.$(OBJEXT)
+	libnodes_a-rootnode.$(OBJEXT) libnodes_a-booleannode.$(OBJEXT)
 libnodes_a_OBJECTS = $(am_libnodes_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -174,7 +174,8 @@ libnodes_a_SOURCES = \
 	numbernode.cpp \
 	treenode.cpp \
 	arraynode.cpp \
-	rootnode.cpp
+	rootnode.cpp \
+	booleannode.cpp
 
 noinst_HEADERS = \
 	objnode.h \
@@ -186,7 +187,8 @@ noinst_HEADERS = \
 	numbernode.h \
 	treenode.h \
 	arraynode.h \
-	rootnode.h
+	rootnode.h \
+	booleannode.h
 
 libnodes_a_CXXFLAGS = -I..
 all: all-am
@@ -238,6 +240,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-arraynode.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-booleannode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-mapnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-namenode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-numbernode.Po@am__quote@
@@ -401,6 +404,20 @@ libnodes_a-rootnode.obj: rootnode.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='rootnode.cpp' object='libnodes_a-rootnode.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-rootnode.obj `if test -f 'rootnode.cpp'; then $(CYGPATH_W) 'rootnode.cpp'; else $(CYGPATH_W) '$(srcdir)/rootnode.cpp'; fi`
+
+libnodes_a-booleannode.o: booleannode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-booleannode.o -MD -MP -MF $(DEPDIR)/libnodes_a-booleannode.Tpo -c -o libnodes_a-booleannode.o `test -f 'booleannode.cpp' || echo '$(srcdir)/'`booleannode.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-booleannode.Tpo $(DEPDIR)/libnodes_a-booleannode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='booleannode.cpp' object='libnodes_a-booleannode.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-booleannode.o `test -f 'booleannode.cpp' || echo '$(srcdir)/'`booleannode.cpp
+
+libnodes_a-booleannode.obj: booleannode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-booleannode.obj -MD -MP -MF $(DEPDIR)/libnodes_a-booleannode.Tpo -c -o libnodes_a-booleannode.obj `if test -f 'booleannode.cpp'; then $(CYGPATH_W) 'booleannode.cpp'; else $(CYGPATH_W) '$(srcdir)/booleannode.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-booleannode.Tpo $(DEPDIR)/libnodes_a-booleannode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='booleannode.cpp' object='libnodes_a-booleannode.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-booleannode.obj `if test -f 'booleannode.cpp'; then $(CYGPATH_W) 'booleannode.cpp'; else $(CYGPATH_W) '$(srcdir)/booleannode.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

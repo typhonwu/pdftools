@@ -2,6 +2,7 @@
 #define DOCUMENT_H
 
 #include "nodes/nodes.h"
+#include "page.h"
 #include <string>
 
 using namespace std;
@@ -15,6 +16,7 @@ private:
     string m_lang;
     TreeNode *m_root;
     TreeNode *m_info;
+    vector<Page *> m_pages;
     
 public:
     Document();
@@ -28,6 +30,9 @@ public:
     void set_subject(string subject);
     void set_author(string author);
     void set_lang(string lang);
+    
+    void add_page(Page *page);
+    vector<Page *> pages();
     
     string lang();
     string id();

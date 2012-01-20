@@ -38,6 +38,8 @@ Scanner::Scanner() : m_error(NULL)
     m_reserved["endobj"] = END_OBJ;
     m_reserved["EOF"] = END_PDF;
     m_reserved["xref"] = XREF;
+    m_reserved["true"] = TRUE;
+    m_reserved["false"] = FALSE;
     m_reserved["stream"] = STREAM;
     m_reserved["endstream"] = END_STREAM;
     m_reserved["startxref"] = START_XREF;

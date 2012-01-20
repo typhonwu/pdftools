@@ -11,5 +11,6 @@
 #include "stringnode.h"
 #include "arraynode.h"
 #include "rootnode.h"
+#include "booleannode.h"
 
 #endif

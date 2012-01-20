@@ -9,11 +9,26 @@ Document::Document()
 
 Document::~Document()
 {
+    vector<Page *>::iterator i = m_pages.begin();
+    while (i != m_pages.end()) {
+        delete *i;
+        i = m_pages.erase(i);
+    }
 }
 
 void Document::set_id(string first, string second)
 {
     m_id = first + second;
+}
+
+void Document::add_page(Page *page)
+{
+    m_pages.push_back(page);
+}
+
+vector<Page *> Document::pages()
+{
+    return m_pages;
 }
 
 TreeNode *Document::root_node()

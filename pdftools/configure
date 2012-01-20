@@ -4444,7 +4444,7 @@ _ACEOF
   LIBS="-lzip $LIBS"
 
 else
-  as_fn_error "zlib not found, see http://www.nih.at/libzip" "$LINENO" 5
+  as_fn_error "libzip not found, see http://www.nih.at/libzip" "$LINENO" 5
 fi
 
 

@@ -1,8 +1,10 @@
 noinst_LIBRARIES = libsemantic.a
 libsemantic_a_SOURCES = \
-	document.cpp
+	document.cpp \
+	page.cpp
 
 noinst_HEADERS = \
-	document.h
+	document.h \
+	page.h
 
 libsemantic_a_CXXFLAGS = -I..

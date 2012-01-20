@@ -55,11 +55,13 @@ bool Parser::match(TokenType type)
     if (m_token && m_token->type() == type) {
         next_token();
     } else {
+#ifdef DEBUG
         string msg = "unexpected token: ";
         if (m_token) {
             msg += m_token->value();
         }
         error_message(msg.c_str());
+#endif
         next_token();
         return false;
     }
@@ -73,9 +75,6 @@ RootNode *Parser::parse()
     match(PERCENT);
     if (verify_version()) {
         while (m_scanner->good() && !error) {
-            if (m_token == NULL) {
-                break;
-            }
             switch (m_token->type()) {
             case PERCENT:
                 comment_sequence();
@@ -138,13 +137,10 @@ TreeNode * Parser::xref_sequence()
     return xref;
 }
 
+#include <iostream>
+
 TreeNode *Parser::value_sequence()
 {
-    if (!m_token) {
-        // FIXME null token
-        error_message("Should not happen.");
-        return NULL;
-    }
     if (m_token->type() == START_DICT) {
         match(START_DICT);
         MapNode *map = new MapNode;
@@ -153,10 +149,20 @@ TreeNode *Parser::value_sequence()
             string name = m_token->value();
             match(NAME);
             TreeNode *value = value_sequence();
+            NameNode *n = dynamic_cast<NameNode *> (value);
+            if (n && n->name()[0] != '/') {
+                value = value_sequence();
+            }
             map->push(name, value);
         }
         match(END_DICT);
         return map;
+    } else if (m_token->type() == TRUE) {
+        match(TRUE);
+        return new BooleanNode(true);
+    } else if (m_token->type() == FALSE) {
+        match(FALSE);
+        return new BooleanNode(false);
     } else if (m_token->type() == NAME) {
         string name = m_token->value();
         match(NAME);

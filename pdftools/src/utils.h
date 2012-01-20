@@ -1,8 +1,12 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-void error_message(const char *msg);
-void verbose_message(const char *msg);
+#include <string>
+
+using namespace std;
+
+void error_message(string msg);
+void verbose_message(string msg);
 void set_verbose_mode(const bool verbose);
 bool verbose_mode();
 

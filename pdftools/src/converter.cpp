@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "analyze.h"
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -36,14 +37,23 @@ void Converter::convert()
     Analyze analyze;
 
     if (!parser.open_file(m_filein)) {
-        error_message("file not found");
+        error_message(string(m_filein).append(" not found."));
     } else {
+        verbose_message(string("parsing file ").append(m_filein));
         m_syntax_tree = parser.parse();
+
+        verbose_message(string("analyzing file ").append(m_filein));
         m_document = analyze.analyze_tree(m_syntax_tree);
         if (m_document) {
-//            cout << "Title: " << m_document->title() << endl;
-//            cout << "Subject: " << m_document->subject() << endl;
-//            cout << "Author: " << m_document->author() << endl;
+            stringstream msg;
+            msg << m_filein << " Title: ";
+            if (m_document->title().empty()) {
+                msg << "no title";
+            } else {
+                msg << m_document->title();
+            }
+            msg << " Pages: " << m_document->pages().size();
+            verbose_message(msg.str());
         } else {
             error_message("Invalid file");
         }

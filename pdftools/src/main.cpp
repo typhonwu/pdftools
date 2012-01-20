@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
                 string msg = "format ";
                 msg += format;
                 msg += " not supported.";
-                error_message(msg.c_str());
+                error_message(msg);
                 error = true;
             }
             break;
@@ -101,14 +101,12 @@ int main(int argc, char *argv[])
         return -1;
     } else {
         while (optind < argc) {
-            if (verbose_mode()) {
-                string msg = "parsing file ";
-                msg += argv[optind];
-                verbose_message(msg.c_str());
-            }
             Converter converter(argv[optind], format);
             converter.convert();
             optind++;
+            if (optind < argc && verbose_mode()) {
+                verbose_message("");
+            }
         }
     }
     return EXIT_SUCCESS;

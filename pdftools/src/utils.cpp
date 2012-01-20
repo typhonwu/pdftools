@@ -10,14 +10,14 @@ using namespace std;
 
 static bool _verbose = false;
 
-void verbose_message(const char *msg)
+void verbose_message(string msg)
 {
     if (verbose_mode()) {
         cout << PACKAGE_NAME << ": " << msg << endl;
     }
 }
 
-void error_message(const char *msg)
+void error_message(string msg)
 {
     cerr << PACKAGE_NAME << ": " << msg << endl;
 }

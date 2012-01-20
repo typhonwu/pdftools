@@ -10,6 +10,8 @@ private:
 public:
     NumberNode(double value);
     virtual ~NumberNode();
+    
+    double value();
 };
 
 #endif

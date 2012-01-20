@@ -7,5 +7,9 @@ NumberNode::NumberNode(double value) : TreeNode()
 
 NumberNode::~NumberNode()
 {
+}
 
+double NumberNode::value()
+{
+    return m_value;
 }

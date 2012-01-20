@@ -168,6 +168,7 @@ Token *Scanner::next_token()
     string token_string;
     TokenType current_token = ENDFILE;
     StateType state = START;
+    int inner_string = 0;
     m_error = NULL;
 
     bool save;
@@ -262,13 +263,19 @@ Token *Scanner::next_token()
             }
             break;
         case INSTRING:
-            if (c == '\\') {
+            if (c == '(') {
+                inner_string++;
+            } else if (c == '\\') {
                 // save the next char
                 c = next_char();
             } else if (c == ')') {
-                save = false;
-                state = DONE;
-                current_token = STRING;
+                if (inner_string > 0) {
+                    inner_string--;
+                } else {
+                    save = false;
+                    state = DONE;
+                    current_token = STRING;
+                }
             }
             break;
         case INNAME:

@@ -171,11 +171,12 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
             ObjNode *contents = dynamic_cast<ObjNode *> (get_real_value(catalog->get("/Contents")));
             if (contents) {
                 MapNode *snode = dynamic_cast<MapNode *> (contents->value());
-                NumberNode *length = dynamic_cast<NumberNode *> (get_real_value(snode->get("/Length")));
+                //NumberNode *length = dynamic_cast<NumberNode *> (get_real_value(snode->get("/Length")));
                 NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
                 if (filter && filter->name() == "/FlateDecode") {
-                    contents->set_uncompressed(inflate(contents->stream(), contents->stream_size()));
+                    contents->set_uncompressed(flat_decode(contents->stream(), contents->stream_size()));
                     contents->clear_stream();
+                    //cout << contents->uncompressed() << endl;
                 } else {
                     cout << "compression not supported: ";
                     if (filter) {

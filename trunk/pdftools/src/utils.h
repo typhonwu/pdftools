@@ -9,6 +9,6 @@ void error_message(string msg);
 void verbose_message(string msg);
 void set_verbose_mode(const bool verbose);
 bool verbose_mode();
-char *inflate(int8_t *compressed, int size);
+char *flat_decode(int8_t *compressed, int size);
 
 #endif

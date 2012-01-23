@@ -33,7 +33,7 @@ bool verbose_mode()
     return _verbose;
 }
 
-char *inflate(int8_t *compressed, int size)
+char *flat_decode(int8_t *compressed, int size)
 {
     vector<char *> values;
 
@@ -58,11 +58,14 @@ char *inflate(int8_t *compressed, int size)
 
             int rst2 = inflate(&zstream, Z_NO_FLUSH);
             if (rst2 >= 0) {
-                char *temp = new char[zstream.total_out];
+                char *temp = new char[zstream.total_out + 1];
                 memcpy(temp, buffer, zstream.total_out);
+                temp[zstream.total_out] = 0;
+                //cout << strlen(buffer) << endl << strlen(temp) << endl;
                 values.push_back(temp);
                 if (rst2 == Z_STREAM_END) break;
             } else {
+                cout << "error" << endl;
                 // Error in decompression
                 break;
             }
@@ -71,9 +74,11 @@ char *inflate(int8_t *compressed, int size)
     
     char *ret = new char[values.size() + 1];
     ret[values.size()] = 0;
+    
     memcpy(ret, values[0], values.size());
     vector<char *>::iterator i = values.begin();
     while (i != values.end()) {
+        cout << *i << endl;
         delete [] (*i);
         i = values.erase(i);
     }

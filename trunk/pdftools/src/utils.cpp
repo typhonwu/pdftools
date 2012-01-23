@@ -11,6 +11,11 @@ using namespace std;
 
 static bool _verbose = false;
 
+struct buffer_struct {
+    char *buffer;
+    int size;
+};
+
 void verbose_message(string msg)
 {
     if (verbose_mode()) {
@@ -35,34 +40,34 @@ bool verbose_mode()
 
 char *flat_decode(int8_t *compressed, int size)
 {
-    vector<char *> values;
+    vector<buffer_struct> values;
 
     // 2k buffer, last byte is for \0 (end string)
-    char buffer[2049];
+    char buffer[2048];
     z_stream zstream;
     memset(&zstream, 0, sizeof (z_stream));
 
     zstream.avail_in = size;
-    zstream.avail_out = sizeof (buffer) - 1;
+    zstream.avail_out = sizeof (buffer);
     zstream.next_in = (Bytef *) compressed;
     zstream.next_out = (Bytef *) buffer;
 
-    int count = 0;
+    int total = 0;
     int rsti = inflateInit(&zstream);
     if (rsti == Z_OK) {
         do {
-            count++;
-            zstream.avail_out = sizeof (buffer) - 1;
+            zstream.avail_out = sizeof (buffer);
             memset(buffer, 0, sizeof (buffer));
             zstream.next_out = (Bytef *) buffer;
 
             int rst2 = inflate(&zstream, Z_NO_FLUSH);
             if (rst2 >= 0) {
-                char *temp = new char[zstream.total_out + 1];
-                memcpy(temp, buffer, zstream.total_out);
-                temp[zstream.total_out] = 0;
-                //cout << strlen(buffer) << endl << strlen(temp) << endl;
-                values.push_back(temp);
+                buffer_struct b;
+                b.size = sizeof (buffer) - zstream.avail_out;
+                b.buffer = new char[size];
+                memcpy(b.buffer, buffer, b.size);
+                total += b.size;
+                values.push_back(b);
                 if (rst2 == Z_STREAM_END) break;
             } else {
                 cout << "error" << endl;
@@ -71,18 +76,19 @@ char *flat_decode(int8_t *compressed, int size)
             }
         } while (zstream.avail_out == 0);
     }
-    
-    char *ret = new char[values.size() + 1];
-    ret[values.size()] = 0;
-    
-    memcpy(ret, values[0], values.size());
-    vector<char *>::iterator i = values.begin();
-    while (i != values.end()) {
-        cout << *i << endl;
-        delete [] (*i);
-        i = values.erase(i);
-    }
     inflateEnd(&zstream);
     
+    char *ret = new char[total + 1];
+    ret[total] = 0;
+    
+    int locate = 0;
+    vector<buffer_struct>::iterator i = values.begin();
+    while (i != values.end()) {
+        memcpy(ret + locate, (*i).buffer, (*i).size);
+        locate += (*i).size;
+        delete [] (*i).buffer;
+        i = values.erase(i);
+    }
+    //cout << ret << endl;
     return ret;
 }

@@ -3,6 +3,7 @@
 
 #include "token.h"
 #include "nodes/nodes.h"
+#include <fstream>
 
 class Scanner;
 class TreeNode;
@@ -11,6 +12,7 @@ class Parser {
 private:
     Scanner *m_scanner;
     Token *m_token;
+    ifstream m_filein;
     bool m_valid;
     bool m_linear;
     const char *m_version;

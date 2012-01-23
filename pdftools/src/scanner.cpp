@@ -1,9 +1,7 @@
 #include "scanner.h"
 #include "utils.h"
-#include <fstream>
-#include <sstream>
+#include <istream>
 #include <cstring>
-#include <algorithm>
 #include <vector>
 
 #if HAVE_CONFIG_H
@@ -48,36 +46,21 @@ Scanner::Scanner() : m_error(NULL)
 
 Scanner::~Scanner()
 {
-    close_file();
 }
 
-void Scanner::close_file()
+void Scanner::set_istream(istream *stream)
 {
-    if (is_open()) {
-        m_filein.close();
-    }
-}
-
-bool Scanner::is_open()
-{
-    return m_filein.is_open();
-}
-
-bool Scanner::open_file(const char *path)
-{
-    close_file();
-    m_filein.open(path, ios::binary);
-    return is_open();
+    m_filein = stream;
 }
 
 int Scanner::pos()
 {
-    return m_filein.tellg();
+    return m_filein->tellg();
 }
 
 void Scanner::to_pos(int pos)
 {
-    m_filein.seekg(pos);
+    m_filein->seekg(pos);
 }
 
 vector<int8_t> Scanner::get_stream()
@@ -85,29 +68,29 @@ vector<int8_t> Scanner::get_stream()
     vector<int8_t> stream;
 
     // Ignore first new line
-    while (m_filein.good() && next_char() == '\n');
+    while (m_filein->good() && next_char() == '\n');
     unget_char();
 
-    while (m_filein.good()) {
-        int8_t ret = m_filein.get();
-        if ((ret == '\n' || ret == '\r') && m_filein.good()) {
-            int pos = m_filein.tellg();
-            int next = m_filein.get();
+    while (m_filein->good()) {
+        int8_t ret = m_filein->get();
+        if ((ret == '\n' || ret == '\r') && m_filein->good()) {
+            int pos = m_filein->tellg();
+            int next = m_filein->get();
             // treat '\r\n', '\r' or '\n'
-            if (next == 'e' || m_filein.get() == 'e') {
-                m_filein.unget();
+            if (next == 'e' || m_filein->get() == 'e') {
+                m_filein->unget();
                 Token *token = next_token();
                 if (token != NULL && token->type() == END_STREAM) {
                     // endstream: do not save the and char 
                     // and return the token start position
-                    m_filein.seekg(pos);
+                    m_filein->seekg(pos);
                     delete token;
                     break;
                 }
                 delete token;
             }
             // not endstream
-            m_filein.seekg(pos);
+            m_filein->seekg(pos);
         }
         stream.push_back(ret);
     }
@@ -118,14 +101,14 @@ char Scanner::next_char()
 {
     char ret = EOF;
 
-    if (m_filein.good() && !m_filein.eof()) {
-        ret = m_filein.get();
+    if (m_filein->good() && !m_filein->eof()) {
+        ret = m_filein->get();
         if (ret == '\r') {
-            char second = m_filein.get();
+            char second = m_filein->get();
             if (second == '\n') {
                 return '\n';
             }
-            m_filein.unget();
+            m_filein->unget();
         }
     }
     return ret;
@@ -133,7 +116,7 @@ char Scanner::next_char()
 
 bool Scanner::good()
 {
-    return m_filein.good();
+    return m_filein->good();
 }
 
 void Scanner::ignore_line()
@@ -148,7 +131,7 @@ const char *Scanner::error()
 
 void Scanner::unget_char()
 {
-    m_filein.unget();
+    m_filein->unget();
 }
 
 bool Scanner::is_space(const char c)
@@ -176,7 +159,7 @@ Token *Scanner::next_token()
     m_error = NULL;
 
     bool save;
-    while (state != DONE && m_filein.good()) {
+    while (state != DONE && m_filein->good()) {
         char c = next_char();
         save = true;
         switch (state) {
@@ -311,8 +294,8 @@ const char *Scanner::get_line()
     string _buffer;
     register bool starting = true;
 
-    while (m_filein.good()) {
-        wchar_t c = next_char();
+    while (m_filein->good()) {
+        char c = next_char();
         if ((c == '\n' || c == '\r')) {
             if (starting) {
                 continue;

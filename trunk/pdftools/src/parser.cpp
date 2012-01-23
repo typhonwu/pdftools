@@ -213,9 +213,7 @@ TreeNode *Parser::object_sequence()
     match(OBJ);
     node->set_value(value_sequence());
     if (m_token && m_token->type() == STREAM) {
-        vector<uint8_t> stream = m_scanner->get_stream();
-        node->set_stream(stream);
-        stream.clear();
+        node->set_stream(m_scanner->get_stream());
         next_token();
         match(END_STREAM);
     }

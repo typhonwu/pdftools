@@ -24,6 +24,7 @@ private:
     void analyze_info();
     void analyse_root();
     void analyse_pages(TreeNode *page, ArrayNode *mediabox = NULL);
+    void process_pages();
     string get_string_value(TreeNode *value);
     double get_number_value(TreeNode *value);
     ObjNode *get_object(int id, int generation);

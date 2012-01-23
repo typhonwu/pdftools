@@ -1,7 +1,7 @@
 #include "analyze.h"
 #include "nodes/nodes.h"
 #include <iostream>
-
+#include <zlib.h>
 
 #include "utils.h"
 
@@ -127,6 +127,11 @@ Document *Analyze::analyze_tree(RootNode * tree)
     return m_document;
 }
 
+void Analyze::process_pages()
+{
+
+}
+
 void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
 {
     ObjNode *obj_pages = dynamic_cast<ObjNode *> (page);
@@ -163,6 +168,75 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
             vector<TreeNode *> bounds = media->values();
             page->set_media_box(get_number_value(bounds[0]), get_number_value(bounds[1]), get_number_value(bounds[2]), get_number_value(bounds[3]));
 
+            ObjNode *contents = dynamic_cast<ObjNode *> (get_real_value(catalog->get("/Contents")));
+            if (contents) {
+                MapNode *snode = dynamic_cast<MapNode *> (contents->value());
+                NumberNode *length = dynamic_cast<NumberNode *> (get_real_value(snode->get("/Length")));
+                NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
+                if (filter && filter->name() == "/FlateDecode") {
+                    contents->set_uncompressed(inflate(contents->stream(), contents->stream_size()));
+                    contents->clear_stream();
+                } else {
+                    cout << "compression not supported: ";
+                    if (filter) {
+                        cout << filter->name();
+                    } else {
+                        cout << "uncompressed";
+                    }
+                    cout << endl;
+                    abort();
+                }
+                /*vector<char *> values;
+                
+                // 2k buffer, last byte is for \0 (end string)
+                char buffer[2049];
+                z_stream zstream;
+                memset(&zstream, 0, sizeof (z_stream));
+                
+                if (contents->id() == 161 && contents->generation() == 0) {
+                    cout << endl;
+                }
+
+                zstream.avail_in = contents->stream_size();
+                zstream.avail_out = sizeof(buffer) - 1;
+                zstream.next_in = (Bytef *) contents->stream();
+                zstream.next_out = (Bytef *) buffer;
+
+                int count = 0;
+                int rsti = inflateInit(&zstream);
+                if (rsti == Z_OK) {
+                    do {
+                        count++;
+                        zstream.avail_out = sizeof(buffer) - 1;
+                        memset(buffer, 0, sizeof(buffer));
+                        zstream.next_out = (Bytef *) buffer;
+            
+                        int rst2 = inflate(&zstream, Z_NO_FLUSH);
+                        if (rst2 >= 0) {
+                            char *temp = new char[zstream.total_out];
+                            memcmp(temp, buffer, zstream.total_out);
+                            values.push_back(temp);
+                            //cout << buffer;
+                            if (rst2 == Z_STREAM_END) break;
+                        } else {
+                            cout << endl << "Total loops " << count << endl;
+                            cout << endl << rst2 << endl << contents->id() << " " << contents->generation()
+                                    << endl << contents->stream_size() << ":" << length->value()
+                                    << endl;// << (char*) contents->stream() << endl;
+                            abort();
+                        }
+                    } while(zstream.avail_out == 0);
+                }
+                vector<char *>::iterator i = values.begin();
+                while(i != values.end()) {
+                    delete [] (*i);
+                    i = values.erase(i);
+                }
+                inflateEnd(&zstream);*/
+            } else {
+                ArrayNode *contents2 = dynamic_cast<ArrayNode *> (catalog->get("/Contents"));
+                cout << "handle array content" << endl;
+            }
             //ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/Resources"));
             //ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/Contents")); // stream or array
             // /Metadata // stream

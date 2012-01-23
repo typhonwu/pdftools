@@ -2,6 +2,7 @@
 #include "nodes/nodes.h"
 #include <iostream>
 #include <zlib.h>
+#include <cstdlib>
 
 #include "utils.h"
 

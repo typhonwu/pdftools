@@ -66,7 +66,7 @@ bool Scanner::is_open()
 bool Scanner::open_file(const char *path)
 {
     close_file();
-    m_filein.open(path);
+    m_filein.open(path, ios::binary);
     return is_open();
 }
 
@@ -80,19 +80,21 @@ void Scanner::to_pos(int pos)
     m_filein.seekg(pos);
 }
 
-vector<uint8_t> Scanner::get_stream()
+vector<int8_t> Scanner::get_stream()
 {
-    vector<uint8_t> stream;
+    vector<int8_t> stream;
 
     // Ignore first new line
-    while (m_filein.good() && m_filein.get() != '\n');
+    while (m_filein.good() && next_char() == '\n');
+    unget_char();
 
     while (m_filein.good()) {
-        uint8_t ret = m_filein.get();
+        int8_t ret = m_filein.get();
         if ((ret == '\n' || ret == '\r') && m_filein.good()) {
             int pos = m_filein.tellg();
             int next = m_filein.get();
-            if (next == 'e') {
+            // treat '\r\n', '\r' or '\n'
+            if (next == 'e' || m_filein.get() == 'e') {
                 m_filein.unget();
                 Token *token = next_token();
                 if (token != NULL && token->type() == END_STREAM) {

@@ -27,7 +27,7 @@ public:
     void ignore_line();
     int pos();
     void to_pos(int pos);
-    std::vector<uint8_t> get_stream();
+    std::vector<int8_t> get_stream();
     
 private:
     void close_file();

@@ -9,19 +9,27 @@ class ObjNode : public TreeNode {
 private:
     int m_id;
     int m_generation;
+    int m_stream_size;
     TreeNode *m_value;
-    uint8_t *m_stream;
+    int8_t *m_stream;
+    char *m_uncompressed;
     
 public:
     ObjNode(int id, int generation);
     virtual ~ObjNode();
     
     void set_value(TreeNode *value);
-    void set_stream(std::vector<uint8_t> stream);
+    void set_stream(std::vector<int8_t> stream);
     
+    int id();
+    int generation();
+    int stream_size();
     TreeNode *value();
-    uint8_t *stream();
+    int8_t *stream();
+    char *uncompressed();
+    void set_uncompressed(char *data);
     bool this_object(int id, int generation);
+    void clear_stream();
 };
 
 #endif

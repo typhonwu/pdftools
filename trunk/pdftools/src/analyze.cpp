@@ -125,6 +125,38 @@ Document *Analyze::analyze_tree(RootNode * tree)
     analyse_root();
     analyse_pages(m_page_tree);
 
+    vector<TreeNode *> root = m_tree->child();
+    vector<TreeNode *>::iterator i = root.begin();
+
+    while (i < root.end()) {
+        ObjNode *root_object = dynamic_cast<ObjNode *> (*i);
+        if (root_object) {
+            MapNode *map = dynamic_cast<MapNode *> (root_object->value());
+            if (map) {
+                NameNode *type = dynamic_cast<NameNode *> (map->get("/Type"));
+                if (type && type->name() == "/ObjStm") {
+                    int qtd = get_number_value(map->get("/N"));
+                    cout << qtd << endl;
+
+                    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(map->get("/Filter")));
+                    if (filter && filter->name() == "/FlateDecode") {
+                        //cout << flat_decode(root_object->stream(), root_object->stream_size());
+
+                    } else {
+                        cout << "compression not supported: ";
+                        if (filter) {
+                            cout << filter->name();
+                        } else {
+                            cout << "uncompressed";
+                        }
+                        cout << endl;
+                        abort();
+                    }
+                }
+            }
+        }
+        i++;
+    }
     return m_document;
 }
 
@@ -188,53 +220,6 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
                     cout << endl;
                     abort();
                 }
-                /*vector<char *> values;
-                
-                // 2k buffer, last byte is for \0 (end string)
-                char buffer[2049];
-                z_stream zstream;
-                memset(&zstream, 0, sizeof (z_stream));
-                
-                if (contents->id() == 161 && contents->generation() == 0) {
-                    cout << endl;
-                }
-
-                zstream.avail_in = contents->stream_size();
-                zstream.avail_out = sizeof(buffer) - 1;
-                zstream.next_in = (Bytef *) contents->stream();
-                zstream.next_out = (Bytef *) buffer;
-
-                int count = 0;
-                int rsti = inflateInit(&zstream);
-                if (rsti == Z_OK) {
-                    do {
-                        count++;
-                        zstream.avail_out = sizeof(buffer) - 1;
-                        memset(buffer, 0, sizeof(buffer));
-                        zstream.next_out = (Bytef *) buffer;
-            
-                        int rst2 = inflate(&zstream, Z_NO_FLUSH);
-                        if (rst2 >= 0) {
-                            char *temp = new char[zstream.total_out];
-                            memcmp(temp, buffer, zstream.total_out);
-                            values.push_back(temp);
-                            //cout << buffer;
-                            if (rst2 == Z_STREAM_END) break;
-                        } else {
-                            cout << endl << "Total loops " << count << endl;
-                            cout << endl << rst2 << endl << contents->id() << " " << contents->generation()
-                                    << endl << contents->stream_size() << ":" << length->value()
-                                    << endl;// << (char*) contents->stream() << endl;
-                            abort();
-                        }
-                    } while(zstream.avail_out == 0);
-                }
-                vector<char *>::iterator i = values.begin();
-                while(i != values.end()) {
-                    delete [] (*i);
-                    i = values.erase(i);
-                }
-                inflateEnd(&zstream);*/
             } else {
                 ArrayNode *contents2 = dynamic_cast<ArrayNode *> (catalog->get("/Contents"));
                 cout << "handle array content" << endl;

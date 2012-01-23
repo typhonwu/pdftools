@@ -31,15 +31,19 @@ Parser::~Parser()
     if (m_token) {
         delete m_token;
     }
+    if (m_filein.is_open()) {
+        m_filein.close();
+    }
 }
 
 bool Parser::open_file(const char *path)
 {
-    bool ret = m_scanner->open_file(path);
-    if (ret) {
+    m_filein.open(path, ios::binary);
+    m_scanner->set_istream(&m_filein);
+    if (m_filein.is_open()) {
         next_token();
     }
-    return ret;
+    return m_filein.is_open();
 }
 
 void Parser::next_token()

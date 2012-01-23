@@ -1,17 +1,19 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
-#include <fstream>
+#include <istream>
 #include <ios>
 #include <map>
 #include <vector>
 #include <stdint.h>
 #include "token.h"
 
+using namespace std;
+
 class Scanner {
 private:
-    std::ifstream m_filein;
-    std::map<const char *, TokenType> m_reserved;
+    istream *m_filein;
+    map<const char *, TokenType> m_reserved;
     const char *m_error;
     
 public:
@@ -19,18 +21,17 @@ public:
     ~Scanner();
 
     Token *next_token();
-    bool open_file(const char *path);
-    bool is_open();
+    //bool open_file(const char *path);
+    void set_istream(istream *stream);
     bool good();
     const char *error();
     
     void ignore_line();
     int pos();
     void to_pos(int pos);
-    std::vector<int8_t> get_stream();
+    vector<int8_t> get_stream();
     
 private:
-    void close_file();
     void unget_char();
     const char *get_line();
     bool is_space(const char c);

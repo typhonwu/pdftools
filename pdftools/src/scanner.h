@@ -15,6 +15,7 @@ private:
     istream *m_filein;
     map<const char *, TokenType> m_reserved;
     const char *m_error;
+    Token m_current;
     
 public:
     Scanner();

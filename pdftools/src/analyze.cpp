@@ -125,38 +125,6 @@ Document *Analyze::analyze_tree(RootNode * tree)
     analyse_root();
     analyse_pages(m_page_tree);
 
-    vector<TreeNode *> root = m_tree->child();
-    vector<TreeNode *>::iterator i = root.begin();
-
-    while (i < root.end()) {
-        ObjNode *root_object = dynamic_cast<ObjNode *> (*i);
-        if (root_object) {
-            MapNode *map = dynamic_cast<MapNode *> (root_object->value());
-            if (map) {
-                NameNode *type = dynamic_cast<NameNode *> (map->get("/Type"));
-                if (type && type->name() == "/ObjStm") {
-                    int qtd = get_number_value(map->get("/N"));
-                    cout << qtd << endl;
-
-                    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(map->get("/Filter")));
-                    if (filter && filter->name() == "/FlateDecode") {
-                        //cout << flat_decode(root_object->stream(), root_object->stream_size());
-
-                    } else {
-                        cout << "compression not supported: ";
-                        if (filter) {
-                            cout << filter->name();
-                        } else {
-                            cout << "uncompressed";
-                        }
-                        cout << endl;
-                        abort();
-                    }
-                }
-            }
-        }
-        i++;
-    }
     return m_document;
 }
 
@@ -198,9 +166,11 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
             if (!media) {
                 media = mediabox;
             }
-            vector<TreeNode *> bounds = media->values();
-            page->set_media_box(get_number_value(bounds[0]), get_number_value(bounds[1]), get_number_value(bounds[2]), get_number_value(bounds[3]));
-
+            // FIXME correct bounds verification
+            if (media) {
+                vector<TreeNode *> bounds = media->values();
+                page->set_media_box(get_number_value(bounds[0]), get_number_value(bounds[1]), get_number_value(bounds[2]), get_number_value(bounds[3]));
+            }
             ObjNode *contents = dynamic_cast<ObjNode *> (get_real_value(catalog->get("/Contents")));
             if (contents) {
                 MapNode *snode = dynamic_cast<MapNode *> (contents->value());

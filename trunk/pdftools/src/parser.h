@@ -29,7 +29,8 @@ private:
     void next_token();
     bool verify_version();
     bool match(TokenType type);
-    
+    void object_streams(RootNode *root);
+
     void comment_sequence();
     TreeNode *object_sequence();
     TreeNode *xref_sequence();

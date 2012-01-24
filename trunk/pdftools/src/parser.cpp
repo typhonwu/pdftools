@@ -4,6 +4,8 @@
 #include "nodes/nodes.h"
 #include <cstdlib>
 #include <string>
+#include <sstream>
+#include <iostream>
 
 using namespace std;
 
@@ -97,7 +99,71 @@ RootNode *Parser::parse()
     } else {
         error_message("invalid input file");
     }
+    object_streams(root);
     return root;
+}
+
+void Parser::object_streams(RootNode *root_node)
+{
+    vector<TreeNode *> root = root_node->child();
+    vector<TreeNode *>::iterator i = root.begin();
+
+    while (i < root.end()) {
+        ObjNode *root_object = dynamic_cast<ObjNode *> (*i);
+        if (root_object) {
+            MapNode *map = dynamic_cast<MapNode *> (root_object->value());
+            if (map) {
+                NameNode *type = dynamic_cast<NameNode *> (map->get("/Type"));
+                if (type && type->name() == "/ObjStm") {
+                    int qtd = 0;
+                    NumberNode *number = dynamic_cast<NumberNode *> (map->get("/N"));
+                    if (number) {
+                        qtd = number->value();
+                    }
+
+                    NameNode *filter = dynamic_cast<NameNode *> (map->get("/Filter"));
+                    if (filter && filter->name() == "/FlateDecode") {
+                        stringstream stream_value;
+                        char *uncompressed = flat_decode(root_object->stream(), root_object->stream_size());
+                        stream_value << uncompressed;
+                        stream_value.seekg(0);
+
+                        Scanner scanner;
+                        Scanner *temp = m_scanner;
+                        m_scanner = &scanner;
+                        scanner.set_istream(&stream_value);
+
+                        vector<int> ids;
+                        int loop;
+                        for (loop = 0; loop < qtd; loop++) {
+                            next_token();
+                            ids.push_back(m_token->to_number());
+                            next_token();
+                        }
+                        next_token();
+                        vector<int>::iterator id;
+                        for (id = ids.begin(); id != ids.end(); id++) {
+                            ObjNode *new_obj = new ObjNode(*id, 0);
+                            new_obj->set_value(value_sequence());
+                            root_node->add_child(new_obj);
+                        }
+                        m_scanner = temp;
+                        delete uncompressed;
+                    } else {
+                        cout << "compression not supported: ";
+                        if (filter) {
+                            cout << filter->name();
+                        } else {
+                            cout << "uncompressed";
+                        }
+                        cout << endl;
+                        abort();
+                    }
+                }
+            }
+        }
+        i++;
+    }
 }
 
 void Parser::comment_sequence()
@@ -140,8 +206,6 @@ TreeNode * Parser::xref_sequence()
     match(END_PDF);
     return xref;
 }
-
-#include <iostream>
 
 TreeNode *Parser::value_sequence()
 {

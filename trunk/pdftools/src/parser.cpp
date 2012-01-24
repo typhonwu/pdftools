@@ -120,44 +120,46 @@ void Parser::object_streams(RootNode *root_node)
                     if (number) {
                         qtd = number->value();
                     }
+                    char *uncompressed = NULL;
 
                     NameNode *filter = dynamic_cast<NameNode *> (map->get("/Filter"));
                     if (filter && filter->name() == "/FlateDecode") {
-                        stringstream stream_value;
-                        char *uncompressed = flat_decode(root_object->stream(), root_object->stream_size());
-                        stream_value << uncompressed;
-                        stream_value.seekg(0);
-
-                        Scanner scanner;
-                        Scanner *temp = m_scanner;
-                        m_scanner = &scanner;
-                        scanner.set_istream(&stream_value);
-
-                        vector<int> ids;
-                        int loop;
-                        for (loop = 0; loop < qtd; loop++) {
-                            next_token();
-                            ids.push_back(m_token->to_number());
-                            next_token();
-                        }
-                        next_token();
-                        vector<int>::iterator id;
-                        for (id = ids.begin(); id != ids.end(); id++) {
-                            ObjNode *new_obj = new ObjNode(*id, 0);
-                            new_obj->set_value(value_sequence());
-                            root_node->add_child(new_obj);
-                        }
-                        m_scanner = temp;
-                        delete uncompressed;
+                        uncompressed = flat_decode(root_object->stream(), root_object->stream_size());
+                        root_object->clear_stream();
+                    } else if (!filter) {
+                        uncompressed = (char *)root_object->stream();
                     } else {
-                        cout << "compression not supported: ";
-                        if (filter) {
-                            cout << filter->name();
-                        } else {
-                            cout << "uncompressed";
-                        }
-                        cout << endl;
-                        abort();
+                        error_message(string("compression not supported: ") + filter->name());
+                        return;
+                    }
+                    stringstream stream_value;
+                    stream_value << uncompressed;
+                    stream_value.seekg(0);
+
+                    Scanner scanner;
+                    Scanner *temp = m_scanner;
+                    m_scanner = &scanner;
+                    scanner.set_istream(&stream_value);
+
+                    vector<int> ids;
+                    int loop;
+                    for (loop = 0; loop < qtd; loop++) {
+                        next_token();
+                        ids.push_back(m_token->to_number());
+                        next_token();
+                    }
+                    next_token();
+                    vector<int>::iterator id;
+                    for (id = ids.begin(); id != ids.end(); id++) {
+                        ObjNode *new_obj = new ObjNode(*id, 0);
+                        new_obj->set_value(value_sequence());
+                        root_node->add_child(new_obj);
+                    }
+                    m_scanner = temp;
+                    if (!filter) {
+                        root_object->clear_stream();
+                    } else {
+                        delete uncompressed;
                     }
                 }
             }

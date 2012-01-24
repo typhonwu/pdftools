@@ -30,6 +30,7 @@ private:
     bool verify_version();
     bool match(TokenType type);
     void object_streams(RootNode *root);
+    void startxref_sequence();
 
     void comment_sequence();
     TreeNode *object_sequence();

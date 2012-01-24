@@ -15,18 +15,15 @@ typedef struct {
 class XREFNode : public TreeNode {
 private:
     std::vector<object_reference> m_references;
-    long m_start_address;
     TreeNode *m_trailer;
-    
+
 public:
     XREFNode();
     virtual ~XREFNode();
-    
+
     void add_node(uint16_t id, uint16_t generation, uint32_t address, char status);
-    void set_start_address(long address);
     void set_trailer(TreeNode *trailer);
-    
-    long start_address();
+
     TreeNode *trailer();
 };
 

@@ -88,10 +88,8 @@ vector<int8_t> Scanner::get_stream()
                     // endstream: do not save the and char 
                     // and return the token start position
                     m_filein->seekg(pos);
-                    delete token;
                     break;
                 }
-                delete token;
             }
             // not endstream
             m_filein->seekg(pos);
@@ -290,7 +288,9 @@ Token *Scanner::next_token()
             token_string.push_back(c);
         }
     }
-    return new Token(current_token, token_string);
+    m_current.set_type(current_token);
+    m_current.set_value(token_string);
+    return &m_current;
 }
 
 const char *Scanner::get_line()

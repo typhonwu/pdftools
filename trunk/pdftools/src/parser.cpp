@@ -30,9 +30,6 @@ Parser::Parser()
 Parser::~Parser()
 {
     delete m_scanner;
-    if (m_token) {
-        delete m_token;
-    }
     if (m_filein.is_open()) {
         m_filein.close();
     }
@@ -50,9 +47,6 @@ bool Parser::open_file(const char *path)
 
 void Parser::next_token()
 {
-    if (m_token) {
-        delete m_token;
-    }
     m_token = m_scanner->next_token();
 }
 

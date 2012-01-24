@@ -3,10 +3,18 @@
 
 using namespace std;
 
-Token::Token(TokenType type, string value)
+Token::Token()
+{
+    m_type = ENDFILE;
+}
+void Token::set_value(string value)
+{
+    m_value = value;
+}
+
+void Token::set_type(TokenType type)
 {
     m_type = type;
-    m_value = value;
 }
 
 double Token::to_number()

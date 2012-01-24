@@ -85,6 +85,9 @@ RootNode *Parser::parse()
             case XREF:
                 root->add_child(xref_sequence());
                 break;
+            case START_XREF:
+                startxref_sequence();
+                break;
             default:
                 next_token();
                 error = true;
@@ -121,7 +124,7 @@ void Parser::object_streams(RootNode *root_node)
                         uncompressed = flat_decode(root_object->stream(), root_object->stream_size());
                         root_object->clear_stream();
                     } else if (!filter) {
-                        uncompressed = (char *)root_object->stream();
+                        uncompressed = (char *) root_object->stream();
                     } else {
                         error_message(string("compression not supported: ") + filter->name());
                         return;
@@ -192,15 +195,18 @@ TreeNode * Parser::xref_sequence()
     } while (m_scanner->good() && (m_token->type() != TRAILER));
     match(TRAILER);
     xref->set_trailer(value_sequence());
+    return xref;
+}
 
+void Parser::startxref_sequence()
+{
     match(START_XREF);
-    xref->set_start_address(m_token->to_number());
+    //xref->set_start_address(m_token->to_number());
     match(NUM);
 
     match(PERCENT);
     match(PERCENT);
     match(END_PDF);
-    return xref;
 }
 
 TreeNode *Parser::value_sequence()

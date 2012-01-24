@@ -24,7 +24,6 @@ void Analyze::analyze_xref()
     vector<TreeNode *> root = m_tree->child();
     vector<TreeNode *>::iterator i = root.begin();
 
-    // Parse XREF Nodes
     while (i < root.end()) {
         XREFNode *xref = dynamic_cast<XREFNode *> (*i);
         if (xref) {

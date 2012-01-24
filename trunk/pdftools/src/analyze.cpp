@@ -175,27 +175,28 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
             if (contents) {
                 MapNode *snode = dynamic_cast<MapNode *> (contents->value());
                 //NumberNode *length = dynamic_cast<NumberNode *> (get_real_value(snode->get("/Length")));
-                NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
-                if (filter && filter->name() == "/FlateDecode") {
-                    contents->set_uncompressed(flat_decode(contents->stream(), contents->stream_size()));
-                    contents->clear_stream();
-                    //cout << contents->uncompressed() << endl;
-                } else {
-                    cout << "compression not supported: ";
-                    if (filter) {
-                        cout << filter->name();
+                if (snode) {
+                    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
+                    if (filter && filter->name() == "/FlateDecode") {
+                        contents->set_uncompressed(flat_decode(contents->stream(), contents->stream_size()));
+                        contents->clear_stream();
+                        //cout << contents->uncompressed() << endl;
                     } else {
-                        cout << "uncompressed";
+                        cout << "compression not supported: ";
+                        if (filter) {
+                            cout << filter->name();
+                        } else {
+                            cout << "uncompressed";
+                        }
+                        cout << endl;
+                        abort();
                     }
-                    cout << endl;
-                    abort();
+                } else {
+                    // FIXME Array of Object Streams
+                    //ArrayNode *contents2 = dynamic_cast<ArrayNode *> (contents->value());
                 }
-            } else {
-                ArrayNode *contents2 = dynamic_cast<ArrayNode *> (catalog->get("/Contents"));
-                cout << "handle array content" << endl;
             }
             //ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/Resources"));
-            //ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/Contents")); // stream or array
             // /Metadata // stream
             // /TemplateInstantiated name
             // /UserUnit number

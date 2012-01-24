@@ -12,6 +12,10 @@
 #include <iostream>
 #endif
 
+#ifndef EOF
+#define EOF -1
+#endif
+
 using namespace std;
 
 static const char *spaces = " \r\t\f";

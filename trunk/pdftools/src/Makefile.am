@@ -21,7 +21,7 @@ noinst_HEADERS = \
 	converter.h \
 	generator.h
 
-pdftools_LDADD = nodes/libnodes.a semantic/libsemantic.a epub/libepub.a
+pdftools_LDADD = nodes/libnodes.a semantic/libsemantic.a epub/libepub.a @LIBICONV@
 
 if HELP2MAN
 pdftools.1: pdftools$(EXEEXT) pdftools.h2m

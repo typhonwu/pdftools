@@ -3,6 +3,7 @@
 
 #include <istream>
 #include <stdint.h>
+#include <iconv.h>
 #include "token.h"
 
 using namespace std;

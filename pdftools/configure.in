@@ -27,13 +27,14 @@ AC_CHECK_TOOL(HELP2MAN, help2man, :)
 AM_CONDITIONAL(HELP2MAN, [test "$HELP2MAN" != :])
 
 # Checks for libraries.
-AM_ICONV
 AC_CHECK_LIB([z], [gzread], , [AC_MSG_ERROR([zlib not found, see http://www.zlib.net])])
 AC_CHECK_LIB([zip], [zip_open], , [AC_MSG_ERROR([libzip not found, see http://www.nih.at/libzip])])
+AC_CHECK_LIB([iconv], [iconv_open], , )
 
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([string cstdlib fstream],,AC_MSG_ERROR(required file is missing))
+AC_CHECK_HEADERS([iconv.h],,AC_MSG_ERROR(libiconv is missing))
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL

@@ -6,11 +6,14 @@
 /* Define to 1 if you have the <fstream> header file. */
 #undef HAVE_FSTREAM
 
-/* Define if you have the iconv() function and it works. */
-#undef HAVE_ICONV
+/* Define to 1 if you have the <iconv.h> header file. */
+#undef HAVE_ICONV_H
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `iconv' library (-liconv). */
+#undef HAVE_LIBICONV
 
 /* Define to 1 if you have the `z' library (-lz). */
 #undef HAVE_LIBZ
@@ -51,9 +54,6 @@
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
 
-/* Define as const if the declaration of iconv() needs const. */
-#undef ICONV_CONST
-
 /* Name of package */
 #undef PACKAGE
 
@@ -68,9 +68,6 @@
 
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
-
-/* Define to the home page for this package. */
-#undef PACKAGE_URL
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION

@@ -2,9 +2,6 @@
 #define SCANNER_H
 
 #include <istream>
-#include <ios>
-#include <map>
-#include <vector>
 #include <stdint.h>
 #include "token.h"
 
@@ -13,7 +10,6 @@ using namespace std;
 class Scanner {
 private:
     istream *m_filein;
-    map<const char *, TokenType> m_reserved;
     const char *m_error;
     Token m_current;
     
@@ -30,7 +26,7 @@ public:
     void ignore_line();
     int pos();
     void to_pos(int pos);
-    vector<int8_t> get_stream();
+    pair<int, int8_t *> get_stream(int length);
     
 private:
     void unget_char();

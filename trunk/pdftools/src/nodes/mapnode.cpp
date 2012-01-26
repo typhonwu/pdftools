@@ -14,7 +14,6 @@ MapNode::~MapNode()
         delete (*i).second;
         i++;
     }
-    m_values.clear();
 }
 
 TreeNode *MapNode::get(string name)

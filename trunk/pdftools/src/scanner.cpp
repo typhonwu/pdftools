@@ -293,7 +293,7 @@ Token * Scanner::next_token()
 
                     if (convert_string) {
                         iconv_t conv_desc = iconv_open("LATIN1", "UTF-16");
-                        if ((int) conv_desc == -1) {
+                        if ((size_t)conv_desc == (size_t)-1) {
                             /* Initialization failure. Do not convert strings */
                         } else {
                             size_t len = token_string.length();

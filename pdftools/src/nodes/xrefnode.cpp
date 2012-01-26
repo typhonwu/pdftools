@@ -12,7 +12,6 @@ XREFNode::~XREFNode()
     if (m_trailer) {
         delete m_trailer;
     }
-    m_references.clear();
 }
 
 void XREFNode::set_trailer(TreeNode *trailer)

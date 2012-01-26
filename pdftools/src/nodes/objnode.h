@@ -5,6 +5,8 @@
 #include <vector>
 #include <stdint.h>
 
+using namespace std;
+
 class ObjNode : public TreeNode {
 private:
     int m_id;
@@ -19,7 +21,7 @@ public:
     virtual ~ObjNode();
     
     void set_value(TreeNode *value);
-    void set_stream(std::vector<int8_t> stream);
+    void set_stream(pair<int, int8_t *> stream);
     
     int id();
     int generation();

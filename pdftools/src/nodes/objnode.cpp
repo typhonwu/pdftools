@@ -68,11 +68,13 @@ void ObjNode::clear_stream()
     }
 }
 
-void ObjNode::set_stream(vector<int8_t> stream)
+void ObjNode::set_stream(pair<int, int8_t *> stream)
 {
-    m_stream_size = stream.size();
-    m_stream = new int8_t[stream.size()];
-    copy(stream.begin(), stream.end(), m_stream);
+    if (m_stream) {
+        delete m_stream;
+    }
+    m_stream_size = stream.first;
+    m_stream = stream.second;
 }
 
 char *ObjNode::uncompressed()

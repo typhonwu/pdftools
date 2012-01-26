@@ -201,7 +201,6 @@ TreeNode * Parser::xref_sequence()
 void Parser::startxref_sequence()
 {
     match(START_XREF);
-    //xref->set_start_address(m_token->to_number());
     match(NUM);
 
     match(PERCENT);
@@ -283,7 +282,15 @@ TreeNode *Parser::object_sequence()
     match(OBJ);
     node->set_value(value_sequence());
     if (m_token && m_token->type() == STREAM) {
-        node->set_stream(m_scanner->get_stream());
+        int length = 0;
+        MapNode *map = dynamic_cast<MapNode *>(node->value());
+        if (map) {
+            NumberNode *number = dynamic_cast<NumberNode *>(map->get("/Length"));
+            if (number) {
+                length = number->value();
+            }
+        }
+        node->set_stream(m_scanner->get_stream(length));
         next_token();
         match(END_STREAM);
     }

@@ -31,21 +31,11 @@ inline unsigned int xtod(char c)
     if (c >= '0' && c <= '9') return c - '0';
     if (c >= 'A' && c <= 'F') return c - 'A' + 10;
     if (c >= 'a' && c <= 'f') return c - 'a' + 10;
-    return 0; // not Hex digit
+    return 0; // not a hex digit
 }
 
 Scanner::Scanner() : m_error(NULL)
 {
-    m_reserved["obj"] = OBJ;
-    m_reserved["endobj"] = END_OBJ;
-    m_reserved["EOF"] = END_PDF;
-    m_reserved["xref"] = XREF;
-    m_reserved["true"] = TRUE;
-    m_reserved["false"] = FALSE;
-    m_reserved["stream"] = STREAM;
-    m_reserved["endstream"] = END_STREAM;
-    m_reserved["startxref"] = START_XREF;
-    m_reserved["trailer"] = TRAILER;
 }
 
 Scanner::~Scanner()
@@ -67,36 +57,48 @@ void Scanner::to_pos(int pos)
     m_filein->seekg(pos);
 }
 
-vector<int8_t> Scanner::get_stream()
+pair<int, int8_t *> Scanner::get_stream(int length)
 {
-    vector<int8_t> stream;
-
     // Ignore first new line
     while (m_filein->good() && next_char() == '\n');
     unget_char();
 
-    while (m_filein->good()) {
-        int8_t ret = m_filein->get();
-        if ((ret == '\n' || ret == '\r') && m_filein->good()) {
-            int pos = m_filein->tellg();
-            int next = m_filein->get();
-            // treat '\r\n', '\r' or '\n'
-            if (next == 'e' || m_filein->get() == 'e') {
-                m_filein->unget();
-                Token *token = next_token();
-                if (token != NULL && token->type() == END_STREAM) {
-                    // endstream: do not save the and char 
-                    // and return the token start position
-                    m_filein->seekg(pos);
-                    break;
+    if (length > 0) {
+        pair<int, int8_t *> pair;
+        pair.first = length;
+        pair.second = new int8_t[length];
+        m_filein->read((char *) pair.second, length);
+        return pair;
+    } else {
+        vector<int8_t> stream;
+
+        while (m_filein->good()) {
+            int8_t ret = m_filein->get();
+            if ((ret == '\n' || ret == '\r') && m_filein->good()) {
+                int pos = m_filein->tellg();
+                int next = m_filein->get();
+                // treat '\r\n', '\r' or '\n'
+                if (next == 'e' || m_filein->get() == 'e') {
+                    m_filein->unget();
+                    Token *token = next_token();
+                    if (token != NULL && token->type() == END_STREAM) {
+                        // endstream: do not save the and char 
+                        // and return the token start position
+                        m_filein->seekg(pos);
+                        break;
+                    }
                 }
+                // not endstream
+                m_filein->seekg(pos);
             }
-            // not endstream
-            m_filein->seekg(pos);
+            stream.push_back(ret);
         }
-        stream.push_back(ret);
+        pair<int, int8_t *> pair;
+        pair.first = stream.size();
+        pair.second = new int8_t[stream.size()];
+        copy(stream.begin(), stream.end(), pair.second);
+        return pair;
     }
-    return stream;
 }
 
 char Scanner::next_char()
@@ -123,7 +125,8 @@ bool Scanner::good()
 
 void Scanner::ignore_line()
 {
-    get_line();
+    while (next_char() != '\n');
+    unget_char();
 }
 
 const char *Scanner::error()
@@ -143,11 +146,26 @@ bool Scanner::is_space(const char c)
 
 TokenType Scanner::reserved_lookup(const char *s)
 {
-    map<const char *, TokenType>::iterator i;
-    for (i = m_reserved.begin(); i != m_reserved.end(); i++) {
-        if (!strcmp(s, (*i).first)) {
-            return (*i).second;
-        }
+    if (!strcmp("obj", s)) {
+        return OBJ;
+    } else if (!strcmp("endobj", s)) {
+        return END_OBJ;
+    } else if (!strcmp("EOF", s)) {
+        return END_PDF;
+    } else if (!strcmp("xref", s)) {
+        return XREF;
+    } else if (!strcmp("true", s)) {
+        return TRUE;
+    } else if (!strcmp("false", s)) {
+        return FALSE;
+    } else if (!strcmp("stream", s)) {
+        return STREAM;
+    } else if (!strcmp("endstream", s)) {
+        return END_STREAM;
+    } else if (!strcmp("startxref", s)) {
+        return START_XREF;
+    } else if (!strcmp("trailer", s)) {
+        return TRAILER;
     }
     return NAME;
 }
@@ -296,19 +314,13 @@ Token *Scanner::next_token()
 const char *Scanner::get_line()
 {
     string _buffer;
-    register bool starting = true;
 
     while (m_filein->good()) {
         char c = next_char();
-        if ((c == '\n' || c == '\r')) {
-            if (starting) {
-                continue;
-            } else {
-                break;
-            }
+        if (c == '\n') {
+            break;
         }
         _buffer += c;
-        starting = false;
     }
     return _buffer.c_str();
 }

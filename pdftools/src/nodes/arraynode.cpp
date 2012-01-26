@@ -11,7 +11,7 @@ ArrayNode::~ArrayNode()
     vector<TreeNode*>::iterator i = m_values.begin();
     while (i != m_values.end()) {
         delete *i;
-        i = m_values.erase(i);
+        i++;
     }
 }
 

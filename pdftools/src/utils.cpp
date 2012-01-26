@@ -80,8 +80,7 @@ char *flat_decode(int8_t *compressed, int size)
     while (i != values.end()) {
         memcpy(ret + locate, (*i).buffer, (*i).size);
         locate += (*i).size;
-        i = values.erase(i);
+        i++;
     }
-    //cout << ret << endl;
     return ret;
 }

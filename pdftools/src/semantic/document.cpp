@@ -12,7 +12,7 @@ Document::~Document()
     vector<Page *>::iterator i = m_pages.begin();
     while (i != m_pages.end()) {
         delete *i;
-        i = m_pages.erase(i);
+        i++;
     }
 }
 

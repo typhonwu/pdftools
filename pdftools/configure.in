@@ -27,6 +27,7 @@ AC_CHECK_TOOL(HELP2MAN, help2man, :)
 AM_CONDITIONAL(HELP2MAN, [test "$HELP2MAN" != :])
 
 # Checks for libraries.
+AM_ICONV
 AC_CHECK_LIB([z], [gzread], , [AC_MSG_ERROR([zlib not found, see http://www.zlib.net])])
 AC_CHECK_LIB([zip], [zip_open], , [AC_MSG_ERROR([libzip not found, see http://www.nih.at/libzip])])
 

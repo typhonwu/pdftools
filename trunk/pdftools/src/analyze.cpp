@@ -107,7 +107,7 @@ void Analyze::analyse_root()
     m_page_tree = get_real_value(catalog->get("/Pages"));
     m_document->set_lang(get_string_value(catalog->get("/Lang")));
 
-    //FIXME PageLabels, Outlines & StructTreeRoot
+    //FIXME PageLabels page 595, Outlines & StructTreeRoot
 }
 
 Document *Analyze::analyze_tree(RootNode * tree)

@@ -54,8 +54,9 @@ libepub_a_LIBADD =
 am_libepub_a_OBJECTS = libepub_a-epub.$(OBJEXT)
 libepub_a_OBJECTS = $(am_libepub_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
-depcomp =
-am__depfiles_maybe =
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+am__depfiles_maybe = depfiles
+am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -190,9 +191,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps src/epub/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/epub/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu --ignore-deps src/epub/Makefile
+	  $(AUTOMAKE) --gnu src/epub/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -225,17 +226,35 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepub_a-epub.Po@am__quote@
+
 .cpp.o:
-	$(CXXCOMPILE) -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
 
 .cpp.obj:
-	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 libepub_a-epub.o: epub.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -c -o libepub_a-epub.o `test -f 'epub.cpp' || echo '$(srcdir)/'`epub.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -MT libepub_a-epub.o -MD -MP -MF $(DEPDIR)/libepub_a-epub.Tpo -c -o libepub_a-epub.o `test -f 'epub.cpp' || echo '$(srcdir)/'`epub.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libepub_a-epub.Tpo $(DEPDIR)/libepub_a-epub.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='epub.cpp' object='libepub_a-epub.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -c -o libepub_a-epub.o `test -f 'epub.cpp' || echo '$(srcdir)/'`epub.cpp
 
 libepub_a-epub.obj: epub.cpp
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -c -o libepub_a-epub.obj `if test -f 'epub.cpp'; then $(CYGPATH_W) 'epub.cpp'; else $(CYGPATH_W) '$(srcdir)/epub.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -MT libepub_a-epub.obj -MD -MP -MF $(DEPDIR)/libepub_a-epub.Tpo -c -o libepub_a-epub.obj `if test -f 'epub.cpp'; then $(CYGPATH_W) 'epub.cpp'; else $(CYGPATH_W) '$(srcdir)/epub.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libepub_a-epub.Tpo $(DEPDIR)/libepub_a-epub.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='epub.cpp' object='libepub_a-epub.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -c -o libepub_a-epub.obj `if test -f 'epub.cpp'; then $(CYGPATH_W) 'epub.cpp'; else $(CYGPATH_W) '$(srcdir)/epub.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -353,6 +372,7 @@ clean: clean-am
 clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -398,6 +418,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

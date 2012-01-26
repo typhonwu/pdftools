@@ -6,6 +6,10 @@
 #error the config.h file is mandatory
 #endif
 
+#ifndef HAVE_ICONV
+#error the ICONV support is mandatory
+#endif
+
 #include "utils.h"
 #include "converter.h"
 #include <iostream>

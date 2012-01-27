@@ -8,3 +8,4 @@ noinst_HEADERS = \
 	page.h
 
 libsemantic_a_CXXFLAGS = -I..
+AM_CXXFLAGS = $(OPENMP_CXXFLAGS)

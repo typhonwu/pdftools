@@ -22,9 +22,10 @@ Analyze::~Analyze()
 void Analyze::analyze_xref()
 {
     vector<TreeNode *> root = m_tree->child();
-    vector<TreeNode *>::iterator i = root.begin();
+    vector<TreeNode *>::iterator i;
 
-    while (i < root.end()) {
+#pragma omp parallel for
+    for (i = root.begin(); i < root.end(); i++) {
         XREFNode *xref = dynamic_cast<XREFNode *> (*i);
         if (xref) {
             MapNode *trailer = dynamic_cast<MapNode *> (xref->trailer());
@@ -73,7 +74,6 @@ void Analyze::analyze_xref()
                 }
             }
         }
-        i++;
     }
 }
 
@@ -232,17 +232,26 @@ ObjNode *Analyze::get_object(RefNode * ref)
     return get_object(ref->id(), ref->generation());
 }
 
-ObjNode * Analyze::get_object(int id, int generation)
+ObjNode *Analyze::get_object(int id, int generation)
 {
     vector<TreeNode *> root = m_tree->child();
-    vector<TreeNode *>::iterator i = root.begin();
-    while (i < root.end()) {
-        ObjNode *obj = dynamic_cast<ObjNode *> (*i);
-        if (obj && obj->this_object(id, generation)) {
-            return obj;
+    vector<TreeNode *>::iterator i;
+    ObjNode *ret = NULL;
+    bool done = false;
+
+#pragma omp parallel for
+    for (i = root.begin(); i < root.end(); i++) {
+#pragma omp flush(done)
+        if (!done) {
+            ObjNode *obj = dynamic_cast<ObjNode *> (*i);
+            if (obj && obj->this_object(id, generation)) {
+                done = true;
+#pragma omp flush(done)
+                //return obj;
+                ret = obj;
+            }
         }
-        i++;
     }
     // Not found
-    return NULL;
+    return ret;
 }

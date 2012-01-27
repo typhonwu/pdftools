@@ -100,13 +100,11 @@ int main(int argc, char *argv[])
         cout << "Try `" << PACKAGE_NAME << " --help' for usage." << endl;
         return -1;
     } else {
-        while (optind < argc) {
-            Converter converter(argv[optind], format);
+        int loop;
+#pragma omp parallel for
+        for (loop = optind; loop < argc; loop++) {
+            Converter converter(argv[loop], format);
             converter.convert();
-            optind++;
-            if (optind < argc && verbose_mode()) {
-                verbose_message("");
-            }
         }
     }
     return EXIT_SUCCESS;

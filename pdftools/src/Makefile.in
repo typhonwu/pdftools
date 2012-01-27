@@ -53,9 +53,8 @@ am_pdftools_OBJECTS = pdftools-main.$(OBJEXT) \
 	pdftools-analyze.$(OBJEXT) pdftools-converter.$(OBJEXT) \
 	pdftools-generator.$(OBJEXT)
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
-am__DEPENDENCIES_1 =
 pdftools_DEPENDENCIES = nodes/libnodes.a semantic/libsemantic.a \
-	epub/libepub.a $(am__DEPENDENCIES_1)
+	epub/libepub.a
 pdftools_LINK = $(CXXLD) $(pdftools_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -180,12 +179,14 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
+XML2_CONFIG = @XML2_CONFIG@
+XML_CPPFLAGS = @XML_CPPFLAGS@
+XML_LIBS = @XML_LIBS@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -212,8 +213,6 @@ infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
-libxml2_CFLAGS = @libxml2_CFLAGS@
-libxml2_LIBS = @libxml2_LIBS@
 localedir = @localedir@
 localstatedir = @localstatedir@
 mandir = @mandir@

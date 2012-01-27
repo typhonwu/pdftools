@@ -4827,7 +4827,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
      XML_CPPFLAGS=""
      XML_LIBS=""
-     as_fn_error " *** libxml not found
+     :
   fi
 
 

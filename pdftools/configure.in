@@ -31,7 +31,7 @@ AC_CHECK_LIB([z], [gzread], , [AC_MSG_ERROR([zlib not found, see http://www.zlib
 AC_CHECK_LIB([zip], [zip_open], , [AC_MSG_ERROR([libzip not found, see http://www.nih.at/libzip])])
 AC_CHECK_LIB([iconv], [iconv_open], , )
 AC_OPENMP
-AM_PATH_XML2(2.4.0,,AC_MSG_ERROR([ *** libxml not found, see http://www.libxml.org/]))
+AM_PATH_XML2(2.4.0)
 # PKG_CHECK_MODULES([libxml2], libxml-2.0 >= 2.4)
 
 # Checks for header files.

@@ -64,7 +64,7 @@ char *flat_decode(int8_t *compressed, int size)
                 values.push_back(b);
                 if (rst2 == Z_STREAM_END) break;
             } else {
-                cout << "error" << endl;
+                cout << "error in decompression" << endl;
                 // Error in decompression
                 break;
             }
@@ -76,11 +76,10 @@ char *flat_decode(int8_t *compressed, int size)
     ret[total] = 0;
 
     int locate = 0;
-    vector<buffer_struct>::iterator i = values.begin();
-    while (i != values.end()) {
+    vector<buffer_struct>::iterator i;
+    for (i = values.begin(); i != values.end(); i++) {
         memcpy(ret + locate, (*i).buffer, (*i).size);
         locate += (*i).size;
-        i++;
     }
     return ret;
 }

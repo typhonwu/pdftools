@@ -6,3 +6,4 @@ noinst_HEADERS = \
 	epub.h
 
 libepub_a_CXXFLAGS = -I..
+AM_CXXFLAGS = $(OPENMP_CXXFLAGS)

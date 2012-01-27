@@ -147,7 +147,7 @@ void Parser::object_streams(RootNode *root_node)
                     }
                     next_token();
                     vector<int>::iterator id;
-                    for (id = ids.begin(); id != ids.end(); id++) {
+                    for (id = ids.begin(); id < ids.end(); id++) {
                         ObjNode *new_obj = new ObjNode(*id, 0);
                         new_obj->set_value(value_sequence());
                         root_node->add_child(new_obj);
@@ -283,9 +283,9 @@ TreeNode *Parser::object_sequence()
     node->set_value(value_sequence());
     if (m_token && m_token->type() == STREAM) {
         int length = 0;
-        MapNode *map = dynamic_cast<MapNode *>(node->value());
+        MapNode *map = dynamic_cast<MapNode *> (node->value());
         if (map) {
-            NumberNode *number = dynamic_cast<NumberNode *>(map->get("/Length"));
+            NumberNode *number = dynamic_cast<NumberNode *> (map->get("/Length"));
             if (number) {
                 length = number->value();
             }

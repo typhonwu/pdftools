@@ -21,6 +21,7 @@ noinst_HEADERS = \
 	converter.h \
 	generator.h
 
+AM_CXXFLAGS = $(OPENMP_CXXFLAGS)
 pdftools_LDADD = nodes/libnodes.a semantic/libsemantic.a epub/libepub.a
 
 if HELP2MAN

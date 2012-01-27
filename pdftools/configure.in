@@ -1,4 +1,4 @@
-AC_PREREQ(2.61)
+AC_PREREQ(2.62)
 AC_INIT([pdftools],[0.2],[leonhad@gmail.com],[pdftools],[http://code.google.com/p/pdftools/])
 AM_INIT_AUTOMAKE([-Wall tar-ustar])
 AC_CONFIG_SRCDIR([config.h.in])
@@ -30,6 +30,7 @@ AM_CONDITIONAL(HELP2MAN, [test "$HELP2MAN" != :])
 AC_CHECK_LIB([z], [gzread], , [AC_MSG_ERROR([zlib not found, see http://www.zlib.net])])
 AC_CHECK_LIB([zip], [zip_open], , [AC_MSG_ERROR([libzip not found, see http://www.nih.at/libzip])])
 AC_CHECK_LIB([iconv], [iconv_open], , )
+AC_OPENMP
 
 # Checks for header files.
 AC_HEADER_STDC

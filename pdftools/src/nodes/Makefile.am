@@ -26,3 +26,4 @@ noinst_HEADERS = \
 	booleannode.h
 
 libnodes_a_CXXFLAGS = -I..
+AM_CXXFLAGS = $(OPENMP_CXXFLAGS)

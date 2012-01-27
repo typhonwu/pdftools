@@ -51,8 +51,9 @@ am_pdftools_OBJECTS = main.$(OBJEXT) parser.$(OBJEXT) \
 	scanner.$(OBJEXT) token.$(OBJEXT) utils.$(OBJEXT) \
 	analyze.$(OBJEXT) converter.$(OBJEXT) generator.$(OBJEXT)
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
+am__DEPENDENCIES_1 =
 pdftools_DEPENDENCIES = nodes/libnodes.a semantic/libsemantic.a \
-	epub/libepub.a
+	epub/libepub.a $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -180,6 +181,9 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
+XML2_CONFIG = @XML2_CONFIG@
+XML_CPPFLAGS = @XML_CPPFLAGS@
+XML_LIBS = @XML_LIBS@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -243,8 +247,8 @@ noinst_HEADERS = \
 	converter.h \
 	generator.h
 
-AM_CXXFLAGS = $(OPENMP_CXXFLAGS)
-pdftools_LDADD = nodes/libnodes.a semantic/libsemantic.a epub/libepub.a
+AM_CXXFLAGS = $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
+pdftools_LDADD = nodes/libnodes.a semantic/libsemantic.a epub/libepub.a $(XML_LIBS)
 all: all-recursive
 
 .SUFFIXES:

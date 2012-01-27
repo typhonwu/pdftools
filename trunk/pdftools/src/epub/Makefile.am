@@ -5,5 +5,4 @@ libepub_a_SOURCES = \
 noinst_HEADERS = \
 	epub.h
 
-libepub_a_CXXFLAGS = -I..
-AM_CXXFLAGS = $(OPENMP_CXXFLAGS)
+libepub_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(libxml2_CFLAGS)

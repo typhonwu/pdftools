@@ -53,8 +53,9 @@ am_pdftools_OBJECTS = pdftools-main.$(OBJEXT) \
 	pdftools-analyze.$(OBJEXT) pdftools-converter.$(OBJEXT) \
 	pdftools-generator.$(OBJEXT)
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
+am__DEPENDENCIES_1 =
 pdftools_DEPENDENCIES = nodes/libnodes.a semantic/libsemantic.a \
-	epub/libepub.a
+	epub/libepub.a $(am__DEPENDENCIES_1)
 pdftools_LINK = $(CXXLD) $(pdftools_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -250,8 +251,8 @@ noinst_HEADERS = \
 	converter.h \
 	generator.h
 
-pdftools_CXXFLAGS = $(OPENMP_CXXFLAGS) $(libxml2_CFLAGS)
-pdftools_LDADD = nodes/libnodes.a semantic/libsemantic.a epub/libepub.a $(libxml2_LIBS)
+pdftools_CXXFLAGS = $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
+pdftools_LDADD = nodes/libnodes.a semantic/libsemantic.a epub/libepub.a $(XML_LIBS)
 all: all-recursive
 
 .SUFFIXES:

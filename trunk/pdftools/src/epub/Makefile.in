@@ -169,7 +169,7 @@ libepub_a_SOURCES = \
 noinst_HEADERS = \
 	epub.h
 
-libepub_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(libxml2_CFLAGS)
+libepub_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 all: all-am
 
 .SUFFIXES:

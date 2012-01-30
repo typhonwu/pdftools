@@ -14,6 +14,7 @@
 #include <cstdio>
 #include <cstring>
 #include <getopt.h>
+#include <libxml/xmlversion.h>
 
 using namespace std;
 
@@ -24,6 +25,8 @@ int main(int argc, char *argv[])
     bool error = false;
     const char *fileout = NULL;
     const char *format = "epub";
+    
+    LIBXML_TEST_VERSION;
 
     while (true) {
         static struct option long_options[] = {

@@ -22,11 +22,12 @@ Analyze::~Analyze()
 void Analyze::analyze_xref()
 {
     vector<TreeNode *> root = m_tree->child();
-    vector<TreeNode *>::iterator i;
+    size_t i;
 
 #pragma omp parallel for
-    for (i = root.begin(); i < root.end(); i++) {
-        XREFNode *xref = dynamic_cast<XREFNode *> (*i);
+    for (i = 0; i < root.size(); i++) {
+        TreeNode *value = root[i];
+        XREFNode *xref = dynamic_cast<XREFNode *> (value);
         if (xref) {
             MapNode *trailer = dynamic_cast<MapNode *> (xref->trailer());
 
@@ -47,7 +48,7 @@ void Analyze::analyze_xref()
                 }
             }
         } else {
-            ObjNode *obj = dynamic_cast<ObjNode *> (*i);
+            ObjNode *obj = dynamic_cast<ObjNode *> (value);
             if (obj) {
                 MapNode *values = dynamic_cast<MapNode *> (obj->value());
                 if (values) {
@@ -235,23 +236,23 @@ ObjNode *Analyze::get_object(RefNode * ref)
 ObjNode *Analyze::get_object(int id, int generation)
 {
     vector<TreeNode *> root = m_tree->child();
-    vector<TreeNode *>::iterator i;
+    register size_t i;
     ObjNode *ret = NULL;
     bool done = false;
 
 #pragma omp parallel for
-    for (i = root.begin(); i < root.end(); i++) {
+    for (i = 0; i < root.size(); i++) {
 #pragma omp flush(done)
         if (!done) {
-            ObjNode *obj = dynamic_cast<ObjNode *> (*i);
+            ObjNode *obj = dynamic_cast<ObjNode *> (root[i]);
             if (obj && obj->this_object(id, generation)) {
+                // Value found
                 done = true;
 #pragma omp flush(done)
-                //return obj;
                 ret = obj;
             }
         }
     }
-    // Not found
     return ret;
 }
+

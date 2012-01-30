@@ -24,9 +24,7 @@ void Analyze::analyze_xref()
     vector<TreeNode *> root = m_tree->child();
     size_t i;
 
-#ifdef HAVE_OPENMP
 #pragma omp parallel for
-#endif
     for (i = 0; i < root.size(); i++) {
         TreeNode *value = root[i];
         XREFNode *xref = dynamic_cast<XREFNode *> (value);
@@ -242,21 +240,15 @@ ObjNode *Analyze::get_object(int id, int generation)
     ObjNode *ret = NULL;
     bool done = false;
 
-#ifdef HAVE_OPENMP
 #pragma omp parallel for
-#endif
     for (i = 0; i < root.size(); i++) {
-#ifdef HAVE_OPENMP
 #pragma omp flush(done)
-#endif
         if (!done) {
             ObjNode *obj = dynamic_cast<ObjNode *> (root[i]);
             if (obj && obj->this_object(id, generation)) {
                 // Value found
                 done = true;
-#ifdef HAVE_OPENMP
 #pragma omp flush(done)
-#endif
                 ret = obj;
             }
         }

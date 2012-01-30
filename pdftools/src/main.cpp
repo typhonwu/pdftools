@@ -101,9 +101,8 @@ int main(int argc, char *argv[])
         return -1;
     } else {
         int loop;
-#ifdef HAVE_OPENMP
+
 #pragma omp parallel for
-#endif
         for (loop = optind; loop < argc; loop++) {
             Converter converter(argv[loop], format);
             converter.convert();

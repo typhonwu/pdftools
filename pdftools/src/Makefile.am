@@ -1,4 +1,4 @@
-SUBDIRS = nodes semantic epub
+SUBDIRS = nodes semantic html epub
 
 bin_PROGRAMS = pdftools
 pdftools_SOURCES = main.cpp \

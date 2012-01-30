@@ -33,7 +33,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-subdir = src/html
+subdir = src/xml
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -47,10 +47,10 @@ CONFIG_CLEAN_VPATH_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
 ARFLAGS = cru
-libhtml_a_AR = $(AR) $(ARFLAGS)
-libhtml_a_LIBADD =
-am_libhtml_a_OBJECTS = libhtml_a-html.$(OBJEXT)
-libhtml_a_OBJECTS = $(am_libhtml_a_OBJECTS)
+libxml_a_AR = $(AR) $(ARFLAGS)
+libxml_a_LIBADD =
+am_libxml_a_OBJECTS = libxml_a-xml.$(OBJEXT)
+libxml_a_OBJECTS = $(am_libxml_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -60,8 +60,8 @@ CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-SOURCES = $(libhtml_a_SOURCES)
-DIST_SOURCES = $(libhtml_a_SOURCES)
+SOURCES = $(libxml_a_SOURCES)
+DIST_SOURCES = $(libxml_a_SOURCES)
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -162,14 +162,14 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LIBRARIES = libhtml.a
-libhtml_a_SOURCES = \
-	html.cpp
+noinst_LIBRARIES = libxml.a
+libxml_a_SOURCES = \
+	xml.cpp
 
 noinst_HEADERS = \
-	html.h
+	xml.h
 
-libhtml_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
+libxml_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 all: all-am
 
 .SUFFIXES:
@@ -183,9 +183,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/html/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/xml/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/html/Makefile
+	  $(AUTOMAKE) --gnu src/xml/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -207,10 +207,10 @@ $(am__aclocal_m4_deps):
 
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libhtml.a: $(libhtml_a_OBJECTS) $(libhtml_a_DEPENDENCIES) 
-	-rm -f libhtml.a
-	$(libhtml_a_AR) libhtml.a $(libhtml_a_OBJECTS) $(libhtml_a_LIBADD)
-	$(RANLIB) libhtml.a
+libxml.a: $(libxml_a_OBJECTS) $(libxml_a_DEPENDENCIES) 
+	-rm -f libxml.a
+	$(libxml_a_AR) libxml.a $(libxml_a_OBJECTS) $(libxml_a_LIBADD)
+	$(RANLIB) libxml.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -218,7 +218,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhtml_a-html.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxml_a-xml.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -234,19 +234,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-libhtml_a-html.o: html.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhtml_a_CXXFLAGS) $(CXXFLAGS) -MT libhtml_a-html.o -MD -MP -MF $(DEPDIR)/libhtml_a-html.Tpo -c -o libhtml_a-html.o `test -f 'html.cpp' || echo '$(srcdir)/'`html.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libhtml_a-html.Tpo $(DEPDIR)/libhtml_a-html.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='html.cpp' object='libhtml_a-html.o' libtool=no @AMDEPBACKSLASH@
+libxml_a-xml.o: xml.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -MT libxml_a-xml.o -MD -MP -MF $(DEPDIR)/libxml_a-xml.Tpo -c -o libxml_a-xml.o `test -f 'xml.cpp' || echo '$(srcdir)/'`xml.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libxml_a-xml.Tpo $(DEPDIR)/libxml_a-xml.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='xml.cpp' object='libxml_a-xml.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhtml_a_CXXFLAGS) $(CXXFLAGS) -c -o libhtml_a-html.o `test -f 'html.cpp' || echo '$(srcdir)/'`html.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -c -o libxml_a-xml.o `test -f 'xml.cpp' || echo '$(srcdir)/'`xml.cpp
 
-libhtml_a-html.obj: html.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhtml_a_CXXFLAGS) $(CXXFLAGS) -MT libhtml_a-html.obj -MD -MP -MF $(DEPDIR)/libhtml_a-html.Tpo -c -o libhtml_a-html.obj `if test -f 'html.cpp'; then $(CYGPATH_W) 'html.cpp'; else $(CYGPATH_W) '$(srcdir)/html.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libhtml_a-html.Tpo $(DEPDIR)/libhtml_a-html.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='html.cpp' object='libhtml_a-html.obj' libtool=no @AMDEPBACKSLASH@
+libxml_a-xml.obj: xml.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -MT libxml_a-xml.obj -MD -MP -MF $(DEPDIR)/libxml_a-xml.Tpo -c -o libxml_a-xml.obj `if test -f 'xml.cpp'; then $(CYGPATH_W) 'xml.cpp'; else $(CYGPATH_W) '$(srcdir)/xml.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libxml_a-xml.Tpo $(DEPDIR)/libxml_a-xml.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='xml.cpp' object='libxml_a-xml.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhtml_a_CXXFLAGS) $(CXXFLAGS) -c -o libhtml_a-html.obj `if test -f 'html.cpp'; then $(CYGPATH_W) 'html.cpp'; else $(CYGPATH_W) '$(srcdir)/html.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -c -o libxml_a-xml.obj `if test -f 'xml.cpp'; then $(CYGPATH_W) 'xml.cpp'; else $(CYGPATH_W) '$(srcdir)/xml.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

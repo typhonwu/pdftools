@@ -15,6 +15,7 @@ public:
 
 private:
     void generate_container();
+    void generate_content();
     void generate_mimetype();
 };
 

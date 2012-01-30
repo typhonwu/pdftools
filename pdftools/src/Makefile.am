@@ -1,4 +1,4 @@
-SUBDIRS = nodes semantic html epub
+SUBDIRS = nodes semantic xml html epub
 
 bin_PROGRAMS = pdftools
 pdftools_SOURCES = main.cpp \
@@ -22,7 +22,13 @@ noinst_HEADERS = \
 	generator.h
 
 pdftools_CXXFLAGS = $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
-pdftools_LDADD = nodes/libnodes.a semantic/libsemantic.a epub/libepub.a $(XML_LIBS)
+pdftools_LDADD = \
+	nodes/libnodes.a \
+	semantic/libsemantic.a \
+	epub/libepub.a \
+	html/libhtml.a \
+	xml/libxml.a \
+	$(XML_LIBS)
 
 if HELP2MAN
 pdftools.1: pdftools$(EXEEXT) pdftools.h2m

@@ -8,6 +8,9 @@ case $host_os in
  windows* )
 	MINIZIP_DEPENDENCIES='iowin32.$(OBJEXT)'
 	;;
+ cygwin*)
+        MINIZIP_DEPENDENCIES='iowin32.$(OBJEXT)'
+	;;
  *)
 	MINIZIP_DEPENDENCIES='ioapi.$(OBJEXT)'
 	;;

@@ -2,7 +2,6 @@
 
 #include "utils.h"
 #include <cstring>
-#include <cstdio>
 #include <iostream>
 #include "xml/xml.h"
 
@@ -15,16 +14,18 @@ EPUB::EPUB() : Generator()
 
 EPUB::~EPUB()
 {
+    if (m_zipfile) delete m_zipfile;
 }
 
 void EPUB::generate_mimetype()
 {
+    /*
     const char *mime = "application/epub+zip";
     struct zip_source *s;
     if ((s = zip_source_buffer(m_zipfile, mime, strlen(mime), false)) == NULL ||
             zip_add(m_zipfile, "mimetype", s) < 0) {
         error_message(zip_strerror(m_zipfile));
-    }
+    }*/
 }
 
 void EPUB::generate_container()
@@ -43,12 +44,12 @@ void EPUB::generate_container()
     xml.end_document();
 
     string content = xml.content();
-
+/*
     struct zip_source *s;
     if ((s = zip_source_buffer(m_zipfile, content.c_str(), content.length(), 0)) == NULL ||
             zip_add(m_zipfile, "META-INF/container.xml", s) < 0) {
         error_message(zip_strerror(m_zipfile));
-    }
+    }*/
 }
 
 void EPUB::generate_content()
@@ -58,8 +59,8 @@ void EPUB::generate_content()
 
 void EPUB::generate(Document* document, const char* output)
 {
-    int errors = 0;
-    remove(output);
+    m_zipfile = new ZipFile;
+    /*
     m_zipfile = zip_open(output, ZIP_CREATE, &errors);
     if (m_zipfile) {
         generate_mimetype();
@@ -67,5 +68,5 @@ void EPUB::generate(Document* document, const char* output)
         errors = zip_close(m_zipfile);
     } else {
         printf("error adding file: %sn", zip_strerror(m_zipfile));
-    }
+    }*/
 }

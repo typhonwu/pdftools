@@ -1,11 +1,12 @@
 #ifndef EPUB_H
 #define EPUB_H
 
-#include "../generator.h"
+#include "generator.h"
+#include "zipfile.h"
 
 class EPUB : public Generator {
 private:
-    
+    ZipFile *m_zipfile;
     
 public:
     EPUB();

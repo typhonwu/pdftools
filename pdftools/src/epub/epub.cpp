@@ -1,15 +1,12 @@
 #include "epub.h"
+
 #include "utils.h"
 #include <cstring>
 #include <cstdio>
 #include <iostream>
-#include <libxml/xmlwriter.h>
+#include "xml/xml.h"
 
 using namespace std;
-
-//rc = xmlTextWriterWriteFormatElement(writer, BAD_CAST "X_ORDER_ID", "%010d", 53535);
-
-#define CHECK_ERROR(x) if (x < 0) {return;}
 
 EPUB::EPUB() : Generator()
 {
@@ -32,39 +29,20 @@ void EPUB::generate_mimetype()
 
 void EPUB::generate_container()
 {
-    xmlTextWriterPtr writer;
+    XML xml;
+    xml.start_document("1.0", "UTF-8");
+    xml.start_tag("container");
+    xml.add_attribute("xmlns", "urn:oasis:names:tc:opendocument:xmlns:container");
+    xml.start_tag("rootfiles");
+    xml.start_tag("rootfile");
+    xml.add_attribute("full-path", "content.opf");
+    xml.add_attribute("media-type", "application/oebps-package+xml");
+    xml.end_tag();
+    xml.end_tag();
+    xml.end_tag();
+    xml.end_document();
 
-    xmlBufferPtr buffer = xmlBufferCreate();
-    if (buffer == NULL) {
-        return;
-    }
-
-    writer = xmlNewTextWriterMemory(buffer, 0);
-    if (writer == NULL) {
-        return;
-    }
-
-    CHECK_ERROR(xmlTextWriterStartDocument(writer, "1.0", "UTF-8", NULL));
-
-    CHECK_ERROR(xmlTextWriterStartElement(writer, BAD_CAST "container"));
-    CHECK_ERROR(xmlTextWriterWriteAttribute(writer, BAD_CAST "xmlns",
-            BAD_CAST "urn:oasis:names:tc:opendocument:xmlns:container"));
-
-    CHECK_ERROR(xmlTextWriterStartElement(writer, BAD_CAST "rootfiles"));
-
-    CHECK_ERROR(xmlTextWriterStartElement(writer, BAD_CAST "rootfile"));
-    CHECK_ERROR(xmlTextWriterWriteAttribute(writer, BAD_CAST "full-path", BAD_CAST "content.opf"));
-    CHECK_ERROR(xmlTextWriterWriteAttribute(writer, BAD_CAST "media-type",
-            BAD_CAST "application/oebps-package+xml"));
-    
-    CHECK_ERROR(xmlTextWriterEndElement(writer));
-    CHECK_ERROR(xmlTextWriterEndElement(writer));
-    CHECK_ERROR(xmlTextWriterEndElement(writer));
-
-    xmlFreeTextWriter(writer);
-
-    string content = (const char *) buffer->content;
-    xmlBufferFree(buffer);
+    string content = xml.content();
 
     struct zip_source *s;
     if ((s = zip_source_buffer(m_zipfile, content.c_str(), content.length(), 0)) == NULL ||

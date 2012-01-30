@@ -55,8 +55,8 @@ am_pdftools_OBJECTS = pdftools-main.$(OBJEXT) \
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
 am__DEPENDENCIES_1 =
 pdftools_DEPENDENCIES = nodes/libnodes.a semantic/libsemantic.a \
-	epub/libepub.a html/libhtml.a xml/libxml.a \
-	$(am__DEPENDENCIES_1)
+	epub/libepub.a minizip/libminizip.a html/libhtml.a \
+	xml/libxml.a $(am__DEPENDENCIES_1)
 pdftools_LINK = $(CXXLD) $(pdftools_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -232,7 +232,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = nodes semantic xml html epub
+SUBDIRS = nodes semantic minizip xml html epub
 pdftools_SOURCES = main.cpp \
 	parser.cpp \
 	scanner.cpp \
@@ -257,6 +257,7 @@ pdftools_LDADD = \
 	nodes/libnodes.a \
 	semantic/libsemantic.a \
 	epub/libepub.a \
+	minizip/libminizip.a \
 	html/libhtml.a \
 	xml/libxml.a \
 	$(XML_LIBS)

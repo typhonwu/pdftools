@@ -22,10 +22,11 @@ Analyze::~Analyze()
 void Analyze::analyze_xref()
 {
     vector<TreeNode *> root = m_tree->child();
-    size_t i;
+    int i;
+    int size = root.size();
 
 #pragma omp parallel for
-    for (i = 0; i < root.size(); i++) {
+    for (i = 0; i < size; i++) {
         TreeNode *value = root[i];
         XREFNode *xref = dynamic_cast<XREFNode *> (value);
         if (xref) {
@@ -236,12 +237,13 @@ ObjNode *Analyze::get_object(RefNode * ref)
 ObjNode *Analyze::get_object(int id, int generation)
 {
     vector<TreeNode *> root = m_tree->child();
-    register size_t i;
+    int size = root.size();
+    int i;
     ObjNode *ret = NULL;
     bool done = false;
 
 #pragma omp parallel for
-    for (i = 0; i < root.size(); i++) {
+    for (i = 0; i < size; i++) {
 #pragma omp flush(done)
         if (!done) {
             ObjNode *obj = dynamic_cast<ObjNode *> (root[i]);

@@ -11,9 +11,6 @@ case $host_os in
  cygwin*)
         MINIZIP_DEPENDENCIES='iowin32.$(OBJEXT)'
 	;;
- *)
-	dnl MINIZIP_DEPENDENCIES='ioapi.$(OBJEXT)'
-	;;
 esac
 AC_SUBST([MINIZIP_DEPENDENCIES])
 

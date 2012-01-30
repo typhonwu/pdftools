@@ -3,6 +3,16 @@ AC_INIT([pdftools],[0.2],[leonhad@gmail.com],[pdftools],[http://code.google.com/
 AM_INIT_AUTOMAKE([-Wall tar-ustar])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
+AC_CANONICAL_HOST
+case $host_os in
+ windows* )
+	MINIZIP_DEPENDENCIES='iowin32.$(OBJEXT)'
+	;;
+ *)
+	MINIZIP_DEPENDENCIES='ioapi.$(OBJEXT)'
+	;;
+esac
+AC_SUBST([MINIZIP_DEPENDENCIES])
 
 DEBUG_CFLAGS="-O3 -DNDEBUG -pedantic -Wall -funroll-loops -s"
 dnl This mechanism allows one to enable debug compilations...

@@ -33,6 +33,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+build_triplet = @build@
+host_triplet = @host@
 subdir = src/minizip
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -48,9 +50,8 @@ LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
 ARFLAGS = cru
 libminizip_a_AR = $(AR) $(ARFLAGS)
-libminizip_a_LIBADD =
-am_libminizip_a_OBJECTS = libminizip_a-zip.$(OBJEXT) \
-	libminizip_a-ioapi.$(OBJEXT)
+am__DEPENDENCIES_1 =
+am_libminizip_a_OBJECTS = libminizip_a-zip.$(OBJEXT)
 libminizip_a_OBJECTS = $(am_libminizip_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -60,8 +61,8 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libminizip_a_SOURCES)
-DIST_SOURCES = $(libminizip_a_SOURCES)
+SOURCES = $(libminizip_a_SOURCES) $(EXTRA_libminizip_a_SOURCES)
+DIST_SOURCES = $(libminizip_a_SOURCES) $(EXTRA_libminizip_a_SOURCES)
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -100,6 +101,7 @@ LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MINIZIP_DEPENDENCIES = @MINIZIP_DEPENDENCIES@
 MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
 OPENMP_CXXFLAGS = @OPENMP_CXXFLAGS@
@@ -131,14 +133,22 @@ am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
 bindir = @bindir@
+build = @build@
 build_alias = @build_alias@
+build_cpu = @build_cpu@
+build_os = @build_os@
+build_vendor = @build_vendor@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+host = @host@
 host_alias = @host_alias@
+host_cpu = @host_cpu@
+host_os = @host_os@
+host_vendor = @host_vendor@
 htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
@@ -164,15 +174,18 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libminizip.a
 libminizip_a_SOURCES = \
-	zip.c \
-	ioapi.c
+	zip.c 
 
 noinst_HEADERS = \
 	zip.h \
-	ioapi.h
+	ioapi.h \
+	iowin32.h
 
 libminizip_a_CFLAGS = -I.. $(OPENMP_CXXFLAGS) -DNOCRYPT
+EXTRA_libminizip_a_SOURCES = iowin32.c ioapi.c
 EXTRA_DIST = MiniZip64_info.txt
+libminizip_a_LIBADD = $(MINIZIP_DEPENDENCIES)
+libminizip_a_DEPENDENCIES = $(MINIZIP_DEPENDENCIES)
 all: all-am
 
 .SUFFIXES:
@@ -222,6 +235,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libminizip_a-ioapi.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libminizip_a-iowin32.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libminizip_a-zip.Po@am__quote@
 
 .c.o:
@@ -251,6 +265,20 @@ libminizip_a-zip.obj: zip.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='zip.c' object='libminizip_a-zip.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -c -o libminizip_a-zip.obj `if test -f 'zip.c'; then $(CYGPATH_W) 'zip.c'; else $(CYGPATH_W) '$(srcdir)/zip.c'; fi`
+
+libminizip_a-iowin32.o: iowin32.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -MT libminizip_a-iowin32.o -MD -MP -MF $(DEPDIR)/libminizip_a-iowin32.Tpo -c -o libminizip_a-iowin32.o `test -f 'iowin32.c' || echo '$(srcdir)/'`iowin32.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-iowin32.Tpo $(DEPDIR)/libminizip_a-iowin32.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='iowin32.c' object='libminizip_a-iowin32.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -c -o libminizip_a-iowin32.o `test -f 'iowin32.c' || echo '$(srcdir)/'`iowin32.c
+
+libminizip_a-iowin32.obj: iowin32.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -MT libminizip_a-iowin32.obj -MD -MP -MF $(DEPDIR)/libminizip_a-iowin32.Tpo -c -o libminizip_a-iowin32.obj `if test -f 'iowin32.c'; then $(CYGPATH_W) 'iowin32.c'; else $(CYGPATH_W) '$(srcdir)/iowin32.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-iowin32.Tpo $(DEPDIR)/libminizip_a-iowin32.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='iowin32.c' object='libminizip_a-iowin32.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -c -o libminizip_a-iowin32.obj `if test -f 'iowin32.c'; then $(CYGPATH_W) 'iowin32.c'; else $(CYGPATH_W) '$(srcdir)/iowin32.c'; fi`
 
 libminizip_a-ioapi.o: ioapi.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -MT libminizip_a-ioapi.o -MD -MP -MF $(DEPDIR)/libminizip_a-ioapi.Tpo -c -o libminizip_a-ioapi.o `test -f 'ioapi.c' || echo '$(srcdir)/'`ioapi.c

@@ -1,4 +1,4 @@
-SUBDIRS = nodes semantic minizip xml html epub
+SUBDIRS = nodes semantic zip xml html epub
 
 bin_PROGRAMS = pdftools
 pdftools_SOURCES = main.cpp \
@@ -26,7 +26,7 @@ pdftools_LDADD = \
 	nodes/libnodes.a \
 	semantic/libsemantic.a \
 	epub/libepub.a \
-	minizip/libminizip.a \
+	zip/libzip.a \
 	html/libhtml.a \
 	xml/libxml.a \
 	$(XML_LIBS)

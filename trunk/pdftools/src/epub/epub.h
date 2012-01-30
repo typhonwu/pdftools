@@ -2,7 +2,7 @@
 #define EPUB_H
 
 #include "generator.h"
-#include "zipfile.h"
+#include "zip/zipfile.h"
 
 class EPUB : public Generator {
 private:

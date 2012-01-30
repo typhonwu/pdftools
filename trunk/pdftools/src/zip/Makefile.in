@@ -33,7 +33,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-subdir = src/xml
+subdir = src/zip
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -47,10 +47,10 @@ CONFIG_CLEAN_VPATH_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
 ARFLAGS = cru
-libxml_a_AR = $(AR) $(ARFLAGS)
-libxml_a_LIBADD =
-am_libxml_a_OBJECTS = libxml_a-xml.$(OBJEXT)
-libxml_a_OBJECTS = $(am_libxml_a_OBJECTS)
+libzip_a_AR = $(AR) $(ARFLAGS)
+libzip_a_LIBADD =
+am_libzip_a_OBJECTS = libzip_a-zipfile.$(OBJEXT)
+libzip_a_OBJECTS = $(am_libzip_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -60,8 +60,8 @@ CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-SOURCES = $(libxml_a_SOURCES)
-DIST_SOURCES = $(libxml_a_SOURCES)
+SOURCES = $(libzip_a_SOURCES)
+DIST_SOURCES = $(libzip_a_SOURCES)
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -162,14 +162,14 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LIBRARIES = libxml.a
-libxml_a_SOURCES = \
-	xml.cpp
+noinst_LIBRARIES = libzip.a
+libzip_a_SOURCES = \
+	zipfile.cpp
 
 noinst_HEADERS = \
-	xml.h
+	zipfile.h
 
-libxml_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
+libzip_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 all: all-am
 
 .SUFFIXES:
@@ -183,9 +183,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/xml/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/zip/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/xml/Makefile
+	  $(AUTOMAKE) --gnu src/zip/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -207,10 +207,10 @@ $(am__aclocal_m4_deps):
 
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libxml.a: $(libxml_a_OBJECTS) $(libxml_a_DEPENDENCIES) 
-	-rm -f libxml.a
-	$(libxml_a_AR) libxml.a $(libxml_a_OBJECTS) $(libxml_a_LIBADD)
-	$(RANLIB) libxml.a
+libzip.a: $(libzip_a_OBJECTS) $(libzip_a_DEPENDENCIES) 
+	-rm -f libzip.a
+	$(libzip_a_AR) libzip.a $(libzip_a_OBJECTS) $(libzip_a_LIBADD)
+	$(RANLIB) libzip.a
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -218,7 +218,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxml_a-xml.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libzip_a-zipfile.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -234,19 +234,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-libxml_a-xml.o: xml.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -MT libxml_a-xml.o -MD -MP -MF $(DEPDIR)/libxml_a-xml.Tpo -c -o libxml_a-xml.o `test -f 'xml.cpp' || echo '$(srcdir)/'`xml.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libxml_a-xml.Tpo $(DEPDIR)/libxml_a-xml.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='xml.cpp' object='libxml_a-xml.o' libtool=no @AMDEPBACKSLASH@
+libzip_a-zipfile.o: zipfile.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -MT libzip_a-zipfile.o -MD -MP -MF $(DEPDIR)/libzip_a-zipfile.Tpo -c -o libzip_a-zipfile.o `test -f 'zipfile.cpp' || echo '$(srcdir)/'`zipfile.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libzip_a-zipfile.Tpo $(DEPDIR)/libzip_a-zipfile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zipfile.cpp' object='libzip_a-zipfile.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -c -o libxml_a-xml.o `test -f 'xml.cpp' || echo '$(srcdir)/'`xml.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -c -o libzip_a-zipfile.o `test -f 'zipfile.cpp' || echo '$(srcdir)/'`zipfile.cpp
 
-libxml_a-xml.obj: xml.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -MT libxml_a-xml.obj -MD -MP -MF $(DEPDIR)/libxml_a-xml.Tpo -c -o libxml_a-xml.obj `if test -f 'xml.cpp'; then $(CYGPATH_W) 'xml.cpp'; else $(CYGPATH_W) '$(srcdir)/xml.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libxml_a-xml.Tpo $(DEPDIR)/libxml_a-xml.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='xml.cpp' object='libxml_a-xml.obj' libtool=no @AMDEPBACKSLASH@
+libzip_a-zipfile.obj: zipfile.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -MT libzip_a-zipfile.obj -MD -MP -MF $(DEPDIR)/libzip_a-zipfile.Tpo -c -o libzip_a-zipfile.obj `if test -f 'zipfile.cpp'; then $(CYGPATH_W) 'zipfile.cpp'; else $(CYGPATH_W) '$(srcdir)/zipfile.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libzip_a-zipfile.Tpo $(DEPDIR)/libzip_a-zipfile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zipfile.cpp' object='libzip_a-zipfile.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -c -o libxml_a-xml.obj `if test -f 'xml.cpp'; then $(CYGPATH_W) 'xml.cpp'; else $(CYGPATH_W) '$(srcdir)/xml.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -c -o libzip_a-zipfile.obj `if test -f 'zipfile.cpp'; then $(CYGPATH_W) 'zipfile.cpp'; else $(CYGPATH_W) '$(srcdir)/zipfile.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

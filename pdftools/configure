@@ -2841,8 +2841,6 @@ case $host_os in
  cygwin*)
         MINIZIP_DEPENDENCIES='iowin32.$(OBJEXT)'
 	;;
- *)
-		;;
 esac
 
 

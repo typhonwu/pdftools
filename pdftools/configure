@@ -631,9 +631,9 @@ CPPFLAGS
 LDFLAGS
 CFLAGS
 CC
+MINIZIP_DEPENDENCIES
 ENABLE_DEBUG_FALSE
 ENABLE_DEBUG_TRUE
-MINIZIP_DEPENDENCIES
 host_os
 host_vendor
 host_cpu
@@ -2834,15 +2834,6 @@ IFS=$ac_save_IFS
 case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 
 
-case $host_os in
- windows* )
-	MINIZIP_DEPENDENCIES='iowin32.$(OBJEXT)'
-	;;
- cygwin*)
-        MINIZIP_DEPENDENCIES='iowin32.$(OBJEXT)'
-	;;
-esac
-
 
 DEBUG_CFLAGS="-O3 -DNDEBUG -pedantic -Wall -funroll-loops -s"
 # Check whether --enable-debug was given.
@@ -2862,6 +2853,18 @@ else
 fi
 
 CXXFLAGS="$DEBUG_CFLAGS $CXXFLAGS"
+
+case $host_os in
+ windows* )
+	MINIZIP_DEPENDENCIES='iowin32.$(OBJEXT)'
+        CXXFLAGS+=" -DUSE_FILE32API"
+	;;
+ cygwin*)
+        MINIZIP_DEPENDENCIES='iowin32.$(OBJEXT)'
+        CXXFLAGS+=" -DUSE_FILE32API"
+	;;
+esac
+
 
 # Checks for programs.
 ac_ext=cpp

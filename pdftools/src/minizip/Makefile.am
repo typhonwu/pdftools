@@ -8,7 +8,7 @@ noinst_HEADERS = \
 	ioapi.h \
 	iowin32.h
 
-libminizip_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) -DNOCRYPT -DUSE_FILE32API
+libminizip_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) -DNOCRYPT
 
 EXTRA_libminizip_a_SOURCES = iowin32.cpp
 

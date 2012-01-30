@@ -51,16 +51,18 @@ AR = ar
 ARFLAGS = cru
 libminizip_a_AR = $(AR) $(ARFLAGS)
 am__DEPENDENCIES_1 =
-am_libminizip_a_OBJECTS = libminizip_a-zip.$(OBJEXT)
+am_libminizip_a_OBJECTS = libminizip_a-zip.$(OBJEXT) \
+	libminizip_a-ioapi.$(OBJEXT)
 libminizip_a_OBJECTS = $(am_libminizip_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+CXXLD = $(CXX)
+CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
+	-o $@
 SOURCES = $(libminizip_a_SOURCES) $(EXTRA_libminizip_a_SOURCES)
 DIST_SOURCES = $(libminizip_a_SOURCES) $(EXTRA_libminizip_a_SOURCES)
 HEADERS = $(noinst_HEADERS)
@@ -174,22 +176,23 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libminizip.a
 libminizip_a_SOURCES = \
-	zip.c 
+	zip.cpp \
+	ioapi.cpp
 
 noinst_HEADERS = \
 	zip.h \
 	ioapi.h \
 	iowin32.h
 
-libminizip_a_CFLAGS = -I.. $(OPENMP_CXXFLAGS) -DNOCRYPT
-EXTRA_libminizip_a_SOURCES = iowin32.c ioapi.c
+libminizip_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) -DNOCRYPT
+EXTRA_libminizip_a_SOURCES = iowin32.cpp
 EXTRA_DIST = MiniZip64_info.txt
 libminizip_a_LIBADD = $(MINIZIP_DEPENDENCIES)
 libminizip_a_DEPENDENCIES = $(MINIZIP_DEPENDENCIES)
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .o .obj
+.SUFFIXES: .cpp .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -238,61 +241,61 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libminizip_a-iowin32.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libminizip_a-zip.Po@am__quote@
 
-.c.o:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c $<
+.cpp.o:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
 
-.c.obj:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+.cpp.obj:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-libminizip_a-zip.o: zip.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -MT libminizip_a-zip.o -MD -MP -MF $(DEPDIR)/libminizip_a-zip.Tpo -c -o libminizip_a-zip.o `test -f 'zip.c' || echo '$(srcdir)/'`zip.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-zip.Tpo $(DEPDIR)/libminizip_a-zip.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='zip.c' object='libminizip_a-zip.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -c -o libminizip_a-zip.o `test -f 'zip.c' || echo '$(srcdir)/'`zip.c
+libminizip_a-zip.o: zip.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -MT libminizip_a-zip.o -MD -MP -MF $(DEPDIR)/libminizip_a-zip.Tpo -c -o libminizip_a-zip.o `test -f 'zip.cpp' || echo '$(srcdir)/'`zip.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-zip.Tpo $(DEPDIR)/libminizip_a-zip.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zip.cpp' object='libminizip_a-zip.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -c -o libminizip_a-zip.o `test -f 'zip.cpp' || echo '$(srcdir)/'`zip.cpp
 
-libminizip_a-zip.obj: zip.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -MT libminizip_a-zip.obj -MD -MP -MF $(DEPDIR)/libminizip_a-zip.Tpo -c -o libminizip_a-zip.obj `if test -f 'zip.c'; then $(CYGPATH_W) 'zip.c'; else $(CYGPATH_W) '$(srcdir)/zip.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-zip.Tpo $(DEPDIR)/libminizip_a-zip.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='zip.c' object='libminizip_a-zip.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -c -o libminizip_a-zip.obj `if test -f 'zip.c'; then $(CYGPATH_W) 'zip.c'; else $(CYGPATH_W) '$(srcdir)/zip.c'; fi`
+libminizip_a-zip.obj: zip.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -MT libminizip_a-zip.obj -MD -MP -MF $(DEPDIR)/libminizip_a-zip.Tpo -c -o libminizip_a-zip.obj `if test -f 'zip.cpp'; then $(CYGPATH_W) 'zip.cpp'; else $(CYGPATH_W) '$(srcdir)/zip.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-zip.Tpo $(DEPDIR)/libminizip_a-zip.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zip.cpp' object='libminizip_a-zip.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -c -o libminizip_a-zip.obj `if test -f 'zip.cpp'; then $(CYGPATH_W) 'zip.cpp'; else $(CYGPATH_W) '$(srcdir)/zip.cpp'; fi`
 
-libminizip_a-iowin32.o: iowin32.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -MT libminizip_a-iowin32.o -MD -MP -MF $(DEPDIR)/libminizip_a-iowin32.Tpo -c -o libminizip_a-iowin32.o `test -f 'iowin32.c' || echo '$(srcdir)/'`iowin32.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-iowin32.Tpo $(DEPDIR)/libminizip_a-iowin32.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='iowin32.c' object='libminizip_a-iowin32.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -c -o libminizip_a-iowin32.o `test -f 'iowin32.c' || echo '$(srcdir)/'`iowin32.c
+libminizip_a-ioapi.o: ioapi.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -MT libminizip_a-ioapi.o -MD -MP -MF $(DEPDIR)/libminizip_a-ioapi.Tpo -c -o libminizip_a-ioapi.o `test -f 'ioapi.cpp' || echo '$(srcdir)/'`ioapi.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-ioapi.Tpo $(DEPDIR)/libminizip_a-ioapi.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ioapi.cpp' object='libminizip_a-ioapi.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -c -o libminizip_a-ioapi.o `test -f 'ioapi.cpp' || echo '$(srcdir)/'`ioapi.cpp
 
-libminizip_a-iowin32.obj: iowin32.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -MT libminizip_a-iowin32.obj -MD -MP -MF $(DEPDIR)/libminizip_a-iowin32.Tpo -c -o libminizip_a-iowin32.obj `if test -f 'iowin32.c'; then $(CYGPATH_W) 'iowin32.c'; else $(CYGPATH_W) '$(srcdir)/iowin32.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-iowin32.Tpo $(DEPDIR)/libminizip_a-iowin32.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='iowin32.c' object='libminizip_a-iowin32.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -c -o libminizip_a-iowin32.obj `if test -f 'iowin32.c'; then $(CYGPATH_W) 'iowin32.c'; else $(CYGPATH_W) '$(srcdir)/iowin32.c'; fi`
+libminizip_a-ioapi.obj: ioapi.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -MT libminizip_a-ioapi.obj -MD -MP -MF $(DEPDIR)/libminizip_a-ioapi.Tpo -c -o libminizip_a-ioapi.obj `if test -f 'ioapi.cpp'; then $(CYGPATH_W) 'ioapi.cpp'; else $(CYGPATH_W) '$(srcdir)/ioapi.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-ioapi.Tpo $(DEPDIR)/libminizip_a-ioapi.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ioapi.cpp' object='libminizip_a-ioapi.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -c -o libminizip_a-ioapi.obj `if test -f 'ioapi.cpp'; then $(CYGPATH_W) 'ioapi.cpp'; else $(CYGPATH_W) '$(srcdir)/ioapi.cpp'; fi`
 
-libminizip_a-ioapi.o: ioapi.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -MT libminizip_a-ioapi.o -MD -MP -MF $(DEPDIR)/libminizip_a-ioapi.Tpo -c -o libminizip_a-ioapi.o `test -f 'ioapi.c' || echo '$(srcdir)/'`ioapi.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-ioapi.Tpo $(DEPDIR)/libminizip_a-ioapi.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ioapi.c' object='libminizip_a-ioapi.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -c -o libminizip_a-ioapi.o `test -f 'ioapi.c' || echo '$(srcdir)/'`ioapi.c
+libminizip_a-iowin32.o: iowin32.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -MT libminizip_a-iowin32.o -MD -MP -MF $(DEPDIR)/libminizip_a-iowin32.Tpo -c -o libminizip_a-iowin32.o `test -f 'iowin32.cpp' || echo '$(srcdir)/'`iowin32.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-iowin32.Tpo $(DEPDIR)/libminizip_a-iowin32.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='iowin32.cpp' object='libminizip_a-iowin32.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -c -o libminizip_a-iowin32.o `test -f 'iowin32.cpp' || echo '$(srcdir)/'`iowin32.cpp
 
-libminizip_a-ioapi.obj: ioapi.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -MT libminizip_a-ioapi.obj -MD -MP -MF $(DEPDIR)/libminizip_a-ioapi.Tpo -c -o libminizip_a-ioapi.obj `if test -f 'ioapi.c'; then $(CYGPATH_W) 'ioapi.c'; else $(CYGPATH_W) '$(srcdir)/ioapi.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-ioapi.Tpo $(DEPDIR)/libminizip_a-ioapi.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ioapi.c' object='libminizip_a-ioapi.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CFLAGS) $(CFLAGS) -c -o libminizip_a-ioapi.obj `if test -f 'ioapi.c'; then $(CYGPATH_W) 'ioapi.c'; else $(CYGPATH_W) '$(srcdir)/ioapi.c'; fi`
+libminizip_a-iowin32.obj: iowin32.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -MT libminizip_a-iowin32.obj -MD -MP -MF $(DEPDIR)/libminizip_a-iowin32.Tpo -c -o libminizip_a-iowin32.obj `if test -f 'iowin32.cpp'; then $(CYGPATH_W) 'iowin32.cpp'; else $(CYGPATH_W) '$(srcdir)/iowin32.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libminizip_a-iowin32.Tpo $(DEPDIR)/libminizip_a-iowin32.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='iowin32.cpp' object='libminizip_a-iowin32.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libminizip_a_CXXFLAGS) $(CXXFLAGS) -c -o libminizip_a-iowin32.obj `if test -f 'iowin32.cpp'; then $(CYGPATH_W) 'iowin32.cpp'; else $(CYGPATH_W) '$(srcdir)/iowin32.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

@@ -33,8 +33,6 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = @build@
-host_triplet = @host@
 bin_PROGRAMS = pdftools$(EXEEXT)
 subdir = src
 DIST_COMMON = $(dist_man_MANS) $(noinst_HEADERS) $(srcdir)/Makefile.am \
@@ -57,8 +55,8 @@ am_pdftools_OBJECTS = pdftools-main.$(OBJEXT) \
 pdftools_OBJECTS = $(am_pdftools_OBJECTS)
 am__DEPENDENCIES_1 =
 pdftools_DEPENDENCIES = nodes/libnodes.a semantic/libsemantic.a \
-	epub/libepub.a minizip/libminizip.a html/libhtml.a \
-	xml/libxml.a $(am__DEPENDENCIES_1)
+	epub/libepub.a zip/libzip.a html/libhtml.a xml/libxml.a \
+	$(am__DEPENDENCIES_1)
 pdftools_LINK = $(CXXLD) $(pdftools_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -172,7 +170,6 @@ LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
-MINIZIP_DEPENDENCIES = @MINIZIP_DEPENDENCIES@
 MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
 OPENMP_CXXFLAGS = @OPENMP_CXXFLAGS@
@@ -204,22 +201,14 @@ am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
 bindir = @bindir@
-build = @build@
 build_alias = @build_alias@
-build_cpu = @build_cpu@
-build_os = @build_os@
-build_vendor = @build_vendor@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
-host = @host@
 host_alias = @host_alias@
-host_cpu = @host_cpu@
-host_os = @host_os@
-host_vendor = @host_vendor@
 htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
@@ -243,7 +232,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = nodes semantic minizip xml html epub
+SUBDIRS = nodes semantic zip xml html epub
 pdftools_SOURCES = main.cpp \
 	parser.cpp \
 	scanner.cpp \
@@ -268,7 +257,7 @@ pdftools_LDADD = \
 	nodes/libnodes.a \
 	semantic/libsemantic.a \
 	epub/libepub.a \
-	minizip/libminizip.a \
+	zip/libzip.a \
 	html/libhtml.a \
 	xml/libxml.a \
 	$(XML_LIBS)

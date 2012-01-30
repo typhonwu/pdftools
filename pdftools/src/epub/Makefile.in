@@ -33,8 +33,6 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = @build@
-host_triplet = @host@
 subdir = src/epub
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -51,8 +49,7 @@ AR = ar
 ARFLAGS = cru
 libepub_a_AR = $(AR) $(ARFLAGS)
 libepub_a_LIBADD =
-am_libepub_a_OBJECTS = libepub_a-epub.$(OBJEXT) \
-	libepub_a-zipfile.$(OBJEXT)
+am_libepub_a_OBJECTS = libepub_a-epub.$(OBJEXT)
 libepub_a_OBJECTS = $(am_libepub_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -103,7 +100,6 @@ LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
-MINIZIP_DEPENDENCIES = @MINIZIP_DEPENDENCIES@
 MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
 OPENMP_CXXFLAGS = @OPENMP_CXXFLAGS@
@@ -135,22 +131,14 @@ am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
 bindir = @bindir@
-build = @build@
 build_alias = @build_alias@
-build_cpu = @build_cpu@
-build_os = @build_os@
-build_vendor = @build_vendor@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
-host = @host@
 host_alias = @host_alias@
-host_cpu = @host_cpu@
-host_os = @host_os@
-host_vendor = @host_vendor@
 htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
@@ -176,12 +164,10 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libepub.a
 libepub_a_SOURCES = \
-	epub.cpp \
-	zipfile.cpp
+	epub.cpp
 
 noinst_HEADERS = \
-	epub.h \
-	zipfile.h
+	epub.h
 
 libepub_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 all: all-am
@@ -233,7 +219,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepub_a-epub.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libepub_a-zipfile.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -262,20 +247,6 @@ libepub_a-epub.obj: epub.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='epub.cpp' object='libepub_a-epub.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -c -o libepub_a-epub.obj `if test -f 'epub.cpp'; then $(CYGPATH_W) 'epub.cpp'; else $(CYGPATH_W) '$(srcdir)/epub.cpp'; fi`
-
-libepub_a-zipfile.o: zipfile.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -MT libepub_a-zipfile.o -MD -MP -MF $(DEPDIR)/libepub_a-zipfile.Tpo -c -o libepub_a-zipfile.o `test -f 'zipfile.cpp' || echo '$(srcdir)/'`zipfile.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libepub_a-zipfile.Tpo $(DEPDIR)/libepub_a-zipfile.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zipfile.cpp' object='libepub_a-zipfile.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -c -o libepub_a-zipfile.o `test -f 'zipfile.cpp' || echo '$(srcdir)/'`zipfile.cpp
-
-libepub_a-zipfile.obj: zipfile.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -MT libepub_a-zipfile.obj -MD -MP -MF $(DEPDIR)/libepub_a-zipfile.Tpo -c -o libepub_a-zipfile.obj `if test -f 'zipfile.cpp'; then $(CYGPATH_W) 'zipfile.cpp'; else $(CYGPATH_W) '$(srcdir)/zipfile.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libepub_a-zipfile.Tpo $(DEPDIR)/libepub_a-zipfile.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zipfile.cpp' object='libepub_a-zipfile.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libepub_a_CXXFLAGS) $(CXXFLAGS) -c -o libepub_a-zipfile.obj `if test -f 'zipfile.cpp'; then $(CYGPATH_W) 'zipfile.cpp'; else $(CYGPATH_W) '$(srcdir)/zipfile.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

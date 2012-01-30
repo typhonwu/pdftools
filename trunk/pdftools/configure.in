@@ -48,6 +48,7 @@ AC_CONFIG_FILES([Makefile
                  src/pdftools.h2m
                  src/nodes/Makefile
                  src/semantic/Makefile
+                 src/html/Makefile
                  src/epub/Makefile
 ])
 AC_OUTPUT

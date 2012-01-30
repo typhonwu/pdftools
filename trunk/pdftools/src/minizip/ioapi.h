@@ -76,21 +76,15 @@
 #include "mz64conf.h"
 #endif
 
-/* a type choosen by DEFINE */
-#ifdef HAVE_64BIT_INT_CUSTOM
-typedef  64BIT_INT_CUSTOM_TYPE ZPOS64_T;
-#else
 #ifdef HAVE_STDINT_H
 #include "stdint.h"
 typedef uint64_t ZPOS64_T;
 #else
 
-
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 typedef unsigned __int64 ZPOS64_T;
 #else
 typedef unsigned long long int ZPOS64_T;
-#endif
 #endif
 #endif
 

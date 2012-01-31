@@ -1,10 +1,10 @@
 #include "analyze.h"
 #include "nodes/nodes.h"
+#include "semantic/pagelabel.h"
+#include "utils.h"
 #include <iostream>
 #include <zlib.h>
 #include <cstdlib>
-
-#include "utils.h"
 
 using namespace std;
 
@@ -32,10 +32,10 @@ void Analyze::analyze_xref()
         if (xref) {
             MapNode *trailer = dynamic_cast<MapNode *> (xref->trailer());
 
-            TreeNode *root = get_real_value(trailer->get("/Root"));
+            TreeNode *rootValue = get_real_value(trailer->get("/Root"));
             TreeNode *info = get_real_value(trailer->get("/Info"));
-            if (root) {
-                m_document->set_root(root);
+            if (rootValue) {
+                m_document->set_root(rootValue);
             }
             if (info) {
                 m_document->set_info(info);
@@ -56,10 +56,10 @@ void Analyze::analyze_xref()
                     NameNode *type = dynamic_cast<NameNode *> (values->get("/Type"));
                     // analyze only XREF Objects
                     if (type && type->name() == "/XRef") {
-                        TreeNode *root = get_real_value(values->get("/Root"));
+                        TreeNode *rootValue = get_real_value(values->get("/Root"));
                         TreeNode *info = get_real_value(values->get("/Info"));
-                        if (root) {
-                            m_document->set_root(root);
+                        if (rootValue) {
+                            m_document->set_root(rootValue);
                         }
                         if (info) {
                             m_document->set_info(info);
@@ -109,7 +109,42 @@ void Analyze::analyse_root()
     m_page_tree = get_real_value(catalog->get("/Pages"));
     m_document->set_lang(get_string_value(catalog->get("/Lang")));
 
-    //FIXME PageLabels page 595, Outlines & StructTreeRoot
+    MapNode *page_labels = dynamic_cast<MapNode *> (get_real_obj_value(catalog->get("/PageLabels")));
+    if (page_labels) {
+        ArrayNode *array = dynamic_cast<ArrayNode *> (get_real_value(page_labels->get("/Nums")));
+        if (array) {
+            vector<TreeNode *> values = array->values();
+            int loop;
+            int size = values.size();
+
+            for (loop = 0; loop < size; loop += 2) {
+                double page = get_number_value(values[loop]);
+                MapNode *attributes = dynamic_cast<MapNode *> (get_real_obj_value(values[loop + 1]));
+                if (attributes) {
+                    NameNode *name_type = dynamic_cast<NameNode *> (attributes->get("/S"));
+                    page_type type = ARABIC;
+                    if (name_type) {
+                        if (name_type->name() == "D") {
+                            type = ARABIC;
+                        } else if (name_type->name() == "R") {
+                            type = UPCASE_ROMAN;
+                        } else if (name_type->name() == "r") {
+                            type = LOWCASE_ROMAN;
+                        } else if (name_type->name() == "A") {
+                            type = UPCASE_LETTERS;
+                        } else if (name_type->name() == "A") {
+                            type = LOWCASE_LETTERS;
+                        }
+                    }
+                    string name = get_string_value(attributes->get("/P"));
+                    int range = get_number_value(attributes->get("/St"), 1);
+                    m_document->add_page_label(new PageLabel(page, range, type, name));
+                }
+            }
+        }
+    }
+    //FIXME Outlines
+    //FIXME StructTreeRoot
 }
 
 Document *Analyze::analyze_tree(RootNode * tree)
@@ -208,6 +243,19 @@ TreeNode *Analyze::get_real_value(TreeNode * value)
     return value;
 }
 
+TreeNode *Analyze::get_real_obj_value(TreeNode *value)
+{
+    RefNode *ref = dynamic_cast<RefNode *> (value);
+    if (ref) {
+        ObjNode *node = get_object(ref);
+        if (node) {
+            return node->value();
+        }
+        return NULL;
+    }
+    return value;
+}
+
 string Analyze::get_string_value(TreeNode * value)
 {
     StringNode *str = dynamic_cast<StringNode *> (value);
@@ -217,13 +265,13 @@ string Analyze::get_string_value(TreeNode * value)
     return string();
 }
 
-double Analyze::get_number_value(TreeNode *value)
+double Analyze::get_number_value(TreeNode *value, int default_value)
 {
     NumberNode *num = dynamic_cast<NumberNode *> (value);
     if (num) {
         return num->value();
     }
-    return 0;
+    return default_value;
 }
 
 ObjNode *Analyze::get_object(RefNode * ref)

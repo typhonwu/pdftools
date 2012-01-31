@@ -4,6 +4,7 @@
 #include <cstring>
 #include <iostream>
 #include "xml/xml.h"
+#include "html/html.h"
 
 using namespace std;
 
@@ -60,6 +61,19 @@ void EPUB::generate_content()
 void EPUB::generate(Document* document, const char* output)
 {
     m_zipfile = new ZipFile;
+//    
+//    Html html;
+//    html.start_document();
+//    html.start_header();
+//    html.set_title("teste de título");
+//    html.end_tag();
+//    
+//    html.start_body();
+//        
+//    html.end_tag();
+//    html.end_document();
+//    cout << html.content() << endl;
+    
     /*
     m_zipfile = zip_open(output, ZIP_CREATE, &errors);
     if (m_zipfile) {

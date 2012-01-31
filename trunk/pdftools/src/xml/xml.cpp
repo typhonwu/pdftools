@@ -43,6 +43,14 @@ bool XML::start_document(const char* version, const char* charset)
     return false;
 }
 
+bool XML::add_doctype(const char *name, const char *public_id, const char *sys_id, const char *subset)
+{
+    if (m_writer) {
+        return xmlTextWriterWriteDTD(m_writer, BAD_CAST name, BAD_CAST public_id, BAD_CAST sys_id, BAD_CAST subset);
+    }
+    return false;
+}
+
 bool XML::end_document()
 {
     if (m_writer) {
@@ -56,6 +64,14 @@ bool XML::add_attribute(const char *attribute, const char *value)
 {
     if (m_writer) {
         return xmlTextWriterWriteAttribute(m_writer, BAD_CAST attribute, BAD_CAST value) >= 0;
+    }
+    return false;
+}
+
+bool XML::add_element(const char *value)
+{
+    if (m_writer) {
+        return xmlTextWriterWriteString(m_writer, BAD_CAST value) >= 0;
     }
     return false;
 }

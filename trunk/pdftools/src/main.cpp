@@ -26,7 +26,8 @@ int main(int argc, char *argv[])
     const char *fileout = NULL;
     const char *format = "epub";
     
-    LIBXML_TEST_VERSION;
+    // Removed (causing memmory leaks)
+    //LIBXML_TEST_VERSION;
 
     while (true) {
         static struct option long_options[] = {

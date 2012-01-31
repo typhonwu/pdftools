@@ -8,6 +8,7 @@ protected:
     Generator();
 
 public:
+    virtual ~Generator();
     static Generator *get_instance(const char *format);
     virtual void generate(Document *document, const char *output) = 0;
 };

@@ -26,10 +26,11 @@ private:
     void analyse_pages(TreeNode *page, ArrayNode *mediabox = NULL);
     void process_pages();
     string get_string_value(TreeNode *value);
-    double get_number_value(TreeNode *value);
+    double get_number_value(TreeNode *value, int default_value = 0);
     ObjNode *get_object(int id, int generation);
     ObjNode *get_object(RefNode *ref);
     TreeNode *get_real_value(TreeNode *value);
+    TreeNode *get_real_obj_value(TreeNode *value);
 };
 
 #endif

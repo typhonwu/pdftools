@@ -3,7 +3,9 @@
 
 #include "nodes/nodes.h"
 #include "page.h"
+#include "pagelabel.h"
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -17,6 +19,7 @@ private:
     TreeNode *m_root;
     TreeNode *m_info;
     vector<Page *> m_pages;
+    vector<PageLabel *> m_page_label;
     
 public:
     Document();
@@ -32,6 +35,7 @@ public:
     void set_lang(string lang);
     
     void add_page(Page *page);
+    void add_page_label(PageLabel *label);
     vector<Page *> pages();
     
     string lang();

@@ -10,7 +10,7 @@ using namespace std;
 
 EPUB::EPUB() : Generator()
 {
-    m_zipfile = NULL;
+    m_zipfile = new ZipFile;
 }
 
 EPUB::~EPUB()
@@ -20,13 +20,8 @@ EPUB::~EPUB()
 
 void EPUB::generate_mimetype()
 {
-    /*
     const char *mime = "application/epub+zip";
-    struct zip_source *s;
-    if ((s = zip_source_buffer(m_zipfile, mime, strlen(mime), false)) == NULL ||
-            zip_add(m_zipfile, "mimetype", s) < 0) {
-        error_message(zip_strerror(m_zipfile));
-    }*/
+    m_zipfile->add_source("mimetype", mime);
 }
 
 void EPUB::generate_container()
@@ -45,12 +40,8 @@ void EPUB::generate_container()
     xml.end_document();
 
     string content = xml.content();
-/*
-    struct zip_source *s;
-    if ((s = zip_source_buffer(m_zipfile, content.c_str(), content.length(), 0)) == NULL ||
-            zip_add(m_zipfile, "META-INF/container.xml", s) < 0) {
-        error_message(zip_strerror(m_zipfile));
-    }*/
+    
+    m_zipfile->add_source("META-INF/container.xml", content.c_str());
 }
 
 void EPUB::generate_content()
@@ -58,9 +49,8 @@ void EPUB::generate_content()
 
 }
 
-void EPUB::generate(Document* document, const char* output)
+bool EPUB::generate(Document* document, const char* output)
 {
-    m_zipfile = new ZipFile;
 //    
 //    Html html;
 //    html.start_document();
@@ -74,13 +64,13 @@ void EPUB::generate(Document* document, const char* output)
 //    html.end_document();
 //    cout << html.content() << endl;
     
-    /*
-    m_zipfile = zip_open(output, ZIP_CREATE, &errors);
-    if (m_zipfile) {
+
+    if (m_zipfile->open(output)) {
         generate_mimetype();
         generate_container();
-        errors = zip_close(m_zipfile);
+        m_zipfile->close();
     } else {
-        printf("error adding file: %sn", zip_strerror(m_zipfile));
-    }*/
+        return false;
+    }
+    return true;
 }

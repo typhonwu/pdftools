@@ -10,7 +10,7 @@ protected:
 public:
     virtual ~Generator();
     static Generator *get_instance(const char *format);
-    virtual void generate(Document *document, const char *output) = 0;
+    virtual bool generate(Document *document, const char *output) = 0;
 };
 
 #endif

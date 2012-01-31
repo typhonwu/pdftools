@@ -58,11 +58,13 @@ void Converter::convert()
             // Generate output file
             Generator *instance = Generator::get_instance(m_format);
             if (instance) {
-                instance->generate(m_document, m_fileout.c_str());
+                if (!instance->generate(m_document, m_fileout.c_str())) {
+                    error_message("Cannot generate output file");
+                }
                 delete instance;
             }
         } else {
-            error_message("Invalid file");
+            error_message("Invalid input file");
         }
     }
 }

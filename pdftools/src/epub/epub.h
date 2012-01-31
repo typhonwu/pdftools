@@ -11,7 +11,7 @@ private:
 public:
     EPUB();
     virtual ~EPUB();
-    virtual void generate(Document *document, const char *output);
+    virtual bool generate(Document *document, const char *output);
 
 private:
     void generate_container();

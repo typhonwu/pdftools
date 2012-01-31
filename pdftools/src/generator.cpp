@@ -7,6 +7,10 @@ Generator::Generator()
 {
 }
 
+Generator::~Generator()
+{
+}
+
 Generator *Generator::get_instance(const char *format)
 {
     if (!strcmp("epub", format)) {

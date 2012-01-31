@@ -14,6 +14,11 @@ Document::~Document()
         delete *i;
         i++;
     }
+    vector<PageLabel *>::iterator l = m_page_label.begin();
+    while (l != m_page_label.end()) {
+        delete *l;
+        l++;
+    }
 }
 
 void Document::set_id(string first, string second)
@@ -24,6 +29,11 @@ void Document::set_id(string first, string second)
 void Document::add_page(Page *page)
 {
     m_pages.push_back(page);
+}
+
+void Document::add_page_label(PageLabel* label)
+{
+    m_page_label.push_back(label);
 }
 
 vector<Page *> Document::pages()

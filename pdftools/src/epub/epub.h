@@ -10,7 +10,7 @@ private:
     
 public:
     EPUB();
-    ~EPUB();
+    virtual ~EPUB();
     virtual void generate(Document *document, const char *output);
 
 private:

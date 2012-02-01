@@ -66,8 +66,9 @@ bool EPUB::generate(Document* document, const char* output)
     
 
     if (m_zipfile->open(output)) {
-        generate_mimetype();
-        generate_container();
+        //generate_mimetype();
+        //generate_container();
+        m_zipfile->add_source("teste.txt", "teste de texto\x0a");
         m_zipfile->close();
     } else {
         return false;

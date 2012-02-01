@@ -4,11 +4,12 @@
 #include <fstream>
 #include <vector>
 #include <stdint.h>
+#include <string>
 
 using namespace std;
 
 struct appended_files {
-    const char *name;
+    string name;
     int length;
     uint32_t date;
     uint32_t crc;
@@ -19,6 +20,8 @@ class ZipFile {
 private:
     ofstream m_output;
     vector<appended_files> m_files;
+    uint32_t m_cd_address;
+    uint32_t m_cd_size;
     
 public:
     ZipFile();
@@ -38,8 +41,7 @@ private:
     void write_string(const char *str);
     
     uint32_t current_datetime();
-    uint32_t crc32(uint8_t byte, uint32_t crc32);
-    uint32_t crc32(uint8_t *data, uint32_t size);
+    uint32_t crc32(const char *data, size_t size);
 };
 
 #endif

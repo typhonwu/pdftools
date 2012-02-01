@@ -107,8 +107,8 @@ void ZipFile::add_source(const char *filename, const char *buffer, int length)
     file.position = m_output.tellp();
     file.date = current_datetime();
     file.length = length;
+    file.name = filename;
     file.crc = crc32(buffer, length);
-    cout << file.crc << endl;
 
     write_string("\x50\x4B\x03\x04");
     // Unix Type
@@ -124,9 +124,12 @@ void ZipFile::add_source(const char *filename, const char *buffer, int length)
     // Uncompressed
     write32(length);
     write16(strlen(filename));
-    write_string(filename);
     // file extra
     write16(0);
+    write_string(filename);
+    
+    m_output.write(buffer, length);
+    
     m_files.push_back(file);
 }
 
@@ -139,10 +142,9 @@ void ZipFile::write_central_file()
         appended_files file = m_files[i];
 
         write_string("\x50\x4B\x01\x02");
-
-        write8(0x1E);
-        write8(0x0A);
-
+        write16(0x031E);
+        write16(0x0A);
+        
         // bit flag
         write16(0);
         // compression
@@ -161,7 +163,7 @@ void ZipFile::write_central_file()
         // dist start
         write16(0);
         write16(0);
-        write32(0);
+        write32(0x81A40000);
         write32(file.position);
         write_string(file.name.c_str());
     }
@@ -186,10 +188,8 @@ void ZipFile::write_central_directory()
     // offset of start of central
     write32(m_cd_address);
 
-    const char *comment = "ePUB file by PDF Tools";
     // Comment size
-    write16(strlen(comment));
-    write_string(comment);
+    write16(0);
 }
 
 void ZipFile::write_string(const char *str)
@@ -221,7 +221,6 @@ void ZipFile::write32(uint32_t c)
 
 uint32_t ZipFile::crc32(const char *data, size_t size)
 {
-    uint32_t loop;
     uint32_t crc = 0xFFFFFFFF;
 
     for (; size; --size, ++data) {

@@ -52,9 +52,6 @@ static uint32_t crc_table[256] = {
     0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
 };
 
-// FIXME see http://www.cplusplus.com/reference/clibrary/ctime/tm/
-// FIXME see http://mindprod.com/jgloss/zip.html
-
 uint32_t ZipFile::current_datetime()
 {
     time_t rawtime;
@@ -100,6 +97,7 @@ void ZipFile::close()
 
 void ZipFile::add_source(const char *filename, const char *buffer, int length)
 {
+    // FIXME add compression facility
     if (length == 0) {
         length = strlen(buffer);
     }

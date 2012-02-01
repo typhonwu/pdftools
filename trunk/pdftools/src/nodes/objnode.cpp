@@ -9,7 +9,6 @@ ObjNode::ObjNode(int id, int generation) : TreeNode()
     m_generation = generation;
     m_value = NULL;
     m_stream = NULL;
-    m_uncompressed = NULL;
 }
 
 ObjNode::~ObjNode()
@@ -19,9 +18,6 @@ ObjNode::~ObjNode()
     }
     if (m_stream) {
         delete [] m_stream;
-    }
-    if (m_uncompressed) {
-        delete [] m_uncompressed;
     }
 }
 
@@ -75,14 +71,4 @@ void ObjNode::set_stream(pair<int, int8_t *> stream)
     }
     m_stream_size = stream.first;
     m_stream = stream.second;
-}
-
-char *ObjNode::uncompressed()
-{
-    return m_uncompressed;
-}
-
-void ObjNode::set_uncompressed(char *data)
-{
-    m_uncompressed = data;
 }

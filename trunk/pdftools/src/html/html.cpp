@@ -10,21 +10,19 @@ Html::~Html()
 {
 }
 
+void Html::add_paragraph()
+{
+    m_xml.start_tag("p");
+}
+
 void Html::start_header()
 {
-    m_xml.start_tag("header");
+    m_xml.start_tag("head");
 }
 
 void Html::start_body()
 {
     m_xml.start_tag("body");
-//    
-//    m_xml.start_tag("div");
-//    add_element("teste ");
-//    m_xml.start_tag("b");
-//    add_element("negrito");
-//    end_tag();
-//    end_tag();
 }
 
 void Html::set_title(const char* title)

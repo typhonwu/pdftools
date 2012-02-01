@@ -83,7 +83,9 @@ void Document::set_author(string author)
 
 void Document::set_lang(string lang)
 {
-    m_lang = lang;
+    if (!lang.empty()) {
+        m_lang = lang;
+    }
 }
 
 string Document::lang()

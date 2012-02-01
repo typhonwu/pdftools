@@ -18,6 +18,7 @@ public:
     void end_document();
     void end_tag();
     
+    void add_paragraph();
     void add_element(const char *element);
     
     void set_title(const char *title);

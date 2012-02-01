@@ -14,7 +14,6 @@ private:
     int m_stream_size;
     TreeNode *m_value;
     int8_t *m_stream;
-    char *m_uncompressed;
     
 public:
     ObjNode(int id, int generation);
@@ -28,8 +27,6 @@ public:
     int stream_size();
     TreeNode *value();
     int8_t *stream();
-    char *uncompressed();
-    void set_uncompressed(char *data);
     bool this_object(int id, int generation);
     void clear_stream();
 };

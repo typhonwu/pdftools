@@ -1,8 +1,11 @@
 #include "analyze.h"
+#include "utils.h"
+#include "scanner.h"
+#include "pageparser.h"
 #include "nodes/nodes.h"
 #include "semantic/pagelabel.h"
-#include "utils.h"
 #include <iostream>
+#include <sstream>
 #include <zlib.h>
 #include <cstdlib>
 
@@ -164,9 +167,62 @@ Document *Analyze::analyze_tree(RootNode * tree)
     return m_document;
 }
 
-void Analyze::process_pages()
-{
+// 193
 
+Page *Analyze::process_page(MapNode *catalog, ArrayNode *mediabox)
+{
+    Page *page = new Page;
+
+    ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/MediaBox"));
+    if (!media) {
+        media = mediabox;
+    }
+    // FIXME correct bounds verification
+    if (media) {
+        vector<TreeNode *> bounds = media->values();
+        page->set_media_box(get_number_value(bounds[0]), get_number_value(bounds[1]), get_number_value(bounds[2]), get_number_value(bounds[3]));
+    }
+    ObjNode *contents = dynamic_cast<ObjNode *> (get_real_value(catalog->get("/Contents")));
+    if (contents) {
+        MapNode *snode = dynamic_cast<MapNode *> (contents->value());
+        //NumberNode *length = dynamic_cast<NumberNode *> (get_real_value(snode->get("/Length")));
+        if (snode) {
+            // FIXME Array
+            const char *uncompressed;
+            NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
+            if (filter && filter->name() == "/FlateDecode") {
+                uncompressed = flat_decode(contents->stream(), contents->stream_size());
+            } else if (!filter) {
+                uncompressed = (char *) contents->stream();
+            } else {
+                error_message(string("Invalid filter ") + filter->name());
+                return page;
+            }
+            stringstream stream_value;
+            stream_value << uncompressed;
+            stream_value.seekg(0);
+
+            // FIXME page parser
+            //PageParser parser(stream_value);
+            // RootNode *root = parser.parse();
+
+            if (!filter) {
+                contents->clear_stream();
+            } else {
+                delete [] uncompressed;
+            }
+        } else {
+            cout << "Aqui" << endl;
+            // FIXME Array of Object Streams
+            //ArrayNode *contents2 = dynamic_cast<ArrayNode *> (contents->value());
+        }
+    }
+    //ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/Resources"));
+    // /Metadata // stream
+    // /TemplateInstantiated name
+    // /UserUnit number
+
+    return page;
 }
 
 void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
@@ -177,12 +233,10 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
         return;
     }
     MapNode *catalog = dynamic_cast<MapNode *> (obj_pages->value());
-
     NameNode *type = dynamic_cast<NameNode *> (catalog->get("/Type"));
     if (type) {
         if (type->name() == "/Pages") {
             ArrayNode *kids = dynamic_cast<ArrayNode *> (catalog->get("/Kids"));
-            //NumberNode *count = dynamic_cast<NumberNode *> (catalog->get("/Count"));
             ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/MediaBox"));
             if (!media) {
                 media = mediabox;
@@ -196,40 +250,7 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
                 }
             }
         } else if (type->name() == "/Page") {
-            Page *page = new Page;
-
-            ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/MediaBox"));
-            if (!media) {
-                media = mediabox;
-            }
-            // FIXME correct bounds verification
-            if (media) {
-                vector<TreeNode *> bounds = media->values();
-                page->set_media_box(get_number_value(bounds[0]), get_number_value(bounds[1]), get_number_value(bounds[2]), get_number_value(bounds[3]));
-            }
-            ObjNode *contents = dynamic_cast<ObjNode *> (get_real_value(catalog->get("/Contents")));
-            if (contents) {
-                MapNode *snode = dynamic_cast<MapNode *> (contents->value());
-                //NumberNode *length = dynamic_cast<NumberNode *> (get_real_value(snode->get("/Length")));
-                if (snode) {
-                    // FIXME no filter, FlateDecode or Array
-                    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
-                    if (filter && filter->name() == "/FlateDecode") {
-                        contents->set_uncompressed(flat_decode(contents->stream(), contents->stream_size()));
-                        contents->clear_stream();
-                        //cout << contents->uncompressed() << endl;
-                    }
-                } else {
-                    // FIXME Array of Object Streams
-                    //ArrayNode *contents2 = dynamic_cast<ArrayNode *> (contents->value());
-                }
-            }
-            //ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/Resources"));
-            // /Metadata // stream
-            // /TemplateInstantiated name
-            // /UserUnit number
-
-            m_document->add_page(page);
+            m_document->add_page(process_page(catalog, mediabox));
         }
     }
 }

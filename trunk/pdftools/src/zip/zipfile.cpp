@@ -1,6 +1,7 @@
 #include "config.h"
 #include "zipfile.h"
 #include <iostream>
+#include <cstring>
 #include <ctime>
 
 using namespace std;

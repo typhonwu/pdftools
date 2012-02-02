@@ -11,6 +11,7 @@ using namespace std;
 struct appended_files {
     string name;
     int length;
+    int compressed;
     uint32_t date;
     uint32_t crc;
     uint32_t position;

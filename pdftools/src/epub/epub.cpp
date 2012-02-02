@@ -86,6 +86,14 @@ void EPUB::generate_content(const char* output)
     xml.end_tag();
 
     xml.start_tag("dc:creator");
+    if (m_document->author().empty()) {
+        xml.add_element("no title");
+    } else {
+        xml.add_element(m_document->author().c_str());
+    }
+    xml.end_tag();
+
+    xml.start_tag("dc:publisher");
     xml.add_element(PACKAGE_STRING);
     xml.end_tag();
 

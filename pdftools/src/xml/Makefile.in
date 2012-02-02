@@ -52,9 +52,8 @@ libxml_a_LIBADD =
 am_libxml_a_OBJECTS = libxml_a-xml.$(OBJEXT)
 libxml_a_OBJECTS = $(am_libxml_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
-depcomp = $(SHELL) $(top_srcdir)/depcomp
-am__depfiles_maybe = depfiles
-am__mv = mv -f
+depcomp =
+am__depfiles_maybe =
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -183,9 +182,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/xml/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps src/xml/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/xml/Makefile
+	  $(AUTOMAKE) --gnu --ignore-deps src/xml/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -218,35 +217,17 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libxml_a-xml.Po@am__quote@
-
 .cpp.o:
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
+	$(CXXCOMPILE) -c -o $@ $<
 
 .cpp.obj:
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 libxml_a-xml.o: xml.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -MT libxml_a-xml.o -MD -MP -MF $(DEPDIR)/libxml_a-xml.Tpo -c -o libxml_a-xml.o `test -f 'xml.cpp' || echo '$(srcdir)/'`xml.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libxml_a-xml.Tpo $(DEPDIR)/libxml_a-xml.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='xml.cpp' object='libxml_a-xml.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -c -o libxml_a-xml.o `test -f 'xml.cpp' || echo '$(srcdir)/'`xml.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -c -o libxml_a-xml.o `test -f 'xml.cpp' || echo '$(srcdir)/'`xml.cpp
 
 libxml_a-xml.obj: xml.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -MT libxml_a-xml.obj -MD -MP -MF $(DEPDIR)/libxml_a-xml.Tpo -c -o libxml_a-xml.obj `if test -f 'xml.cpp'; then $(CYGPATH_W) 'xml.cpp'; else $(CYGPATH_W) '$(srcdir)/xml.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libxml_a-xml.Tpo $(DEPDIR)/libxml_a-xml.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='xml.cpp' object='libxml_a-xml.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -c -o libxml_a-xml.obj `if test -f 'xml.cpp'; then $(CYGPATH_W) 'xml.cpp'; else $(CYGPATH_W) '$(srcdir)/xml.cpp'; fi`
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libxml_a_CXXFLAGS) $(CXXFLAGS) -c -o libxml_a-xml.obj `if test -f 'xml.cpp'; then $(CYGPATH_W) 'xml.cpp'; else $(CYGPATH_W) '$(srcdir)/xml.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -369,7 +350,6 @@ clean: clean-am
 clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -415,7 +395,6 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

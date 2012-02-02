@@ -51,7 +51,7 @@ char *deflate(const char *raw, int size, int &writed)
     zstream.zalloc = Z_NULL;
     zstream.zfree = Z_NULL;
     zstream.opaque = Z_NULL;
-    int err = deflateInit(&zstream, Z_BEST_SPEED);
+    int err = deflateInit(&zstream, Z_BEST_COMPRESSION);
     if (err != Z_OK) {
         return NULL;
     }

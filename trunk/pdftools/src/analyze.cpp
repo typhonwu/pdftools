@@ -169,59 +169,33 @@ Document *Analyze::analyze_tree(RootNode * tree)
 
 // 193
 
-Page *Analyze::process_page(MapNode *catalog, ArrayNode *mediabox)
+Page *Analyze::process_page(ObjNode *obj, MapNode *node, ArrayNode *mediabox)
 {
     Page *page = new Page;
 
-    ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/MediaBox"));
-    if (!media) {
-        media = mediabox;
+    const char *uncompressed;
+    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(node->get("/Filter")));
+    if (filter && filter->name() == "/FlateDecode") {
+        uncompressed = flat_decode(obj->stream(), obj->stream_size());
+    } else if (!filter) {
+        uncompressed = (char *) obj->stream();
+    } else {
+        error_message(string("Invalid filter ") + filter->name());
+        return page;
     }
-    // FIXME correct bounds verification
-    if (media) {
-        vector<TreeNode *> bounds = media->values();
-        page->set_media_box(get_number_value(bounds[0]), get_number_value(bounds[1]), get_number_value(bounds[2]), get_number_value(bounds[3]));
+    stringstream stream_value;
+    stream_value << uncompressed;
+    stream_value.seekg(0);
+
+    // FIXME page parser
+    //PageParser parser(stream_value);
+    // RootNode *root = parser.parse();
+
+    if (!filter) {
+        obj->clear_stream();
+    } else {
+        delete [] uncompressed;
     }
-    ObjNode *contents = dynamic_cast<ObjNode *> (get_real_value(catalog->get("/Contents")));
-    if (contents) {
-        MapNode *snode = dynamic_cast<MapNode *> (contents->value());
-        //NumberNode *length = dynamic_cast<NumberNode *> (get_real_value(snode->get("/Length")));
-        if (snode) {
-            // FIXME Array
-            const char *uncompressed;
-            NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
-            if (filter && filter->name() == "/FlateDecode") {
-                uncompressed = flat_decode(contents->stream(), contents->stream_size());
-            } else if (!filter) {
-                uncompressed = (char *) contents->stream();
-            } else {
-                error_message(string("Invalid filter ") + filter->name());
-                return page;
-            }
-            stringstream stream_value;
-            stream_value << uncompressed;
-            stream_value.seekg(0);
-
-            // FIXME page parser
-            //PageParser parser(stream_value);
-            // RootNode *root = parser.parse();
-
-            if (!filter) {
-                contents->clear_stream();
-            } else {
-                delete [] uncompressed;
-            }
-        } else {
-            cout << "Aqui" << endl;
-            // FIXME Array of Object Streams
-            //ArrayNode *contents2 = dynamic_cast<ArrayNode *> (contents->value());
-        }
-    }
-    //ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/Resources"));
-    // /Metadata // stream
-    // /TemplateInstantiated name
-    // /UserUnit number
-
     return page;
 }
 
@@ -250,7 +224,26 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
                 }
             }
         } else if (type->name() == "/Page") {
-            m_document->add_page(process_page(catalog, mediabox));
+            ArrayNode *media = dynamic_cast<ArrayNode *> (catalog->get("/MediaBox"));
+            if (!media) {
+                media = mediabox;
+            }
+
+            ObjNode *contents = dynamic_cast<ObjNode *> (get_real_value(catalog->get("/Contents")));
+            if (contents) {
+                MapNode *snode = dynamic_cast<MapNode *> (contents->value());
+                if (snode) {
+                    m_document->add_page(process_page(contents, snode, media));
+                } else {
+                    ArrayNode *array = dynamic_cast<ArrayNode *> (contents->value());
+                    if (array) {
+                        // FIXME more than one content
+                        error_message("More than on content is unsupported");
+                    }
+                }
+            }
+
+
         }
     }
 }

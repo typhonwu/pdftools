@@ -52,9 +52,8 @@ libzip_a_LIBADD =
 am_libzip_a_OBJECTS = libzip_a-zipfile.$(OBJEXT)
 libzip_a_OBJECTS = $(am_libzip_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
-depcomp = $(SHELL) $(top_srcdir)/depcomp
-am__depfiles_maybe = depfiles
-am__mv = mv -f
+depcomp =
+am__depfiles_maybe =
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -183,9 +182,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/zip/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps src/zip/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/zip/Makefile
+	  $(AUTOMAKE) --gnu --ignore-deps src/zip/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -218,35 +217,17 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libzip_a-zipfile.Po@am__quote@
-
 .cpp.o:
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
+	$(CXXCOMPILE) -c -o $@ $<
 
 .cpp.obj:
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 libzip_a-zipfile.o: zipfile.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -MT libzip_a-zipfile.o -MD -MP -MF $(DEPDIR)/libzip_a-zipfile.Tpo -c -o libzip_a-zipfile.o `test -f 'zipfile.cpp' || echo '$(srcdir)/'`zipfile.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libzip_a-zipfile.Tpo $(DEPDIR)/libzip_a-zipfile.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zipfile.cpp' object='libzip_a-zipfile.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -c -o libzip_a-zipfile.o `test -f 'zipfile.cpp' || echo '$(srcdir)/'`zipfile.cpp
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -c -o libzip_a-zipfile.o `test -f 'zipfile.cpp' || echo '$(srcdir)/'`zipfile.cpp
 
 libzip_a-zipfile.obj: zipfile.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -MT libzip_a-zipfile.obj -MD -MP -MF $(DEPDIR)/libzip_a-zipfile.Tpo -c -o libzip_a-zipfile.obj `if test -f 'zipfile.cpp'; then $(CYGPATH_W) 'zipfile.cpp'; else $(CYGPATH_W) '$(srcdir)/zipfile.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libzip_a-zipfile.Tpo $(DEPDIR)/libzip_a-zipfile.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zipfile.cpp' object='libzip_a-zipfile.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -c -o libzip_a-zipfile.obj `if test -f 'zipfile.cpp'; then $(CYGPATH_W) 'zipfile.cpp'; else $(CYGPATH_W) '$(srcdir)/zipfile.cpp'; fi`
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libzip_a_CXXFLAGS) $(CXXFLAGS) -c -o libzip_a-zipfile.obj `if test -f 'zipfile.cpp'; then $(CYGPATH_W) 'zipfile.cpp'; else $(CYGPATH_W) '$(srcdir)/zipfile.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -369,7 +350,6 @@ clean: clean-am
 clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -415,7 +395,6 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

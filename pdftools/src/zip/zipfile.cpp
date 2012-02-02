@@ -98,7 +98,6 @@ void ZipFile::close()
 
 void ZipFile::add_source(const char *filename, const char *buffer, int length)
 {
-    // FIXME add compression facility
     if (length == 0) {
         length = strlen(buffer);
     }

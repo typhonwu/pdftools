@@ -12,7 +12,7 @@ using namespace std;
 
 static bool _verbose = false;
 
-#define MAX_BUFFER_SIZE 2048
+#define MAX_BUFFER_SIZE 16384
 
 struct buffer_struct {
     char buffer[MAX_BUFFER_SIZE];
@@ -41,18 +41,70 @@ bool verbose_mode()
     return _verbose;
 }
 
+char *deflate(const char *raw, int size, int &writed)
+{
+    z_stream zstream;
+    vector<buffer_struct> values;
+    writed = 0;
+
+    /* allocate deflate state */
+    zstream.zalloc = Z_NULL;
+    zstream.zfree = Z_NULL;
+    zstream.opaque = Z_NULL;
+    int err = deflateInit(&zstream, Z_BEST_SPEED);
+    if (err != Z_OK) {
+        return NULL;
+    }
+
+    zstream.avail_in = size;
+    zstream.next_in = (Bytef *)raw;
+
+    register int total = 0;
+    do {
+        buffer_struct b;
+        zstream.avail_out = MAX_BUFFER_SIZE;
+        zstream.next_out = (Bytef *) b.buffer;
+
+        err = deflate(&zstream, Z_FINISH); /* no bad return value */
+        b.size = MAX_BUFFER_SIZE - zstream.avail_out;
+
+        total += b.size;
+        values.push_back(b);
+    } while (zstream.avail_out == 0);
+    //} while (flush != Z_FINISH);
+    //assert(ret == Z_STREAM_END);        /* stream will be complete */
+
+    deflateEnd(&zstream);
+
+    writed = total;
+    char *ret = new char[total];
+
+    int locate = 0;
+    vector<buffer_struct>::iterator i;
+    for (i = values.begin(); i != values.end(); i++) {
+        memcpy(ret + locate, (*i).buffer, (*i).size);
+        locate += (*i).size;
+    }
+    return ret;
+}
+
 char *flat_decode(int8_t *compressed, int size)
 {
     vector<buffer_struct> values;
 
     z_stream zstream;
-    memset(&zstream, 0, sizeof (z_stream));
-    zstream.avail_in = size;
-    zstream.next_in = (Bytef *) compressed;
+    zstream.zalloc = Z_NULL;
+    zstream.zfree = Z_NULL;
+    zstream.opaque = Z_NULL;
+    zstream.avail_in = 0;
+    zstream.next_in = Z_NULL;
 
     int total = 0;
     int rsti = inflateInit(&zstream);
     if (rsti == Z_OK) {
+        zstream.avail_in = size;
+        zstream.next_in = (Bytef *) compressed;
+
         do {
             buffer_struct b;
             zstream.avail_out = MAX_BUFFER_SIZE;
@@ -65,7 +117,7 @@ char *flat_decode(int8_t *compressed, int size)
                 values.push_back(b);
                 if (rst2 == Z_STREAM_END) break;
             } else {
-                cout << "error in decompression" << endl;
+                cout << "error in decompression " << rst2 << endl;
                 // Error in decompression
                 break;
             }

@@ -109,26 +109,37 @@ void ZipFile::add_source(const char *filename, const char *buffer, int length)
     file.name = filename;
     file.crc = crc32(buffer, length);
 
-    // FIXME validate file size (store or deflate)
     // FIXME change buffer padding to deflate method
-    
+
     // When using the Compress method, ZLib adds a 2 byte head
     // and a 4 byte tail. The head must be removed for zip
     // compatability and the tail is not necessary.
-    char *b = deflate(buffer, length, file.compressed);
-    file.compressed -= 6;
+    char *b = deflate(buffer, length, file.compressed_size);
+    file.compressed_size -= 6;
+
+    if (file.compressed_size < file.length) {
+        file.compressed = true;
+    } else {
+        file.compressed = false;
+        file.compressed_size = file.length;
+    }
 
     write_string("\x50\x4B\x03\x04");
     // Unix Type
     write16(0xA);
-    // Bit flags
-    write16(2);
-    // Compression mode
-    write16(8);
+    if (file.compressed) {
+        // Bit flags
+        write16(2);
+        // Compression mode
+        write16(8);
+    } else {
+        write16(0);
+        write16(0);
+    }
     write32(file.date);
     write32(file.crc);
     // Compressed
-    write32(file.compressed);
+    write32(file.compressed_size);
     // Uncompressed
     write32(file.length);
     write16(strlen(filename));
@@ -136,10 +147,12 @@ void ZipFile::add_source(const char *filename, const char *buffer, int length)
     write16(0);
     write_string(filename);
 
-    //m_output.write(buffer, length);
-    m_output.write(b + 2, file.compressed);
+    if (file.compressed) {
+        m_output.write(b + 2, file.compressed_size);
+    } else {
+        m_output.write(buffer, file.compressed);
+    }
     delete [] b;
-
     m_files.push_back(file);
 }
 
@@ -155,14 +168,19 @@ void ZipFile::write_central_file()
         write16(0x031E);
         write16(0x0A);
 
-        // bit flag
-        write16(2);
-        // compression
-        write16(8);
+        if (file.compressed) {
+            // bit flag
+            write16(2);
+            // compression
+            write16(8);
+        } else {
+            write16(0);
+            write16(0);
+        }
         write32(file.date);
         write32(file.crc);
         // Compressed
-        write32(file.compressed);
+        write32(file.compressed_size);
         // Uncompressed
         write32(file.length);
         write16(file.name.length());

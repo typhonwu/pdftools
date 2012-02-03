@@ -6,6 +6,7 @@
 #include <sstream>
 #include "xml/xml.h"
 #include "html/html.h"
+#include "semantic/document.h"
 
 using namespace std;
 
@@ -145,6 +146,43 @@ void EPUB::generate_content(const char* output)
     m_zipfile->add_source("content.opf", content.c_str());
 }
 
+void EPUB::generate_outline(XML *xml, Outline *outline)
+{
+    Page *page = m_document->page(outline->id(), outline->generation());
+
+    if (page) {
+        stringstream id;
+        id << "navPoint-" << m_order;
+        stringstream playorder;
+        playorder << m_order;
+        m_order++;
+
+        xml->start_tag("navPoint");
+        xml->add_attribute("id", id.str().c_str());
+        xml->add_attribute("playOrder", playorder.str().c_str());
+
+
+        xml->start_tag("navLabel");
+        xml->start_tag("text");
+        xml->add_element(outline->title());
+        xml->end_tag();
+        xml->end_tag();
+
+        xml->start_tag("content");
+        if (page->link()) {
+            xml->add_attribute("src", page->link());
+        }
+        xml->end_tag();
+    }
+    int size = outline->size();
+    for (int loop = 0; loop < size; loop++) {
+        generate_outline(xml, outline->child(loop));
+    }
+    if (page) {
+        xml->end_tag();
+    }
+}
+
 void EPUB::generate_toc(const char* output)
 {
     XML xml;
@@ -179,6 +217,16 @@ void EPUB::generate_toc(const char* output)
     xml.end_tag();
     xml.end_tag();
 
+    xml.start_tag("navMap");
+    Outline *outline = m_document->outline();
+    if (outline) {
+        m_order = 0;
+        generate_outline(&xml, outline);
+    } else {
+        // FIXME create a start navPoint
+    }
+    xml.end_tag();
+    /*
     int i;
     int size = m_document->pages();
     xml.start_tag("navMap");
@@ -207,6 +255,7 @@ void EPUB::generate_toc(const char* output)
         xml.end_tag();
     }
     xml.end_tag();
+     */
 
     xml.end_tag();
     xml.end_document();
@@ -214,7 +263,7 @@ void EPUB::generate_toc(const char* output)
     m_zipfile->add_source("toc.ncx", content.c_str());
 }
 
-void EPUB::generate_page(Page *page, const char *filename)
+void EPUB::generate_page(Page *page)
 {
 
     Html html;
@@ -224,32 +273,45 @@ void EPUB::generate_page(Page *page, const char *filename)
     html.end_tag();
 
     html.start_body();
-    
+
     html.add_paragraph();
-    html.add_element(filename);
+    html.add_element(page->link());
     html.end_tag();
 
     html.end_tag();
     html.end_document();
 
-    m_zipfile->add_source(filename, html.content());
+    m_zipfile->add_source(page->link(), html.content());
 }
 
 bool EPUB::generate(Document* document, const char* output)
 {
     m_document = document;
     if (m_zipfile->open(output)) {
+        int i;
+        int size = m_document->pages();
+        for (i = 1; i <= size; i++) {
+            Page *page = m_document->page(i - 1);
+            if (page) {
+                stringstream file;
+                file << "page-" << i << ".html";
+                page->set_link((char *) file.str().c_str());
+            }
+        }
+
         generate_mimetype();
         generate_container();
         generate_content(output);
         generate_toc(output);
 
-        int i;
-        int size = m_document->pages();
+        size = m_document->pages();
         for (i = 1; i <= size; i++) {
-            stringstream file;
-            file << "page-" << i << ".html";
-            generate_page(m_document->page(i), file.str().c_str());
+            Page *page = m_document->page(i - 1);
+            if (page) {
+                generate_page(page);
+            } else {
+                cout << "Invalid page " << i << endl;
+            }
         }
 
         m_zipfile->close();

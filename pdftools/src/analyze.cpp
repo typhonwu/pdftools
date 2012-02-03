@@ -153,8 +153,6 @@ void Analyze::analyse_root()
     //FIXME StructTreeRoot
 }
 
-// 585
-
 void Analyze::analyse_outlines(MapNode *values, Outline *parent)
 {
     NameNode *type = dynamic_cast<NameNode *> (values->get("/Type"));
@@ -168,7 +166,7 @@ void Analyze::analyse_outlines(MapNode *values, Outline *parent)
 
     ArrayNode *destinations = dynamic_cast<ArrayNode *> (values->get("/Dest"));
     if (destinations && destinations->size() > 0) {
-        
+
         RefNode *ref = dynamic_cast<RefNode *> (destinations->value(0));
         if (ref) {
             // FIXME process references
@@ -231,7 +229,7 @@ Document *Analyze::analyze_tree(RootNode * tree)
 
 // 193
 
-Page *Analyze::process_page(ObjNode *obj, MapNode *node, ArrayNode *mediabox)
+Page *Analyze::process_page(int id, int generation, ObjNode *obj, MapNode *node, ArrayNode *mediabox)
 {
     Page *page = new Page;
 
@@ -248,6 +246,8 @@ Page *Analyze::process_page(ObjNode *obj, MapNode *node, ArrayNode *mediabox)
     stringstream stream_value;
     stream_value << uncompressed;
     stream_value.seekg(0);
+
+    page->set_destination(id, generation);
 
     // FIXME page parser
     //PageParser parser(stream_value);
@@ -294,7 +294,7 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
             if (contents) {
                 MapNode *snode = dynamic_cast<MapNode *> (contents->value());
                 if (snode) {
-                    m_document->add_page(process_page(contents, snode, media));
+                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), contents, snode, media));
                 } else {
                     ArrayNode *array = dynamic_cast<ArrayNode *> (contents->value());
                     if (array) {

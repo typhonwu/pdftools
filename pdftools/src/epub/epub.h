@@ -5,12 +5,15 @@
 #include "zip/zipfile.h"
 
 class Document;
+class Outline;
 class Page;
+class XML;
 
 class EPUB : public Generator {
 private:
     ZipFile *m_zipfile;
     Document *m_document;
+    int m_order;
     
 public:
     EPUB();
@@ -19,9 +22,10 @@ public:
 
 private:
     void generate_container();
-    void generate_page(Page *page, const char *filename);
+    void generate_page(Page *page);
     void generate_content(const char* output);
     void generate_toc(const char* output);
+    void generate_outline(XML *xml, Outline *outline);
     void generate_mimetype();
 };
 

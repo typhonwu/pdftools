@@ -22,9 +22,27 @@ Document::~Document()
     }
 }
 
+Page *Document::page(int id, int generation)
+{
+    vector<Page *>::iterator i = m_pages.begin();
+    while (i != m_pages.end()) {
+        register Page *page = *i;
+        if (page->id() == id && page->generation() == generation) {
+            return page;
+        }
+        i++;
+    }
+    return NULL;
+}
+
 void Document::set_outline(Outline *outline)
 {
     m_outlines = outline;
+}
+
+Outline *Document::outline()
+{
+    return m_outlines;
 }
 
 void Document::set_id(string first, string second)

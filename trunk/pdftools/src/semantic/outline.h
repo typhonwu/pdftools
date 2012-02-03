@@ -20,6 +20,13 @@ public:
     void add_child(Outline *child);
     void set_destination(int id, int generation);
     void set_title(string title);
+    
+    int id();
+    int generation();
+    const char *title();
+    
+    int size();
+    Outline *child(int index);
 };
 
 #endif

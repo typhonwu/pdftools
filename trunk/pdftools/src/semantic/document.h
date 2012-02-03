@@ -35,12 +35,15 @@ public:
     void set_subject(string subject);
     void set_author(string author);
     void set_lang(string lang);
+    
     void set_outline(Outline *outline);
+    Outline *outline();
     
     void add_page(Page *page);
     void add_page_label(PageLabel *label);
     Page *page(int index);
     int pages();
+    Page *page(int id, int generation);
     
     string lang();
     string id();

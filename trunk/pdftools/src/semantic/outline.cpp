@@ -2,6 +2,8 @@
 
 Outline::Outline()
 {
+    m_id = 0;
+    m_generation = 0;
 }
 
 Outline::~Outline()
@@ -11,6 +13,21 @@ Outline::~Outline()
         delete *i;
         i++;
     }
+}
+
+const char *Outline::title()
+{
+    return m_title.c_str();
+}
+
+int Outline::size()
+{
+    return m_childs.size();
+}
+
+Outline *Outline::child(int index)
+{
+    return m_childs[index];
 }
 
 void Outline::set_title(string title)
@@ -27,4 +44,14 @@ void Outline::set_destination(int id, int generation)
 {
     m_id = id;
     m_generation = generation;
+}
+
+int Outline::id()
+{
+    return m_id;
+}
+
+int Outline::generation()
+{
+    return m_generation;
 }

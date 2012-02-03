@@ -108,7 +108,7 @@ void ZipFile::add_source(const char *filename, const char *buffer, int length)
     file.length = length;
     file.name = filename;
     file.crc = crc32(buffer, length);
-
+    
     // FIXME change buffer padding to deflate method
 
     // When using the Compress method, ZLib adds a 2 byte head
@@ -150,7 +150,7 @@ void ZipFile::add_source(const char *filename, const char *buffer, int length)
     if (file.compressed) {
         m_output.write(b + 2, file.compressed_size);
     } else {
-        m_output.write(buffer, file.compressed);
+        m_output.write(buffer, file.length);
     }
     delete [] b;
     m_files.push_back(file);

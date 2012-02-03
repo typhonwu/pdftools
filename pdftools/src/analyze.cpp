@@ -3,6 +3,7 @@
 #include "scanner.h"
 #include "pageparser.h"
 #include "nodes/nodes.h"
+#include "semantic/outline.h"
 #include "semantic/pagelabel.h"
 #include <iostream>
 #include <sstream>
@@ -46,9 +47,8 @@ void Analyze::analyze_xref()
 
             ArrayNode *array = dynamic_cast<ArrayNode *> (trailer->get("/ID"));
             if (array) {
-                vector<TreeNode *> v = array->values();
-                if (v.size() == 2) {
-                    m_document->set_id(((StringNode*) v[0])->value(), ((StringNode*) v[1])->value());
+                if (array->size() == 2) {
+                    m_document->set_id(get_string_value(array->value(0)), get_string_value(array->value(1)));
                 }
             }
         } else {
@@ -70,9 +70,8 @@ void Analyze::analyze_xref()
 
                         ArrayNode *array = dynamic_cast<ArrayNode *> (values->get("/ID"));
                         if (array) {
-                            vector<TreeNode *> v = array->values();
-                            if (v.size() == 2) {
-                                m_document->set_id(((StringNode*) v[0])->value(), ((StringNode*) v[1])->value());
+                            if (array->size() == 2) {
+                                m_document->set_id(get_string_value(array->value(0)), get_string_value(array->value(1)));
                             }
                         }
                     }
@@ -88,6 +87,7 @@ void Analyze::analyze_info()
     if (obj) {
         MapNode *info = dynamic_cast<MapNode *> (obj->value());
         if (info) {
+
             m_document->set_title(get_string_value(info->get("/Title")));
             m_document->set_author(get_string_value(info->get("/Author")));
             m_document->set_subject(get_string_value(info->get("/Subject")));
@@ -116,13 +116,12 @@ void Analyze::analyse_root()
     if (page_labels) {
         ArrayNode *array = dynamic_cast<ArrayNode *> (get_real_value(page_labels->get("/Nums")));
         if (array) {
-            vector<TreeNode *> values = array->values();
             int loop;
-            int size = values.size();
+            int size = array->size();
 
             for (loop = 0; loop < size; loop += 2) {
-                double page = get_number_value(values[loop]);
-                MapNode *attributes = dynamic_cast<MapNode *> (get_real_obj_value(values[loop + 1]));
+                double page = get_number_value(array->value(loop));
+                MapNode *attributes = dynamic_cast<MapNode *> (get_real_obj_value(array->value(loop + 1)));
                 if (attributes) {
                     NameNode *name_type = dynamic_cast<NameNode *> (attributes->get("/S"));
                     page_type type = ARABIC;
@@ -146,8 +145,71 @@ void Analyze::analyse_root()
             }
         }
     }
-    //FIXME Outlines
+
+    MapNode *outlines = dynamic_cast<MapNode *> (get_real_obj_value(catalog->get("/Outlines")));
+    if (outlines) {
+        analyse_outlines(outlines);
+    }
     //FIXME StructTreeRoot
+}
+
+// 585
+
+void Analyze::analyse_outlines(MapNode *values, Outline *parent)
+{
+    NameNode *type = dynamic_cast<NameNode *> (values->get("/Type"));
+    if (type) {
+        if (type->name() != "/Outlines") {
+            error_message("Invalid outlines");
+            return;
+        }
+    }
+    Outline *outline = new Outline;
+
+    ArrayNode *destinations = dynamic_cast<ArrayNode *> (values->get("/Dest"));
+    if (destinations && destinations->size() > 0) {
+        
+        RefNode *ref = dynamic_cast<RefNode *> (destinations->value(0));
+        if (ref) {
+            // FIXME process references
+            outline->set_destination(ref->id(), ref->generation());
+        }
+    } else {
+        MapNode *actions = dynamic_cast<MapNode *> (get_real_obj_value(values->get("/A")));
+        if (actions) {
+            NameNode *subtype = dynamic_cast<NameNode *> (get_real_obj_value(actions->get("/S")));
+            if (subtype && subtype->name() == "/GoTo") {
+                ArrayNode *dest = dynamic_cast<ArrayNode *> (get_real_obj_value(actions->get("/D")));
+                if (dest) {
+                    RefNode *ref = dynamic_cast<RefNode *> (dest->value(0));
+                    if (ref) {
+                        // FIXME process references
+                        outline->set_destination(ref->id(), ref->generation());
+                    }
+                }
+            }
+        }
+    }
+    outline->set_title(get_string_value(values->get("/Title")));
+
+    if (!parent) {
+        // root node
+        m_document->set_outline(outline);
+    } else {
+        if (parent) {
+            parent->add_child(outline);
+        }
+    }
+    MapNode *first = dynamic_cast<MapNode *> (get_real_obj_value(values->get("/First")));
+    if (first) {
+        analyse_outlines(first, outline);
+    }
+
+    MapNode *next = dynamic_cast<MapNode *> (get_real_obj_value(values->get("/Next")));
+    if (next && parent) {
+        analyse_outlines(next, parent);
+    }
+
 }
 
 Document *Analyze::analyze_tree(RootNode * tree)
@@ -194,6 +256,7 @@ Page *Analyze::process_page(ObjNode *obj, MapNode *node, ArrayNode *mediabox)
     if (!filter) {
         obj->clear_stream();
     } else {
+
         delete [] uncompressed;
     }
     return page;
@@ -216,11 +279,9 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
                 media = mediabox;
             }
             if (kids) {
-                vector<TreeNode *> pages = kids->values();
-                vector<TreeNode *>::iterator i = pages.begin();
-                while (i != pages.end()) {
-                    analyse_pages(get_real_value(*i), media);
-                    i++;
+#pragma omp parallel for
+                for (int loop = 0; loop < kids->size(); loop++) {
+                    analyse_pages(get_real_value(kids->value(loop)), media);
                 }
             }
         } else if (type->name() == "/Page") {
@@ -238,6 +299,7 @@ void Analyze::analyse_pages(TreeNode *page, ArrayNode *mediabox)
                     ArrayNode *array = dynamic_cast<ArrayNode *> (contents->value());
                     if (array) {
                         // FIXME more than one content
+
                         error_message("More than on content is unsupported");
                     }
                 }
@@ -252,6 +314,7 @@ TreeNode *Analyze::get_real_value(TreeNode * value)
 {
     RefNode *ref = dynamic_cast<RefNode *> (value);
     if (ref) {
+
         return get_object(ref);
     }
     return value;
@@ -263,6 +326,7 @@ TreeNode *Analyze::get_real_obj_value(TreeNode *value)
     if (ref) {
         ObjNode *node = get_object(ref);
         if (node) {
+
             return node->value();
         }
         return NULL;
@@ -274,6 +338,7 @@ string Analyze::get_string_value(TreeNode * value)
 {
     StringNode *str = dynamic_cast<StringNode *> (value);
     if (str) {
+
         return str->value();
     }
     return string();
@@ -283,6 +348,7 @@ double Analyze::get_number_value(TreeNode *value, int default_value)
 {
     NumberNode *num = dynamic_cast<NumberNode *> (value);
     if (num) {
+
         return num->value();
     }
     return default_value;
@@ -291,6 +357,7 @@ double Analyze::get_number_value(TreeNode *value, int default_value)
 ObjNode *Analyze::get_object(RefNode * ref)
 {
     if (!ref) {
+
         return NULL;
     }
     return get_object(ref->id(), ref->generation());

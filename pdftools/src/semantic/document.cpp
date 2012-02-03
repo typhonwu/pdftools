@@ -4,6 +4,7 @@ Document::Document()
 {
     m_root = NULL;
     m_info = NULL;
+    m_outlines = NULL;
     m_lang = "en";
 }
 
@@ -21,6 +22,11 @@ Document::~Document()
     }
 }
 
+void Document::set_outline(Outline *outline)
+{
+    m_outlines = outline;
+}
+
 void Document::set_id(string first, string second)
 {
     m_id = first + second;
@@ -36,9 +42,14 @@ void Document::add_page_label(PageLabel* label)
     m_page_label.push_back(label);
 }
 
-vector<Page *> Document::pages()
+Page *Document::page(int index)
 {
-    return m_pages;
+    return m_pages[index];
+}
+
+int Document::pages()
+{
+    return m_pages.size();
 }
 
 TreeNode *Document::root_node()

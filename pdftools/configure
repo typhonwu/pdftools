@@ -618,7 +618,6 @@ CXX
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
-am__nodep
 AMDEPBACKSLASH
 AMDEP_FALSE
 AMDEP_TRUE
@@ -2756,7 +2755,7 @@ DEBUG_CFLAGS="-O3 -DNDEBUG -pedantic -Wall -funroll-loops -s"
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
   enableval=$enable_debug;   if test "$enable_debug" = "yes"; then
-      DEBUG_CFLAGS="-g3 -ggdb3 -pg -O0 -DDEBUG -pedantic -Wall -fno-inline -fno-eliminate-unused-debug-types"
+      DEBUG_CFLAGS="-ggdb -O0 -DDEBUG -pedantic -Wall -fno-inline -fno-eliminate-unused-debug-types"
    fi
 
 fi
@@ -3620,7 +3619,6 @@ fi
 if test "x$enable_dependency_tracking" != xno; then
   am_depcomp="$ac_aux_dir/depcomp"
   AMDEPBACKSLASH='\'
-  am__nodep='_no'
 fi
  if test "x$enable_dependency_tracking" != xno; then
   AMDEP_TRUE=
@@ -3645,7 +3643,6 @@ else
   # instance it was reported that on HP-UX the gcc test will end up
   # making a dummy file named `D' -- because `-MD' means `put the output
   # in D'.
-  rm -rf conftest.dir
   mkdir conftest.dir
   # Copy depcomp to subdir because otherwise we won't find it if we're
   # using a relative directory.
@@ -3705,7 +3702,7 @@ else
 	break
       fi
       ;;
-    msvc7 | msvc7msys | msvisualcpp | msvcmsys)
+    msvisualcpp | msvcmsys)
       # This compiler won't grok `-c -o', but also, the minuso test has
       # not run yet.  These depmodes are late enough in the game, and
       # so weak that their functioning should not be impacted.
@@ -4030,7 +4027,6 @@ else
   # instance it was reported that on HP-UX the gcc test will end up
   # making a dummy file named `D' -- because `-MD' means `put the output
   # in D'.
-  rm -rf conftest.dir
   mkdir conftest.dir
   # Copy depcomp to subdir because otherwise we won't find it if we're
   # using a relative directory.
@@ -4090,7 +4086,7 @@ else
 	break
       fi
       ;;
-    msvc7 | msvc7msys | msvisualcpp | msvcmsys)
+    msvisualcpp | msvcmsys)
       # This compiler won't grok `-c -o', but also, the minuso test has
       # not run yet.  These depmodes are late enough in the game, and
       # so weak that their functioning should not be impacted.

@@ -7,6 +7,8 @@
 
 using namespace std;
 
+class Outline;
+
 class Analyze {
 private:
     Document *m_document;
@@ -23,6 +25,7 @@ private:
     void analyze_xref();
     void analyze_info();
     void analyse_root();
+    void analyse_outlines(MapNode *values, Outline *parent = NULL);
     void analyse_pages(TreeNode *page, ArrayNode *mediabox = NULL);
     Page *process_page(ObjNode *obj, MapNode *node, ArrayNode *mediabox);
     string get_string_value(TreeNode *value);

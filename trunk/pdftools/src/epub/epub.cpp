@@ -104,7 +104,7 @@ void EPUB::generate_content(const char* output)
     xml.end_tag();
 
     int i;
-    int size = m_document->pages().size();
+    int size = m_document->pages();
     xml.start_tag("manifest");
 
     xml.start_tag("item");
@@ -180,7 +180,7 @@ void EPUB::generate_toc(const char* output)
     xml.end_tag();
 
     int i;
-    int size = m_document->pages().size();
+    int size = m_document->pages();
     xml.start_tag("navMap");
     for (i = 1; i <= size; i++) {
         stringstream id;
@@ -245,12 +245,11 @@ bool EPUB::generate(Document* document, const char* output)
         generate_toc(output);
 
         int i;
-        vector<Page *> pages = m_document->pages();
-        int size = pages.size();
+        int size = m_document->pages();
         for (i = 1; i <= size; i++) {
             stringstream file;
             file << "page-" << i << ".html";
-            generate_page(pages[i], file.str().c_str());
+            generate_page(m_document->page(i), file.str().c_str());
         }
 
         m_zipfile->close();

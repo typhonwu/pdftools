@@ -46,7 +46,7 @@ void Converter::convert()
         m_document = analyze.analyze_tree(m_syntax_tree);
         if (m_document) {
             stringstream msg;
-            msg << "Pages: " << m_document->pages().size();
+            msg << "Pages: " << m_document->pages();
             msg << " - " << "Title: ";
             if (m_document->title().empty()) {
                 msg << "no title";

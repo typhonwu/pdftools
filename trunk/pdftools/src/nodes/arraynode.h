@@ -13,9 +13,10 @@ private:
 public:
     ArrayNode();
     virtual ~ArrayNode();
-    
+
     void push(TreeNode *value);
-    vector<TreeNode *> values();
+    TreeNode *value(int index);
+    int size();
 };
 
 #endif

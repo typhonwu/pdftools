@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "mapnode.h"
 #include "treenode.h"
 
@@ -18,9 +20,12 @@ MapNode::~MapNode()
 
 TreeNode *MapNode::get(string name)
 {
-    return m_values[name];
+    try {
+        return m_values.at(name);
+    } catch (out_of_range &) {
+        return NULL;
+    }
 }
-
 
 map<string, TreeNode *> MapNode::values()
 {

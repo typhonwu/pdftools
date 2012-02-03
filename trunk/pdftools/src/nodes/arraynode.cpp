@@ -15,9 +15,14 @@ ArrayNode::~ArrayNode()
     }
 }
 
-vector<TreeNode *> ArrayNode::values()
+TreeNode *ArrayNode::value(int index)
 {
-    return m_values;
+    return m_values[index];
+}
+
+int ArrayNode::size()
+{
+    return m_values.size();
 }
 
 void ArrayNode::push(TreeNode *value)

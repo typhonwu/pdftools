@@ -64,7 +64,11 @@ void EPUB::generate_content(const char* output)
     xml.add_attribute("xmlns:opf", "http://www.idpf.org/2007/opf");
 
     xml.start_tag("dc:title");
-    xml.add_element(m_document->title().c_str());
+    if (!m_document->title().empty()) {
+        xml.add_element(m_document->title().c_str());
+    } else {
+        xml.add_element("No title");
+    }
     xml.end_tag();
 
     xml.start_tag("dc:language");
@@ -88,7 +92,7 @@ void EPUB::generate_content(const char* output)
 
     xml.start_tag("dc:creator");
     if (m_document->author().empty()) {
-        xml.add_element("no title");
+        xml.add_element(PACKAGE_STRING);
     } else {
         xml.add_element(m_document->author().c_str());
     }
@@ -161,7 +165,6 @@ void EPUB::generate_outline(XML *xml, Outline *outline)
         xml->add_attribute("id", id.str().c_str());
         xml->add_attribute("playOrder", playorder.str().c_str());
 
-
         xml->start_tag("navLabel");
         xml->start_tag("text");
         xml->add_element(outline->title());
@@ -185,6 +188,8 @@ void EPUB::generate_outline(XML *xml, Outline *outline)
 
 void EPUB::generate_toc(const char* output)
 {
+    Outline *outline = m_document->outline();
+
     XML xml;
     xml.start_document("1.0", "UTF-8");
 
@@ -199,7 +204,7 @@ void EPUB::generate_toc(const char* output)
     xml.end_tag();
     xml.start_tag("meta");
     xml.add_attribute("name", "dtb:depth");
-    xml.add_attribute("content", "1");
+    xml.add_attribute("content", "2");
     xml.end_tag();
     xml.start_tag("meta");
     xml.add_attribute("name", "dtb:totalPageCount");
@@ -218,44 +223,25 @@ void EPUB::generate_toc(const char* output)
     xml.end_tag();
 
     xml.start_tag("navMap");
-    Outline *outline = m_document->outline();
     if (outline) {
-        m_order = 0;
         generate_outline(&xml, outline);
     } else {
-        // FIXME create a start navPoint
-    }
-    xml.end_tag();
-    /*
-    int i;
-    int size = m_document->pages();
-    xml.start_tag("navMap");
-    for (i = 1; i <= size; i++) {
-        stringstream id;
-        id << "navPoint-" << i;
-        stringstream file;
-        file << "page-" << i << ".html";
-        stringstream playorder;
-        playorder << i;
-
         xml.start_tag("navPoint");
-        xml.add_attribute("id", id.str().c_str());
-        xml.add_attribute("playOrder", playorder.str().c_str());
+        xml.add_attribute("id", "navPoint-1");
+        xml.add_attribute("playOrder", "1");
 
         xml.start_tag("navLabel");
         xml.start_tag("text");
-        xml.add_element("Page title");
+        xml.add_element("Main Title");
         xml.end_tag();
         xml.end_tag();
 
         xml.start_tag("content");
-        xml.add_attribute("src", file.str().c_str());
+        xml.add_attribute("src", "page-1.html");
         xml.end_tag();
-
         xml.end_tag();
     }
     xml.end_tag();
-     */
 
     xml.end_tag();
     xml.end_document();
@@ -265,7 +251,6 @@ void EPUB::generate_toc(const char* output)
 
 void EPUB::generate_page(Page *page)
 {
-
     Html html;
     html.start_document();
     html.start_header();
@@ -287,6 +272,7 @@ void EPUB::generate_page(Page *page)
 bool EPUB::generate(Document* document, const char* output)
 {
     m_document = document;
+    m_order = 1;
     if (m_zipfile->open(output)) {
         int i;
         int size = m_document->pages();
@@ -298,7 +284,6 @@ bool EPUB::generate(Document* document, const char* output)
                 page->set_link((char *) file.str().c_str());
             }
         }
-
         generate_mimetype();
         generate_container();
         generate_content(output);
@@ -313,7 +298,6 @@ bool EPUB::generate(Document* document, const char* output)
                 cout << "Invalid page " << i << endl;
             }
         }
-
         m_zipfile->close();
     } else {
         return false;

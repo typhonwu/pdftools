@@ -172,6 +172,8 @@ char *flat_decode(int8_t *compressed, int size)
     return ret;
 }
 
+#include <errno.h>
+
 string utf16_to_utf8(string &str)
 {
     string ret = str;
@@ -199,7 +201,7 @@ string utf16_to_utf8(string &str)
             memset(utf8, 0, len);
 
             size_t iconv_value = iconv(conv_desc, &utf16, &len, & utf8, & utf8len);
-            /* Handle failures. */
+            // Handle failures.
             if ((int) iconv_value != -1) {
                 ret = utf8start;
             }
@@ -209,7 +211,7 @@ string utf16_to_utf8(string &str)
     } else {
         string converted;
         int size = str.length();
-        
+
         for (int loop = 0; loop < size; loop++) {
             uint8_t c = str[loop];
 

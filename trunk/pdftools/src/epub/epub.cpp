@@ -167,6 +167,7 @@ void EPUB::generate_outline(XML *xml, Outline *outline)
 
         xml->start_tag("navLabel");
         xml->start_tag("text");
+        //cout << outline->title() << endl;
         xml->add_element(outline->title());
         xml->end_tag();
         xml->end_tag();

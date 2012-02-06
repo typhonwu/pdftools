@@ -19,8 +19,8 @@
 
 using namespace std;
 
-static const char *spaces = " \r\t\f";
-static const char *special_chars = "<()/[]>";
+static const char *spaces = " \t\f";
+static const char *special_chars = "\r\n<()/[]>";
 static const char *numbers = "0123456789-+.";
 
 enum StateType {
@@ -35,8 +35,10 @@ inline unsigned int xtod(char c)
     return 0; // not a hex digit
 }
 
-Scanner::Scanner() : m_error(NULL)
+Scanner::Scanner()
 {
+    m_error = NULL;
+    m_ignore_newchar = true;
 }
 
 Scanner::~Scanner()
@@ -64,42 +66,39 @@ pair<int, int8_t *> Scanner::get_stream(int length)
     while (m_filein->good() && next_char() == '\n');
     unget_char();
 
+    vector<int8_t> stream;
     if (length > 0) {
-        pair<int, int8_t *> pair;
-        pair.first = length;
-        pair.second = new int8_t[length];
-        m_filein->read((char *) pair.second, length);
-        return pair;
+        stream.reserve(length);
     } else {
-        vector<int8_t> stream;
-
-        while (m_filein->good()) {
-            int8_t ret = m_filein->get();
-            if ((ret == '\n' || ret == '\r') && m_filein->good()) {
-                int pos = m_filein->tellg();
-                int next = m_filein->get();
-                // treat '\r\n', '\r' or '\n'
-                if (next == 'e' || m_filein->get() == 'e') {
-                    m_filein->unget();
-                    Token *token = next_token();
-                    if (token != NULL && token->type() == END_STREAM) {
-                        // endstream: do not save the and char 
-                        // and return the token start position
-                        m_filein->seekg(pos);
-                        break;
-                    }
-                }
-                // not endstream
-                m_filein->seekg(pos);
-            }
-            stream.push_back(ret);
-        }
-        pair<int, int8_t *> pair;
-        pair.first = stream.size();
-        pair.second = new int8_t[stream.size()];
-        copy(stream.begin(), stream.end(), pair.second);
-        return pair;
+        stream.reserve(1024);
     }
+
+    while (m_filein->good()) {
+        int8_t ret = m_filein->get();
+        if ((ret == '\n' || ret == '\r') && m_filein->good()) {
+            int pos = m_filein->tellg();
+            int next = m_filein->get();
+            // treat '\r\n', '\r' or '\n'
+            if (next == 'e' || m_filein->get() == 'e') {
+                m_filein->unget();
+                Token *token = next_token();
+                if (token != NULL && token->type() == END_STREAM) {
+                    // endstream: do not save the and char 
+                    // and return the token start position
+                    m_filein->seekg(pos);
+                    break;
+                }
+            }
+            // not endstream
+            m_filein->seekg(pos);
+        }
+        stream.push_back(ret);
+    }
+    pair<int, int8_t *> pair;
+    pair.first = stream.size();
+    pair.second = new int8_t[stream.size()];
+    copy(stream.begin(), stream.end(), pair.second);
+    return pair;
 }
 
 char Scanner::next_char()
@@ -142,12 +141,19 @@ void Scanner::unget_char()
 
 bool Scanner::is_space(const char c)
 {
-    return strchr(spaces, c) || (c == '\n') || (c == '\r') || (c == EOF);
+    if (m_ignore_newchar) {
+        return strchr(spaces, c) || (c == '\n') || (c == '\r') || (c == EOF);
+    }
+    return strchr(spaces, c) || (c == EOF);
 }
 
 TokenType Scanner::reserved_lookup(const char *s)
 {
-    if (!strcmp("obj", s)) {
+    if (!strcmp("BT", s)) {
+        return BT;
+    } else if (!strcmp("ET", s)) {
+        return ET;
+    } else if (!strcmp("obj", s)) {
         return OBJ;
     } else if (!strcmp("endobj", s)) {
         return END_OBJ;
@@ -171,7 +177,7 @@ TokenType Scanner::reserved_lookup(const char *s)
     return NAME;
 }
 
-Token * Scanner::next_token()
+Token *Scanner::next_token()
 {
     string token_string;
     TokenType current_token = ENDFILE;
@@ -226,6 +232,9 @@ Token * Scanner::next_token()
                 save = false;
             } else if (isalpha(c) || c == '/') {
                 state = INNAME;
+            } else if (c == '\n') {
+                state = DONE;
+                current_token = NEW_LINE;
             } else if (c == EOF) {
                 state = DONE;
                 current_token = ENDFILE;
@@ -315,6 +324,11 @@ Token * Scanner::next_token()
     m_current.set_value(token_string);
 
     return &m_current;
+}
+
+void Scanner::set_ignore_newchar(bool flag)
+{
+    m_ignore_newchar = flag;
 }
 
 const char *Scanner::get_line()

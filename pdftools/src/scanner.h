@@ -12,6 +12,7 @@ private:
     istream *m_filein;
     const char *m_error;
     Token m_current;
+    bool m_ignore_newchar;
     
 public:
     Scanner();
@@ -20,6 +21,7 @@ public:
     Token *next_token();
     //bool open_file(const char *path);
     void set_istream(istream *stream);
+    void set_ignore_newchar(bool flag);
     bool good();
     const char *error();
     

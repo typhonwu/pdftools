@@ -150,6 +150,13 @@ void Analyze::analyse_root()
     if (outlines) {
         analyse_outlines(outlines);
     }
+    
+    MapNode *names = dynamic_cast<MapNode *> (get_real_obj_value(catalog->get("/Names")));
+    if (names) {
+        MapNode *dests = dynamic_cast<MapNode *> (get_real_obj_value(names->get("/Dests")));
+        cout << dests << endl;
+        //analyse_outlines(outlines);
+    }
     //FIXME StructTreeRoot
 }
 
@@ -169,7 +176,6 @@ void Analyze::analyse_outlines(MapNode *values, Outline *parent)
 
         RefNode *ref = dynamic_cast<RefNode *> (destinations->value(0));
         if (ref) {
-            // FIXME process references
             outline->set_destination(ref->id(), ref->generation());
         }
     } else {
@@ -181,7 +187,6 @@ void Analyze::analyse_outlines(MapNode *values, Outline *parent)
                 if (dest) {
                     RefNode *ref = dynamic_cast<RefNode *> (dest->value(0));
                     if (ref) {
-                        // FIXME process references
                         outline->set_destination(ref->id(), ref->generation());
                     }
                 }

@@ -105,7 +105,7 @@ void Parser::object_streams(RootNode *root_node)
     vector<TreeNode *> root = root_node->child();
     int size = root.size();
     int i;
-    
+
     for (i = 0; i < size; i++) {
         ObjNode *root_object = dynamic_cast<ObjNode *> (root[i]);
         if (root_object) {

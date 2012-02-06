@@ -246,9 +246,6 @@ void Analyze::analyze_outlines(MapNode *values, Outline * parent)
             parent->add_child(outline);
         }
     }
-    if (!outline->id() && parent) {
-        cout << "outline without link" << endl;
-    }
     MapNode *first = dynamic_cast<MapNode *> (get_real_obj_value(values->get("/First")));
     if (first) {
         analyze_outlines(first, outline);
@@ -297,12 +294,14 @@ Page * Analyze::process_page(int id, int generation, ObjNode *obj, MapNode *node
     stringstream stream_value;
     stream_value << uncompressed;
     stream_value.seekg(0);
+    
+    //cout << "Page :: " << obj->id() << endl;
 
     page->set_destination(id, generation);
 
     // FIXME page parser
-    //PageParser parser(stream_value);
-    // RootNode *root = parser.parse();
+    PageParser parser(stream_value);
+    RootNode *root = parser.parse();
 
     if (!filter) {
         obj->clear_stream();

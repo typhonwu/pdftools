@@ -12,7 +12,8 @@ using namespace std;
 
 static bool _verbose = false;
 
-#define MAX_BUFFER_SIZE 16384
+//#define MAX_BUFFER_SIZE 16384
+#define MAX_BUFFER_SIZE 1024
 
 struct buffer_struct {
     char buffer[MAX_BUFFER_SIZE];

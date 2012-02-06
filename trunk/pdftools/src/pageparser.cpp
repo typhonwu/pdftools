@@ -5,6 +5,7 @@
 PageParser::PageParser(istream &stream)
 {
     m_scanner.set_istream(&stream);
+    m_scanner.set_ignore_newchar(false);
 }
 
 PageParser::~PageParser()
@@ -24,12 +25,8 @@ RootNode *PageParser::parse()
 
     while (m_scanner.good() && !error) {
         switch (m_token->type()) {
-        case NAME:
-            if (m_token->value() == "BT") {
-                bt_sequence();
-            } else {
-                error_message("Invalid text start");
-            }
+        case BT:
+            bt_sequence(root);
             break;
         default:
             next_token();
@@ -39,13 +36,30 @@ RootNode *PageParser::parse()
     return root;
 }
 
-void PageParser::bt_sequence()
+#include <iostream>
+
+void PageParser::bt_sequence(RootNode *root)
 {
-    match(NAME);
-    
-    while(!(m_token->type() == NAME && m_token->value() == "ET")) {
-        
+    match(BT);
+
+    vector<Token> tokens;
+    while (m_token->type() != ET) {
+        Token token;
+        token.set_type(m_token->type());
+        token.set_value(m_token->value());
+        if (token.type() == NEW_LINE) {
+            // process tokens
+            //root->add_child();
+            
+            //cout << tokens[tokens.size() - 1].value() << endl;
+            
+            //tokens.clear();
+        } else {
+            tokens.push_back(token);
+        }
+        next_token();
     }
+    match(ET);
 }
 
 bool PageParser::match(TokenType type)

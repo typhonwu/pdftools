@@ -1,5 +1,4 @@
 #include <stdexcept>
-
 #include "mapnode.h"
 #include "treenode.h"
 

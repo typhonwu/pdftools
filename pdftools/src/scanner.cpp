@@ -142,7 +142,7 @@ void Scanner::unget_char()
 
 bool Scanner::is_space(const char c)
 {
-    return strchr(spaces, c) || (c == '\n') || (c == EOF);
+    return strchr(spaces, c) || (c == '\n') || (c == '\r') || (c == EOF);
 }
 
 TokenType Scanner::reserved_lookup(const char *s)
@@ -276,6 +276,9 @@ Token * Scanner::next_token()
             } else if (c == '\\') {
                 // save the next char
                 c = next_char();
+                if (c == '\n' || c == '\r') {
+                    save = false;
+                }
             } else if (c == ')') {
                 if (inner_string > 0) {
                     inner_string--;

@@ -202,6 +202,19 @@ void Analyze::analyze_outlines(MapNode *values, Outline * parent)
     }
     Outline *outline = new Outline;
 
+    string named_dest = get_string_value(values->get("/Dest"));
+    if (!named_dest.empty()) {
+        MapNode *map = dynamic_cast<MapNode *> (get_real_obj_value(get_named_value(named_dest)));
+        if (map) {
+            ArrayNode *dest = dynamic_cast<ArrayNode *> (get_real_obj_value(map->get("/D")));
+            if (dest) {
+                RefNode *ref = dynamic_cast<RefNode *> (dest->value(0));
+                if (ref) {
+                    outline->set_destination(ref->id(), ref->generation());
+                }
+            }
+        }
+    }
     ArrayNode *destinations = dynamic_cast<ArrayNode *> (values->get("/Dest"));
     if (destinations && destinations->size() > 0) {
         RefNode *ref = dynamic_cast<RefNode *> (destinations->value(0));
@@ -209,23 +222,15 @@ void Analyze::analyze_outlines(MapNode *values, Outline * parent)
             outline->set_destination(ref->id(), ref->generation());
         }
     } else {
-        string named_dest = get_string_value(values->get("/Dest"));
-        if (!named_dest.empty()) {
-            RefNode *ref = dynamic_cast<RefNode *> (get_named_value(named_dest));
-            if (ref) {
-                outline->set_destination(ref->id(), ref->generation());
-            }
-        } else {
-            MapNode *actions = dynamic_cast<MapNode *> (get_real_obj_value(values->get("/A")));
-            if (actions) {
-                NameNode *subtype = dynamic_cast<NameNode *> (get_real_obj_value(actions->get("/S")));
-                if (subtype && subtype->name() == "/GoTo") {
-                    ArrayNode *dest = dynamic_cast<ArrayNode *> (get_real_obj_value(actions->get("/D")));
-                    if (dest) {
-                        RefNode *ref = dynamic_cast<RefNode *> (dest->value(0));
-                        if (ref) {
-                            outline->set_destination(ref->id(), ref->generation());
-                        }
+        MapNode *actions = dynamic_cast<MapNode *> (get_real_obj_value(values->get("/A")));
+        if (actions) {
+            NameNode *subtype = dynamic_cast<NameNode *> (get_real_obj_value(actions->get("/S")));
+            if (subtype && subtype->name() == "/GoTo") {
+                ArrayNode *dest = dynamic_cast<ArrayNode *> (get_real_obj_value(actions->get("/D")));
+                if (dest) {
+                    RefNode *ref = dynamic_cast<RefNode *> (dest->value(0));
+                    if (ref) {
+                        outline->set_destination(ref->id(), ref->generation());
                     }
                 }
             }

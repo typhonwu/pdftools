@@ -378,7 +378,6 @@ TreeNode * Analyze::get_real_value(TreeNode * value)
 {
     RefNode *ref = dynamic_cast<RefNode *> (value);
     if (ref) {
-
         return get_object(ref);
     }
     return value;
@@ -390,7 +389,6 @@ TreeNode * Analyze::get_real_obj_value(TreeNode * value)
     if (ref) {
         ObjNode *node = get_object(ref);
         if (node) {
-
             return node->value();
         }
         return NULL;
@@ -411,7 +409,6 @@ double Analyze::get_number_value(TreeNode *value, int default_value)
 {
     NumberNode *num = dynamic_cast<NumberNode *> (value);
     if (num) {
-
         return num->value();
     }
     return default_value;
@@ -420,7 +417,6 @@ double Analyze::get_number_value(TreeNode *value, int default_value)
 ObjNode * Analyze::get_object(RefNode * ref)
 {
     if (!ref) {
-
         return NULL;
     }
     return get_object(ref->id(), ref->generation());

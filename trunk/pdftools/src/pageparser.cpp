@@ -17,6 +17,7 @@ void PageParser::next_token()
     m_token = m_scanner.next_token();
 }
 
+// 196
 RootNode *PageParser::parse()
 {
     RootNode *root = new RootNode();
@@ -42,18 +43,16 @@ void PageParser::bt_sequence(RootNode *root)
 {
     match(BT);
 
-    vector<Token> tokens;
+    vector<Token *> tokens;
     while (m_token->type() != ET) {
-        Token token;
-        token.set_type(m_token->type());
-        token.set_value(m_token->value());
-        if (token.type() == NEW_LINE) {
+        Token *token = new Token;
+        token->set_type(m_token->type());
+        token->set_value(m_token->value());
+        if (token->type() == NEW_LINE) {
             // process tokens
-            //root->add_child();
+            cout << tokens[tokens.size() - 1]->value() << endl;
             
-            //cout << tokens[tokens.size() - 1].value() << endl;
-            
-            //tokens.clear();
+            tokens.clear();
         } else {
             tokens.push_back(token);
         }

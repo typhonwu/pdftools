@@ -66,39 +66,42 @@ pair<int, int8_t *> Scanner::get_stream(int length)
     while (m_filein->good() && next_char() == '\n');
     unget_char();
 
-    vector<int8_t> stream;
     if (length > 0) {
-        stream.reserve(length);
+        pair<int, int8_t *> pair;
+        pair.first = length;
+        pair.second = new int8_t[length];
+        m_filein->read((char *) pair.second, length);
+        return pair;
     } else {
-        stream.reserve(1024);
-    }
+        vector<int8_t> stream;
 
-    while (m_filein->good()) {
-        int8_t ret = m_filein->get();
-        if ((ret == '\n' || ret == '\r') && m_filein->good()) {
-            int pos = m_filein->tellg();
-            int next = m_filein->get();
-            // treat '\r\n', '\r' or '\n'
-            if (next == 'e' || m_filein->get() == 'e') {
-                m_filein->unget();
-                Token *token = next_token();
-                if (token != NULL && token->type() == END_STREAM) {
-                    // endstream: do not save the and char 
-                    // and return the token start position
-                    m_filein->seekg(pos);
-                    break;
+        while (m_filein->good()) {
+            int8_t ret = m_filein->get();
+            if ((ret == '\n' || ret == '\r') && m_filein->good()) {
+                int pos = m_filein->tellg();
+                int next = m_filein->get();
+                // treat '\r\n', '\r' or '\n'
+                if (next == 'e' || m_filein->get() == 'e') {
+                    m_filein->unget();
+                    Token *token = next_token();
+                    if (token != NULL && token->type() == END_STREAM) {
+                        // endstream: do not save the and char 
+                        // and return the token start position
+                        m_filein->seekg(pos);
+                        break;
+                    }
                 }
+                // not endstream
+                m_filein->seekg(pos);
             }
-            // not endstream
-            m_filein->seekg(pos);
+            stream.push_back(ret);
         }
-        stream.push_back(ret);
+        pair<int, int8_t *> pair;
+        pair.first = stream.size();
+        pair.second = new int8_t[stream.size()];
+        copy(stream.begin(), stream.end(), pair.second);
+        return pair;
     }
-    pair<int, int8_t *> pair;
-    pair.first = stream.size();
-    pair.second = new int8_t[stream.size()];
-    copy(stream.begin(), stream.end(), pair.second);
-    return pair;
 }
 
 char Scanner::next_char()
@@ -232,7 +235,7 @@ Token *Scanner::next_token()
                 save = false;
             } else if (isalpha(c) || c == '/') {
                 state = INNAME;
-            } else if (c == '\n') {
+            } else if (c == '\n' || c == '\r') {
                 state = DONE;
                 current_token = NEW_LINE;
             } else if (c == EOF) {

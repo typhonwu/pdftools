@@ -12,8 +12,7 @@ using namespace std;
 
 static bool _verbose = false;
 
-//#define MAX_BUFFER_SIZE 16384
-#define MAX_BUFFER_SIZE 1024
+#define MAX_BUFFER_SIZE 16384
 
 struct buffer_struct {
     char buffer[MAX_BUFFER_SIZE];
@@ -101,14 +100,12 @@ char *deflate(const char *raw, int size, int &writed)
         zstream.avail_out = MAX_BUFFER_SIZE;
         zstream.next_out = (Bytef *) b.buffer;
 
-        err = deflate(&zstream, Z_FINISH); /* no bad return value */
+        err = deflate(&zstream, Z_FINISH);
         b.size = MAX_BUFFER_SIZE - zstream.avail_out;
 
         total += b.size;
         values.push_back(b);
     } while (zstream.avail_out == 0);
-    //} while (flush != Z_FINISH);
-    //assert(ret == Z_STREAM_END);        /* stream will be complete */
 
     deflateEnd(&zstream);
 

@@ -6,7 +6,6 @@
 #include "semantic/outline.h"
 #include "semantic/pagelabel.h"
 #include <iostream>
-#include <sstream>
 #include <zlib.h>
 #include <cstdlib>
 #include <stdexcept>
@@ -277,24 +276,10 @@ Document * Analyze::analyze_tree(RootNode * tree)
 
 // 193
 
-Page * Analyze::process_page(int id, int generation, ObjNode *obj, MapNode *node, ArrayNode * mediabox)
+Page * Analyze::process_page(int id, int generation, stringstream &stream_value, ArrayNode * mediabox)
 {
     Page *page = new Page;
 
-    const char *uncompressed;
-    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(node->get("/Filter")));
-    if (filter && filter->name() == "/FlateDecode") {
-        uncompressed = flat_decode(obj->stream(), obj->stream_size());
-    } else if (!filter) {
-        uncompressed = (char *) obj->stream();
-    } else {
-        error_message(string("Invalid filter ") + filter->name());
-        return page;
-    }
-    stringstream stream_value;
-    stream_value << uncompressed;
-    stream_value.seekg(0);
-    
     //cout << "Page :: " << obj->id() << endl;
 
     page->set_destination(id, generation);
@@ -303,13 +288,28 @@ Page * Analyze::process_page(int id, int generation, ObjNode *obj, MapNode *node
     PageParser parser(stream_value);
     RootNode *root = parser.parse();
 
-    if (!filter) {
-        obj->clear_stream();
-    } else {
-
-        delete [] uncompressed;
-    }
     return page;
+}
+
+void Analyze::get_stream(ArrayNode *array, stringstream &stream_value)
+{
+    if (array) {
+        for (int loop = 0; loop < array->size(); loop++) {
+            ObjNode *obj = dynamic_cast<ObjNode *> (get_real_value(array->value(loop)));
+            MapNode *node = dynamic_cast<MapNode *> (obj->value());
+            NameNode *filter = dynamic_cast<NameNode *> (get_real_value(node->get("/Filter")));
+            if (filter && filter->name() == "/FlateDecode") {
+                const char *value = flat_decode(obj->stream(), obj->stream_size());
+                stream_value << value;
+                delete [] value;
+                obj->clear_stream();
+            } else if (!filter) {
+                stream_value << (char *) obj->stream();
+            } else {
+                error_message(string("Invalid filter ") + filter->name());
+            }
+        }
+    }
 }
 
 void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
@@ -329,8 +329,9 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
                 media = mediabox;
             }
             if (kids) {
+                int kids_size = kids->size();
 #pragma omp parallel for
-                for (int loop = 0; loop < kids->size(); loop++) {
+                for (int loop = 0; loop < kids_size; loop++) {
                     analyze_pages(get_real_value(kids->value(loop)), media);
                 }
             }
@@ -344,14 +345,27 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
             if (contents) {
                 MapNode *snode = dynamic_cast<MapNode *> (contents->value());
                 if (snode) {
-                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), contents, snode, media));
-                } else {
-                    ArrayNode *array = dynamic_cast<ArrayNode *> (contents->value());
-                    if (array) {
-                        // FIXME more than one content
+                    stringstream stream_value;
 
-                        error_message("More than one content is unsupported");
+                    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
+                    if (filter && filter->name() == "/FlateDecode") {
+                        const char *uncompressed = flat_decode(contents->stream(), contents->stream_size());
+                        stream_value << uncompressed;
+                        delete [] uncompressed;
+                        contents->clear_stream();
+                    } else if (!filter) {
+                        stream_value << (char *) contents->stream();
+                    } else {
+                        error_message(string("Invalid filter ") + filter->name());
                     }
+                    stream_value.seekg(0);
+
+                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), stream_value, media));
+                } else {
+                    stringstream stream_value;
+                    ArrayNode *array = dynamic_cast<ArrayNode *> (contents->value());
+                    get_stream(array, stream_value);
+                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), stream_value, media));
                 }
             }
 

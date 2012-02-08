@@ -24,41 +24,24 @@ RootNode *PageParser::parse()
     bool error = false;
     next_token();
 
+    // FIXME stack based parser
+    
+    CommandNode *command = NULL;
     while (m_scanner.good() && !error) {
+        if (!command) {
+            command = new CommandNode;
+        }
         switch (m_token->type()) {
-        case BT:
-            bt_sequence(root);
+        case NEW_LINE:
+            root->add_child(command);
+            command = NULL;
+            match(NEW_LINE);
             break;
         default:
-            next_token();
-            error = true;
+            command->add_parameter(value_sequence());
         }
     }
     return root;
-}
-
-#include <iostream>
-
-void PageParser::bt_sequence(RootNode *root)
-{
-    match(BT);
-
-    vector<Token *> tokens;
-    while (m_token->type() != ET) {
-        Token *token = new Token;
-        token->set_type(m_token->type());
-        token->set_value(m_token->value());
-        if (token->type() == NEW_LINE) {
-            // process tokens
-            cout << tokens[tokens.size() - 1]->value() << endl;
-            
-            tokens.clear();
-        } else {
-            tokens.push_back(token);
-        }
-        next_token();
-    }
-    match(ET);
 }
 
 bool PageParser::match(TokenType type)
@@ -77,4 +60,67 @@ bool PageParser::match(TokenType type)
         return false;
     }
     return true;
+}
+
+TreeNode *PageParser::value_sequence()
+{
+    if (m_token->type() == START_DICT) {
+        match(START_DICT);
+        MapNode *map = new MapNode;
+
+        while (m_scanner.good() && m_token && m_token->type() != END_DICT) {
+            string name = m_token->value();
+            match(NAME);
+            TreeNode *value = value_sequence();
+            NameNode *n = dynamic_cast<NameNode *> (value);
+            if (n && n->name()[0] != '/') {
+                value = value_sequence();
+            }
+            map->push(name, value);
+        }
+        match(END_DICT);
+        return map;
+    } else if (m_token->type() == TRUE) {
+        match(TRUE);
+        return new BooleanNode(true);
+    } else if (m_token->type() == FALSE) {
+        match(FALSE);
+        return new BooleanNode(false);
+    } else if (m_token->type() == NAME) {
+        string name = m_token->value();
+        match(NAME);
+        return new NameNode(name);
+    } else if (m_token->type() == STRING) {
+        string value = m_token->value();
+        match(STRING);
+        return new StringNode(value);
+    } else if (m_token->type() == NUM) {
+        double value = m_token->to_number();
+        int pos = m_scanner.pos();
+        match(NUM);
+
+        if (m_token->type() == NUM) {
+            double generation = m_token->to_number();
+            match(NUM);
+            if (m_token->type() == NAME && m_token->value() == "R") {
+                match(NAME);
+                return new RefNode(value, generation);
+            } else {
+                m_scanner.to_pos(pos);
+            }
+        } else {
+            m_scanner.to_pos(pos);
+        }
+        next_token();
+        return new NumberNode(value);
+    } else if (m_token->type() == START_ARRAY) {
+        ArrayNode *array = new ArrayNode;
+        match(START_ARRAY);
+        while (m_scanner.good() && m_token->type() != END_ARRAY) {
+            array->push(value_sequence());
+        }
+        match(END_ARRAY);
+        return array;
+    }
+    return NULL;
 }

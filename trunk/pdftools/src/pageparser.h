@@ -21,8 +21,9 @@ public:
     
 private:
     void next_token();
-    void bt_sequence(RootNode *root);
     bool match(TokenType type);
+    
+    TreeNode *value_sequence();
 };
 
 #endif

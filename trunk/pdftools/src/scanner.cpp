@@ -152,11 +152,7 @@ bool Scanner::is_space(const char c)
 
 TokenType Scanner::reserved_lookup(const char *s)
 {
-    if (!strcmp("BT", s)) {
-        return BT;
-    } else if (!strcmp("ET", s)) {
-        return ET;
-    } else if (!strcmp("obj", s)) {
+    if (!strcmp("obj", s)) {
         return OBJ;
     } else if (!strcmp("endobj", s)) {
         return END_OBJ;

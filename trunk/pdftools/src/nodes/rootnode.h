@@ -4,16 +4,19 @@
 #include <vector>
 #include "treenode.h"
 
+using namespace std;
+
 class RootNode : TreeNode {
 private:
-    std::vector<TreeNode *> m_child;
+    vector<TreeNode *> m_child;
 
 public:
     RootNode();
     virtual ~RootNode();
     
     void add_child(TreeNode *child);
-    std::vector<TreeNode *> child();
+    TreeNode *get(int index);
+    int size();
 };
 
 #endif

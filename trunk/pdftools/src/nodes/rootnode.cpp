@@ -4,7 +4,6 @@ using namespace std;
 
 RootNode::RootNode() : TreeNode()
 {
-
 }
 
 RootNode::~RootNode()
@@ -21,7 +20,12 @@ void RootNode::add_child(TreeNode *child)
     m_child.push_back(child);
 }
 
-vector<TreeNode *> RootNode::child()
+TreeNode *RootNode::get(int index)
 {
-    return m_child;
+    return m_child[index];
+}
+
+int RootNode::size()
+{
+    return m_child.size();
 }

@@ -25,13 +25,12 @@ Analyze::~Analyze()
 
 void Analyze::analyze_xref()
 {
-    vector<TreeNode *> root = m_tree->child();
     int i;
-    int size = root.size();
+    int size = m_tree->size();
 
 #pragma omp parallel for
     for (i = 0; i < size; i++) {
-        TreeNode *value = root[i];
+        TreeNode *value = m_tree->get(i);
         XREFNode *xref = dynamic_cast<XREFNode *> (value);
         if (xref) {
             MapNode *trailer = dynamic_cast<MapNode *> (xref->trailer());
@@ -280,13 +279,51 @@ Page * Analyze::process_page(int id, int generation, stringstream &stream_value,
 {
     Page *page = new Page;
 
-    //cout << "Page :: " << obj->id() << endl;
-
     page->set_destination(id, generation);
 
     // FIXME page parser
     PageParser parser(stream_value);
     RootNode *root = parser.parse();
+
+    int size = root->size();
+    int loop;
+#pragma omp parallel for
+    for (loop = 0; loop < size; loop++) {
+        CommandNode *command = dynamic_cast<CommandNode *> (root->get(loop));
+        NameNode *name = dynamic_cast<NameNode *> (command->command());
+        if (name) {
+            if (name->name() == "Tj") {
+                for (int i = 0; i < command->size(); i++) {
+                    cout << get_string_value(command->parameter(i));
+                }
+            }
+            if (name->name() == "'") {
+                for (int i = 0; i < command->size(); i++) {
+                    cout << endl  << get_string_value(command->parameter(i));
+                }
+            }
+            if (name->name() == "") {
+                for (int i = 2; i < command->size(); i++) {
+                    cout << get_string_value(command->parameter(i));
+                }
+            }
+            if (name->name() == "T*") {
+                cout << endl;
+            }
+            if (name->name() == "TJ") {
+                for (int i = 0; i < command->size(); i++) {
+                    ArrayNode *array = dynamic_cast<ArrayNode *> (command->parameter(i));
+                    if (array) {
+                        for (int j = 0; j < array->size(); j++) {
+                            cout << get_string_value(array->value(j));
+                        }
+                    } else {
+                        // FIXME ???
+                    }
+                }
+            }
+        }
+    }
 
     return page;
 }
@@ -424,8 +461,7 @@ ObjNode * Analyze::get_object(RefNode * ref)
 
 ObjNode * Analyze::get_object(int id, int generation)
 {
-    vector<TreeNode *> root = m_tree->child();
-    int size = root.size();
+    int size = m_tree->size();
     int i;
     ObjNode *ret = NULL;
     bool done = false;
@@ -434,7 +470,7 @@ ObjNode * Analyze::get_object(int id, int generation)
     for (i = 0; i < size; i++) {
 #pragma omp flush(done)
         if (!done) {
-            ObjNode *obj = dynamic_cast<ObjNode *> (root[i]);
+            ObjNode *obj = dynamic_cast<ObjNode *> (m_tree->get(i));
             if (obj && obj->this_object(id, generation)) {
                 // Value found
                 done = true;

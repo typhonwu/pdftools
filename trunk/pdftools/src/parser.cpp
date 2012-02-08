@@ -102,12 +102,11 @@ RootNode *Parser::parse()
 
 void Parser::object_streams(RootNode *root_node)
 {
-    vector<TreeNode *> root = root_node->child();
-    int size = root.size();
+    int size = root_node->size();
     int i;
 
     for (i = 0; i < size; i++) {
-        ObjNode *root_object = dynamic_cast<ObjNode *> (root[i]);
+        ObjNode *root_object = dynamic_cast<ObjNode *> (root_node->get(i));
         if (root_object) {
             MapNode *map = dynamic_cast<MapNode *> (root_object->value());
             if (map) {

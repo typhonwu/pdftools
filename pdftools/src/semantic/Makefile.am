@@ -6,7 +6,8 @@ libsemantic_a_SOURCES = \
 	outline.cpp \
 	glyph.cpp \
 	paragraph.cpp \
-	text.cpp
+	text.cpp \
+	end.cpp
 
 noinst_HEADERS = \
 	document.h \
@@ -15,7 +16,8 @@ noinst_HEADERS = \
 	outline.h \
 	glyph.h \
 	paragraph.h \
-	text.h
+	text.h \
+	end.h
 
-libsemantic_a_CXXFLAGS = -I..
+libsemantic_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 AM_CXXFLAGS = $(OPENMP_CXXFLAGS)

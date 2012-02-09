@@ -23,7 +23,10 @@ private:
     void next_token();
     bool match(TokenType type);
     
+    void sequences(RootNode *parent);
     TreeNode *value_sequence();
+    TreeNode *bt_sequence();
+    TreeNode *bdc_sequence();
 };
 
 #endif

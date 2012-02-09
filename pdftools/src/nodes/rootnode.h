@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class RootNode : TreeNode {
+class RootNode : public TreeNode {
 private:
     vector<TreeNode *> m_child;
 

@@ -10,6 +10,12 @@ Html::~Html()
 {
 }
 
+void Html::break_line()
+{
+    m_xml.start_tag("br");
+    m_xml.end_tag();
+}
+
 void Html::add_paragraph()
 {
     m_xml.start_tag("p");

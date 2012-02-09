@@ -7,7 +7,7 @@ libsemantic_a_SOURCES = \
 	glyph.cpp \
 	paragraph.cpp \
 	text.cpp \
-	end.cpp
+	break.cpp
 
 noinst_HEADERS = \
 	document.h \
@@ -17,7 +17,8 @@ noinst_HEADERS = \
 	glyph.h \
 	paragraph.h \
 	text.h \
-	end.h
+	break.h
 
 libsemantic_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 AM_CXXFLAGS = $(OPENMP_CXXFLAGS)
+EXTRA_DIST = glyphs.h

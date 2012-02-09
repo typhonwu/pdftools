@@ -17,6 +17,16 @@ Page::~Page()
     if (m_crop_box) delete [] m_crop_box;
 }
 
+void Page::add_glyph(Glyph *glyph)
+{
+    m_document.add_child(glyph);
+}
+
+void Page::execute(Html *document)
+{
+    m_document.execute(document);
+}
+
 void Page::set_link(char *link)
 {
     m_link = link;

@@ -326,7 +326,6 @@ Page * Analyze::process_page(int id, int generation, stringstream &stream_value,
             }
         }
     }
-
     return page;
 }
 

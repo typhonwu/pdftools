@@ -1,4 +1,5 @@
 #include "commandnode.h"
+#include <cstdlib>
 
 CommandNode::CommandNode() : TreeNode()
 {

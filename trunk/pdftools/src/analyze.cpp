@@ -5,6 +5,7 @@
 #include "nodes/nodes.h"
 #include "semantic/outline.h"
 #include "semantic/pagelabel.h"
+#include "semantic/glyphs.h"
 #include <iostream>
 #include <zlib.h>
 #include <cstdlib>
@@ -294,28 +295,29 @@ Page * Analyze::process_page(int id, int generation, stringstream &stream_value,
         if (name) {
             if (name->name() == "Tj") {
                 for (int i = 0; i < command->size(); i++) {
-                    cout << get_string_value(command->parameter(i));
+                    page->add_glyph(new Text(get_string_value(command->parameter(i))));
                 }
             }
             if (name->name() == "'") {
                 for (int i = 0; i < command->size(); i++) {
-                    cout << endl  << get_string_value(command->parameter(i));
+                    page->add_glyph(new Break());
+                    page->add_glyph(new Text(get_string_value(command->parameter(i))));
                 }
             }
-            if (name->name() == "") {
-                for (int i = 2; i < command->size(); i++) {
-                    cout << get_string_value(command->parameter(i));
-                }
-            }
+//            if (name->name() == "\"") {
+//                for (int i = 2; i < command->size(); i++) {
+//                    cout << get_string_value(command->parameter(i));
+//                }
+//            }
             if (name->name() == "T*") {
-                cout << endl;
+                page->add_glyph(new Break());
             }
             if (name->name() == "TJ") {
-                for (int i = 0; i < command->size(); i++) {
+                for (int i = 0; i < command->size(); i += 2) {
                     ArrayNode *array = dynamic_cast<ArrayNode *> (command->parameter(i));
                     if (array) {
                         for (int j = 0; j < array->size(); j++) {
-                            cout << get_string_value(array->value(j));
+                            page->add_glyph(new Text(get_string_value(array->value(j))));
                         }
                     } else {
                         // FIXME ???

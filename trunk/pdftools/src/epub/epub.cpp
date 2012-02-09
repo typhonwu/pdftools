@@ -259,10 +259,12 @@ void EPUB::generate_page(Page *page)
     html.end_tag();
 
     html.start_body();
+    
+    page->execute(&html);
 
-    html.add_paragraph();
-    html.add_element(page->link());
-    html.end_tag();
+//    html.add_paragraph();
+//    html.add_element(page->link());
+//    html.end_tag();
 
     html.end_tag();
     html.end_document();

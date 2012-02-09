@@ -18,6 +18,8 @@ public:
     void end_document();
     void end_tag();
     
+    void break_line();
+    
     void add_paragraph();
     void add_element(const char *element);
     

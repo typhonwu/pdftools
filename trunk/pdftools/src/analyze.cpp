@@ -275,20 +275,36 @@ Document * Analyze::analyze_tree(RootNode * tree)
 }
 
 // 193
-
-Page * Analyze::process_page(int id, int generation, stringstream &stream_value, ArrayNode * mediabox)
+Page *Analyze::process_page(int id, int generation, stringstream &stream_value, ArrayNode * mediabox)
 {
     Page *page = new Page;
-
     page->set_destination(id, generation);
 
-    // FIXME page parser
     PageParser parser(stream_value);
     RootNode *root = parser.parse();
 
     int size = root->size();
     int loop;
-#pragma omp parallel for
+
+    for (loop = 0; loop < size; loop++) {
+        register TreeNode *node = root->get(loop);
+        BTNode *bt = dynamic_cast<BTNode *> (node);
+        if (bt) {
+            
+        } else {
+            BDCNode *bdc = dynamic_cast<BDCNode *> (node);
+            if (bdc) {
+                Paragraph *p = new Paragraph;
+                
+                
+                page->add_glyph(p);
+            }
+        }
+    }
+    /*
+    int size = root->size();
+    int loop;
+
     for (loop = 0; loop < size; loop++) {
         CommandNode *command = dynamic_cast<CommandNode *> (root->get(loop));
         NameNode *name = dynamic_cast<NameNode *> (command->command());
@@ -325,7 +341,7 @@ Page * Analyze::process_page(int id, int generation, stringstream &stream_value,
                 }
             }
         }
-    }
+    }*/
     return page;
 }
 

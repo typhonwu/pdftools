@@ -12,6 +12,7 @@
 #include "arraynode.h"
 #include "rootnode.h"
 #include "booleannode.h"
-#include "commandnode.h"
+#include "btnode.h"
+#include "bdcnode.h"
 
 #endif

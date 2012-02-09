@@ -11,7 +11,8 @@ libnodes_a_SOURCES = \
 	arraynode.cpp \
 	rootnode.cpp \
 	booleannode.cpp \
-	commandnode.cpp
+	btnode.cpp \
+	bdcnode.cpp
 
 noinst_HEADERS = \
 	objnode.h \
@@ -25,7 +26,8 @@ noinst_HEADERS = \
 	arraynode.h \
 	rootnode.h \
 	booleannode.h \
-	commandnode.h \
+	btnode.h \
+	bdcnode.h \
 	nodes.h
 
 libnodes_a_CXXFLAGS = -I..

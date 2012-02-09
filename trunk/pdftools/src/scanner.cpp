@@ -27,6 +27,39 @@ enum StateType {
     START, INNUM, INNAME, INSTRING, INHEXSTR, DONE
 };
 
+
+struct reserved_words {
+    TokenType type;
+    const char *name;
+};
+
+static reserved_words words[] = {
+    { OBJ, "obj"},
+    { END_OBJ, "endobj"},
+    { END_PDF, "EOF"},
+    { XREF, "xref"},
+    { TRUE, "true"},
+    { FALSE, "false"},
+    { STREAM, "stream"},
+    { END_STREAM, "endstream"},
+    { START_XREF, "startxref"},
+    { TRAILER, "trailer"},
+    { BT, "BT"},
+    { ET, "ET"},
+    { MP, "MP"},
+    { DP, "DP"},
+    { BMC, "BMC"},
+    { BDC, "BDC"},
+    { EMC, "EMC"},
+    { BX, "BX"},
+    { EX, "EX"},
+    { TJ_UP, "TJ"},
+    { TJ_LO, "Tj"},
+    { TJ_AST, "T*"},
+    { QUOTE, "'"},
+    { DOUBLE_QUOTE, "\""}
+};
+
 inline unsigned int xtod(char c)
 {
     if (c >= '0' && c <= '9') return c - '0';
@@ -38,7 +71,6 @@ inline unsigned int xtod(char c)
 Scanner::Scanner()
 {
     m_error = NULL;
-    m_ignore_newchar = true;
 }
 
 Scanner::~Scanner()
@@ -144,34 +176,16 @@ void Scanner::unget_char()
 
 bool Scanner::is_space(const char c)
 {
-    if (m_ignore_newchar) {
-        return strchr(spaces, c) || (c == '\n') || (c == '\r') || (c == EOF);
-    }
-    return strchr(spaces, c) || (c == EOF);
+    return strchr(spaces, c) || (c == '\n') || (c == '\r') || (c == EOF);
 }
 
 TokenType Scanner::reserved_lookup(const char *s)
 {
-    if (!strcmp("obj", s)) {
-        return OBJ;
-    } else if (!strcmp("endobj", s)) {
-        return END_OBJ;
-    } else if (!strcmp("EOF", s)) {
-        return END_PDF;
-    } else if (!strcmp("xref", s)) {
-        return XREF;
-    } else if (!strcmp("true", s)) {
-        return TRUE;
-    } else if (!strcmp("false", s)) {
-        return FALSE;
-    } else if (!strcmp("stream", s)) {
-        return STREAM;
-    } else if (!strcmp("endstream", s)) {
-        return END_STREAM;
-    } else if (!strcmp("startxref", s)) {
-        return START_XREF;
-    } else if (!strcmp("trailer", s)) {
-        return TRAILER;
+    int size = sizeof (words) / sizeof (reserved_words);
+    for (int i = 0; i < size; i++) {
+        if (!strcmp(words[i].name, s)) {
+            return words[i].type;
+        }
     }
     return NAME;
 }
@@ -323,11 +337,6 @@ Token *Scanner::next_token()
     m_current.set_value(token_string);
 
     return &m_current;
-}
-
-void Scanner::set_ignore_newchar(bool flag)
-{
-    m_ignore_newchar = flag;
 }
 
 const char *Scanner::get_line()

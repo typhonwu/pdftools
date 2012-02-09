@@ -5,7 +5,6 @@
 PageParser::PageParser(istream &stream)
 {
     m_scanner.set_istream(&stream);
-    m_scanner.set_ignore_newchar(false);
 }
 
 PageParser::~PageParser()
@@ -18,30 +17,49 @@ void PageParser::next_token()
 }
 
 // 196
+
 RootNode *PageParser::parse()
 {
     RootNode *root = new RootNode();
-    bool error = false;
-    next_token();
 
-    // FIXME stack based parser
-    
-    CommandNode *command = NULL;
+    next_token();
+    sequences(root);
+
+    return root;
+}
+
+void PageParser::sequences(RootNode *parent)
+{
+    bool error = false;
+
     while (m_scanner.good() && !error) {
-        if (!command) {
-            command = new CommandNode;
-        }
         switch (m_token->type()) {
-        case NEW_LINE:
-            root->add_child(command);
-            command = NULL;
-            match(NEW_LINE);
+        case BT:
+            parent->add_child(bt_sequence());
+            break;
+        case NAME:
+            parent->add_child(bdc_sequence());
             break;
         default:
-            command->add_parameter(value_sequence());
+            next_token();
         }
     }
-    return root;
+}
+
+TreeNode *PageParser::bt_sequence()
+{
+    BTNode *bt = new BTNode;
+    sequences(bt);
+    return bt;
+}
+
+TreeNode *PageParser::bdc_sequence()
+{
+    match(NAME);
+
+    BDCNode *bt = new BDCNode(value_sequence());
+    sequences(bt);
+    return bt;
 }
 
 bool PageParser::match(TokenType type)

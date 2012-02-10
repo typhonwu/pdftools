@@ -274,7 +274,34 @@ Document * Analyze::analyze_tree(RootNode * tree)
     return m_document;
 }
 
+Glyph *Analyze::analize_page(TreeNode *node)
+{
+    BTNode *bt = dynamic_cast<BTNode *> (node);
+    if (bt) {
+        Glyph *p = new Glyph;
+
+        int size = bt->size();
+        for (int loop = 0; loop < size; loop++) {
+            p->add_child(analize_page(bt->get(loop)));
+        }
+        return p;
+    } else {
+        BDCNode *bdc = dynamic_cast<BDCNode *> (node);
+        if (bdc) {
+            Paragraph *p = new Paragraph;
+
+            int size = bdc->size();
+            for (int loop = 0; loop < size; loop++) {
+                p->add_child(analize_page(bdc->get(loop)));
+            }
+            return p;
+        }
+    }
+    return NULL;
+}
+
 // 193
+
 Page *Analyze::process_page(int id, int generation, stringstream &stream_value, ArrayNode * mediabox)
 {
     Page *page = new Page;
@@ -284,22 +311,8 @@ Page *Analyze::process_page(int id, int generation, stringstream &stream_value, 
     RootNode *root = parser.parse();
 
     int size = root->size();
-    int loop;
-
-    for (loop = 0; loop < size; loop++) {
-        register TreeNode *node = root->get(loop);
-        BTNode *bt = dynamic_cast<BTNode *> (node);
-        if (bt) {
-            
-        } else {
-            BDCNode *bdc = dynamic_cast<BDCNode *> (node);
-            if (bdc) {
-                Paragraph *p = new Paragraph;
-                
-                
-                page->add_glyph(p);
-            }
-        }
+    for (int loop = 0; loop < size; loop++) {
+        page->add_glyph(analize_page(root->get(loop)));
     }
     /*
     int size = root->size();

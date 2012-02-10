@@ -14,5 +14,6 @@
 #include "booleannode.h"
 #include "btnode.h"
 #include "bdcnode.h"
+#include "textnode.h"
 
 #endif

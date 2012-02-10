@@ -57,7 +57,19 @@ static reserved_words words[] = {
     { TJ_LO, "Tj"},
     { TJ_AST, "T*"},
     { QUOTE, "'"},
-    { DOUBLE_QUOTE, "\""}
+    { DOUBLE_QUOTE, "\""},
+    { GS, "gs"},
+    { TF, "Tf"},
+    { TW, "Tw"},
+    { TZ, "Tz"},
+    { TL, "TL"},
+    { TR, "Tr"},
+    { TS, "Ts"},
+    { TC, "Tc"},
+    { TD_LO, "Td"},
+    { TD_HI, "TD"},
+    { SCN, "scn"},
+    { TM, "Tm"}
 };
 
 inline unsigned int xtod(char c)

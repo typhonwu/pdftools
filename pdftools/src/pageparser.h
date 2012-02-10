@@ -23,11 +23,12 @@ private:
     void next_token();
     bool match(TokenType type);
     
-    void sequences(RootNode *parent);
+    TreeNode *sequence();
     TreeNode *value_sequence();
     TreeNode *bt_sequence();
     TreeNode *bdc_sequence();
     TreeNode *tjlo_sequence();
+    TreeNode *text_sequence();
     TreeNode *tjup_sequence();
 };
 

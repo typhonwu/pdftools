@@ -23,41 +23,129 @@ RootNode *PageParser::parse()
     RootNode *root = new RootNode();
 
     next_token();
-    sequences(root);
-
+    while (m_scanner.good()) {
+        root->add_child(sequence());
+    }
     return root;
 }
 
-void PageParser::sequences(RootNode *parent)
+TreeNode *PageParser::sequence()
 {
-    bool error = false;
-
-    while (m_scanner.good() && !error) {
+    while (m_scanner.good()) {
         switch (m_token->type()) {
         case BT:
-            parent->add_child(bt_sequence());
+            return bt_sequence();
             break;
         case NAME:
-            parent->add_child(bdc_sequence());
+            return bdc_sequence();
+            break;
+        case NUM:
+            return text_sequence();
             break;
         case STRING:
-            parent->add_child(tjlo_sequence());
+            return tjlo_sequence();
             break;
         case START_ARRAY:
-            parent->add_child(tjup_sequence());
+            return tjup_sequence();
             break;
         default:
             next_token();
         }
     }
+    return NULL;
+}
+
+TreeNode *PageParser::text_sequence()
+{
+    //double num1 = m_token->to_number();
+    match(NUM);
+
+    switch (m_token->type()) {
+    case TC:
+        match(TC);
+        return NULL;
+        break;
+    case TW:
+        match(TW);
+        return NULL;
+        break;
+    case TZ:
+        match(TZ);
+        return NULL;
+        break;
+    case TL:
+        match(TL);
+        return NULL;
+        break;
+    case TR:
+        match(TR);
+        return NULL;
+        break;
+    case TS:
+        match(TS);
+        return NULL;
+        break;
+    case SCN:
+        match(SCN);
+        return NULL;
+        break;
+    default:
+        break;
+    }
+    //double num2 = m_token->to_number();
+    match(NUM);
+
+    switch (m_token->type()) {
+    case TD_LO:
+        match(TD_LO);
+        return NULL;
+        break;
+    case TD_HI:
+        match(TD_HI);
+        return NULL;
+        break;
+    case SCN:
+        match(SCN);
+        return NULL;
+        break;
+    default:
+        break;
+    }
+    //double num3 = m_token->to_number();
+    match(NUM);
+    
+    if (m_token->type() == SCN) {
+        match(SCN);
+        return NULL;
+    }
+    //double num4 = m_token->to_number();
+    match(NUM);
+    
+    if (m_token->type() == SCN) {
+        match(SCN);
+        return NULL;
+    }
+    //double num5 = m_token->to_number();
+    match(NUM);
+    
+    if (m_token->type() == SCN) {
+        match(SCN);
+        return NULL;
+    }
+    //double num6 = m_token->to_number();
+    match(NUM);
+    match(TM);
+    return NULL;
 }
 
 TreeNode *PageParser::bt_sequence()
 {
     match(BT);
-    
+
     BTNode *bt = new BTNode;
-    sequences(bt);
+    while (m_token->type() != ET && m_scanner.good()) {
+        bt->add_child(sequence());
+    }
     return bt;
 }
 
@@ -66,7 +154,7 @@ TreeNode *PageParser::tjlo_sequence()
     string value = m_token->value();
     match(STRING);
     match(TJ_LO);
-    
+
     TextNode *text = new TextNode;
     text->add(value);
     return text;
@@ -75,9 +163,9 @@ TreeNode *PageParser::tjlo_sequence()
 TreeNode *PageParser::tjup_sequence()
 {
     match(START_ARRAY);
-    
+
     TextNode *text = new TextNode;
-    while(m_token->type() != END_ARRAY && m_scanner.good()) {
+    while (m_token->type() != END_ARRAY && m_scanner.good()) {
         if (m_token->type() == STRING) {
             text->add(m_token->value());
             match(STRING);
@@ -87,19 +175,38 @@ TreeNode *PageParser::tjup_sequence()
     }
     match(END_ARRAY);
     match(TJ_UP);
-    
+
     return text;
 }
 
 TreeNode *PageParser::bdc_sequence()
 {
+    string name = m_token->value();
     match(NAME);
-    
-    // FIXME test for gs, Tf
 
-    BDCNode *bt = new BDCNode(value_sequence());
-    sequences(bt);
-    return bt;
+    if (m_token->type() == GS) {
+        match(GS);
+        // Ignore graphic state
+        return NULL;
+    }
+
+    TreeNode *value = value_sequence();
+    NumberNode *size = dynamic_cast<NumberNode *> (value);
+    if (size) {
+        match(TF);
+        FontNode *font = new FontNode;
+        font->set_name(name);
+        font->set_size(size->value());
+        return font;
+    }
+
+    BDCNode *bdc = new BDCNode;
+    bdc->set_value(value);
+    bdc->set_name(name);
+    while (m_token->type() != EMC && m_scanner.good()) {
+        bdc->add_child(sequence());
+    }
+    return bdc;
 }
 
 bool PageParser::match(TokenType type)

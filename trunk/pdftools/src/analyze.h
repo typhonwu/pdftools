@@ -34,6 +34,7 @@ private:
     void analyze_pages(TreeNode *page, ArrayNode *mediabox = NULL);
 
     Page *process_page(int id, int generation, stringstream &stream_value, ArrayNode * mediabox);
+    Glyph *analize_page(TreeNode *node);
 
     string get_string_value(TreeNode *value);
     double get_number_value(TreeNode *value, int default_value = 0);

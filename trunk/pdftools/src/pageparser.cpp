@@ -40,6 +40,12 @@ void PageParser::sequences(RootNode *parent)
         case NAME:
             parent->add_child(bdc_sequence());
             break;
+        case STRING:
+            parent->add_child(tjlo_sequence());
+            break;
+        case START_ARRAY:
+            parent->add_child(tjup_sequence());
+            break;
         default:
             next_token();
         }
@@ -48,14 +54,48 @@ void PageParser::sequences(RootNode *parent)
 
 TreeNode *PageParser::bt_sequence()
 {
+    match(BT);
+    
     BTNode *bt = new BTNode;
     sequences(bt);
     return bt;
 }
 
+TreeNode *PageParser::tjlo_sequence()
+{
+    string value = m_token->value();
+    match(STRING);
+    match(TJ_LO);
+    
+    TextNode *text = new TextNode;
+    text->add(value);
+    return text;
+}
+
+TreeNode *PageParser::tjup_sequence()
+{
+    match(START_ARRAY);
+    
+    TextNode *text = new TextNode;
+    while(m_token->type() != END_ARRAY && m_scanner.good()) {
+        if (m_token->type() == STRING) {
+            text->add(m_token->value());
+            match(STRING);
+        } else {
+            match(NUM);
+        }
+    }
+    match(END_ARRAY);
+    match(TJ_UP);
+    
+    return text;
+}
+
 TreeNode *PageParser::bdc_sequence()
 {
     match(NAME);
+    
+    // FIXME test for gs, Tf
 
     BDCNode *bt = new BDCNode(value_sequence());
     sequences(bt);

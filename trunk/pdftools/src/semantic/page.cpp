@@ -19,7 +19,9 @@ Page::~Page()
 
 void Page::add_glyph(Glyph *glyph)
 {
-    m_document.add_child(glyph);
+    if (glyph) {
+        m_document.add_child(glyph);
+    }
 }
 
 void Page::execute(Html *document)

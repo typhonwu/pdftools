@@ -11,8 +11,8 @@ enum TokenType {
     
     OBJ, END_OBJ, END_PDF, XREF, TRAILER, START_XREF, STREAM, END_STREAM,
     
-    BT, ET, MP, DP, BMC, BDC, EMC, BX, EX,
-    TJ_UP, TJ_LO, TJ_AST, QUOTE, DOUBLE_QUOTE
+    BT, ET, MP, DP, BMC, BDC, EMC, BX, EX, GS, TF, TC, TW, TZ, TL, TR, TS,
+    TJ_UP, TJ_LO, TJ_AST, QUOTE, DOUBLE_QUOTE, TD_LO, TD_HI, TM, SCN
 };
 
 struct ReservedWords {

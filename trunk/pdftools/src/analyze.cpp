@@ -288,6 +288,16 @@ Glyph *Analyze::analize_page(TreeNode *node)
     } else {
         BDCNode *bdc = dynamic_cast<BDCNode *> (node);
         if (bdc) {
+            if (bdc->name() == "/Artifact") {
+            MapNode *map = dynamic_cast<MapNode *>(bdc->value());
+                if (map) {
+                    NameNode *name = dynamic_cast<NameNode *>(map->get("/Subtype"));
+                    if (name && name->name() == "/Footer") {
+                        // Ignore footer
+                        return NULL;
+                    }
+                }
+            }
             Paragraph *p = new Paragraph;
 
             int size = bdc->size();
@@ -295,6 +305,11 @@ Glyph *Analyze::analize_page(TreeNode *node)
                 p->add_child(analize_page(bdc->get(loop)));
             }
             return p;
+        } else {
+            TextNode *text = dynamic_cast<TextNode *>(node);
+            if (text) {
+                return new Text(text->text());
+            }
         }
     }
     return NULL;

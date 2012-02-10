@@ -56,7 +56,7 @@ am_libnodes_a_OBJECTS = libnodes_a-objnode.$(OBJEXT) \
 	libnodes_a-treenode.$(OBJEXT) libnodes_a-arraynode.$(OBJEXT) \
 	libnodes_a-rootnode.$(OBJEXT) libnodes_a-booleannode.$(OBJEXT) \
 	libnodes_a-btnode.$(OBJEXT) libnodes_a-bdcnode.$(OBJEXT) \
-	libnodes_a-textnode.$(OBJEXT)
+	libnodes_a-textnode.$(OBJEXT) libnodes_a-fontnode.$(OBJEXT)
 libnodes_a_OBJECTS = $(am_libnodes_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -184,7 +184,8 @@ libnodes_a_SOURCES = \
 	booleannode.cpp \
 	btnode.cpp \
 	bdcnode.cpp \
-	textnode.cpp
+	textnode.cpp \
+	fontnode.cpp
 
 noinst_HEADERS = \
 	objnode.h \
@@ -201,6 +202,7 @@ noinst_HEADERS = \
 	btnode.h \
 	bdcnode.h \
 	textnode.h \
+	fontnode.h \
 	nodes.h
 
 libnodes_a_CXXFLAGS = -I..
@@ -257,6 +259,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-bdcnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-booleannode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-btnode.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-fontnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-mapnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-namenode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-numbernode.Po@am__quote@
@@ -477,6 +480,20 @@ libnodes_a-textnode.obj: textnode.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='textnode.cpp' object='libnodes_a-textnode.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-textnode.obj `if test -f 'textnode.cpp'; then $(CYGPATH_W) 'textnode.cpp'; else $(CYGPATH_W) '$(srcdir)/textnode.cpp'; fi`
+
+libnodes_a-fontnode.o: fontnode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-fontnode.o -MD -MP -MF $(DEPDIR)/libnodes_a-fontnode.Tpo -c -o libnodes_a-fontnode.o `test -f 'fontnode.cpp' || echo '$(srcdir)/'`fontnode.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-fontnode.Tpo $(DEPDIR)/libnodes_a-fontnode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fontnode.cpp' object='libnodes_a-fontnode.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-fontnode.o `test -f 'fontnode.cpp' || echo '$(srcdir)/'`fontnode.cpp
+
+libnodes_a-fontnode.obj: fontnode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-fontnode.obj -MD -MP -MF $(DEPDIR)/libnodes_a-fontnode.Tpo -c -o libnodes_a-fontnode.obj `if test -f 'fontnode.cpp'; then $(CYGPATH_W) 'fontnode.cpp'; else $(CYGPATH_W) '$(srcdir)/fontnode.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-fontnode.Tpo $(DEPDIR)/libnodes_a-fontnode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fontnode.cpp' object='libnodes_a-fontnode.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-fontnode.obj `if test -f 'fontnode.cpp'; then $(CYGPATH_W) 'fontnode.cpp'; else $(CYGPATH_W) '$(srcdir)/fontnode.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

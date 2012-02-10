@@ -15,5 +15,6 @@
 #include "btnode.h"
 #include "bdcnode.h"
 #include "textnode.h"
+#include "fontnode.h"
 
 #endif

@@ -192,7 +192,11 @@ TreeNode * Parser::xref_sequence()
             uint16_t generation = (int) m_token->to_number();
             match(NUM);
             string name = m_token->value();
-            match(NAME);
+            if (m_token->type() == F_LO) {
+                match(F_LO);
+            } else {
+                match(NAME);
+            }
             xref->add_node(id, generation, address, name.at(0));
             id++;
         }

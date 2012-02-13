@@ -26,6 +26,7 @@ private:
     TreeNode *sequence();
     TreeNode *value_sequence();
     TreeNode *bt_sequence();
+    TreeNode *bi_sequence();
     TreeNode *bdc_sequence();
     TreeNode *tjlo_sequence();
     TreeNode *text_sequence();

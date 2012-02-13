@@ -1,6 +1,7 @@
 #include "pageparser.h"
 #include "utils.h"
 #include "nodes/treenode.h"
+#include <iostream>
 
 PageParser::PageParser(istream *stream)
 {
@@ -36,6 +37,9 @@ TreeNode *PageParser::sequence()
         case BT:
             return bt_sequence();
             break;
+        case BI:
+            return bi_sequence();
+            break;
         case NAME:
             return bdc_sequence();
             break;
@@ -48,6 +52,52 @@ TreeNode *PageParser::sequence()
         case START_ARRAY:
             return tjup_sequence();
             break;
+        case T_AST:
+            match(T_AST);
+            // new line
+            break;
+        case W_UP:
+            match(W_UP);
+            // Command
+            next_token();
+            break;
+        case W_AST:
+            match(W_AST);
+            // Command
+            next_token();
+            break;
+        case Q_LO:
+            match(Q_LO);
+            return NULL;
+            break;
+        case Q_UP:
+            match(Q_UP);
+            return NULL;
+            break;
+        case F_AST:
+            match(F_AST);
+            return NULL;
+            break;
+        case F_LO:
+            match(F_LO);
+            return NULL;
+            break;
+        case F_UP:
+            match(F_UP);
+            return NULL;
+            break;
+        case S_LO:
+            match(S_LO);
+            return NULL;
+            break;
+        case S_UP:
+            match(S_UP);
+            return NULL;
+            break;
+        case H:
+            match(H);
+            return NULL;
+            break;
         default:
             next_token();
         }
@@ -55,9 +105,25 @@ TreeNode *PageParser::sequence()
     return NULL;
 }
 
+TreeNode *PageParser::bi_sequence()
+{
+    match(BI);
+    while(m_token->type() != ID) {
+        string name = m_token->value();
+        match(NAME);
+        TreeNode *value = value_sequence();
+        delete value;
+    }
+    match(ID);
+    while(m_token->type() != EI && m_scanner.good()) {
+        next_token();
+    }
+    match(EI);
+}
+
 TreeNode *PageParser::text_sequence()
 {
-    //double num1 = m_token->to_number();
+    string num1 = m_token->value();
     match(NUM);
 
     switch (m_token->type()) {
@@ -89,13 +155,49 @@ TreeNode *PageParser::text_sequence()
         match(SCN);
         return NULL;
         break;
+    case G_LO:
+        match(G_LO);
+        return NULL;
+        break;
+    case G_UP:
+        match(G_UP);
+        return NULL;
+        break;
+    case I:
+        match(I);
+        return NULL;
+        break;
+    case J_LO:
+        match(J_LO);
+        return NULL;
+        break;
+    case J_UP:
+        match(J_UP);
+        return NULL;
+        break;
+    case W_LO:
+        match(W_LO);
+        return NULL;
+        break;
+    case M_UP:
+        match(M_UP);
+        return NULL;
+        break;
+    case F_AST:
+        match(F_AST);
+        return NULL;
+        break;
     default:
         break;
     }
-    //double num2 = m_token->to_number();
+    string num2 = m_token->value();
     match(NUM);
 
     switch (m_token->type()) {
+    case M_LO:
+        match(M_LO);
+        return NULL;
+        break;
     case TD_LO:
         match(TD_LO);
         return NULL;
@@ -108,33 +210,59 @@ TreeNode *PageParser::text_sequence()
         match(SCN);
         return NULL;
         break;
+    case L:
+        match(L);
+        return NULL;
+        break;
     default:
         break;
     }
-    //double num3 = m_token->to_number();
+    string num3 = m_token->value();
     match(NUM);
-    
+
+    if (m_token->type() == SCN) {
+        match(SCN);
+        return NULL;
+    } else if (m_token->type() == RG_LO) {
+        match(RG_LO);
+        return NULL;
+    } else if (m_token->type() == RG_UP) {
+        match(RG_UP);
+        return NULL;
+    }
+    string num4 = m_token->value();
+    match(NUM);
+
+    if (m_token->type() == SCN) {
+        match(SCN);
+        return NULL;
+    } else if (m_token->type() == RE) {
+        match(RE);
+        return NULL;
+    } else if (m_token->type() == K_UP) {
+        match(K_UP);
+        return NULL;
+    } else if (m_token->type() == K_LO) {
+        match(K_LO);
+        return NULL;
+    }
+    string num5 = m_token->value();
+    match(NUM);
+
     if (m_token->type() == SCN) {
         match(SCN);
         return NULL;
     }
-    //double num4 = m_token->to_number();
+    string num6 = m_token->value();
     match(NUM);
     
-    if (m_token->type() == SCN) {
-        match(SCN);
-        return NULL;
+    if (m_token->type() == TM) {
+        match(TM);
+    } else if (m_token->type() == C) {
+        match(C);
+    } else {
+        match(CM);
     }
-    //double num5 = m_token->to_number();
-    match(NUM);
-    
-    if (m_token->type() == SCN) {
-        match(SCN);
-        return NULL;
-    }
-    //double num6 = m_token->to_number();
-    match(NUM);
-    match(TM);
     return NULL;
 }
 
@@ -174,8 +302,13 @@ TreeNode *PageParser::tjup_sequence()
         }
     }
     match(END_ARRAY);
-    match(TJ_UP);
-
+    if (m_token->type() == NUM) {
+        // FIXME d sequence
+        match(NUM);
+        match(D);
+    } else {
+        match(TJ_UP);
+    }
     return text;
 }
 
@@ -187,6 +320,18 @@ TreeNode *PageParser::bdc_sequence()
     if (m_token->type() == GS) {
         match(GS);
         // Ignore graphic state
+        return NULL;
+    } else if (m_token->type() == CS) {
+        match(CS);
+        // Ignore color space
+        return NULL;
+    } else if (m_token->type() == SCN) {
+        match(SCN);
+        // Ignore color space
+        return NULL;
+    } else if (m_token->type() == DO) {
+        match(DO);
+        // Ignore XObject
         return NULL;
     }
 

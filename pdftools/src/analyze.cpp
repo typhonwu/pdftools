@@ -327,6 +327,10 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
     Page *page = new Page;
     page->set_destination(id, generation);
 
+#ifdef DEBUG
+    //cout << stream_value->str() << endl;
+#endif
+    
     stream_value->seekg(0);
     PageParser parser(stream_value);
     RootNode *root = parser.parse();
@@ -449,6 +453,10 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
                 if (snode) {
                     stringstream stream_value;
 
+                    if (obj_pages->id() == 124) {
+                        cout << stream_value.str() << endl;
+                    }
+                    
                     get_stream(contents, &stream_value);
 
                     /*NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));

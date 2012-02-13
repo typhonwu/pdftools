@@ -2,9 +2,9 @@
 #include "utils.h"
 #include "nodes/treenode.h"
 
-PageParser::PageParser(istream &stream)
+PageParser::PageParser(istream *stream)
 {
-    m_scanner.set_istream(&stream);
+    m_scanner.set_istream(stream);
 }
 
 PageParser::~PageParser()

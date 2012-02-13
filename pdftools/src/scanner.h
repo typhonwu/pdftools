@@ -18,15 +18,15 @@ public:
     ~Scanner();
 
     Token *next_token();
-    //bool open_file(const char *path);
     void set_istream(istream *stream);
     bool good();
     const char *error();
     
     void ignore_line();
+    int ignore_stream(int length);
     int pos();
     void to_pos(int pos);
-    pair<int, int8_t *> get_stream(int length);
+    char *get_stream(int length);
     
 private:
     void unget_char();

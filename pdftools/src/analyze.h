@@ -3,9 +3,11 @@
 
 #include "semantic/document.h"
 #include "nodes/nodes.h"
+#include "scanner.h"
 #include <vector>
 #include <map>
 #include <sstream>
+#include <fstream>
 #include <string>
 
 using namespace std;
@@ -16,11 +18,13 @@ class Analyze {
 private:
     Document *m_document;
     RootNode *m_tree;
+    Scanner *m_scanner;
     TreeNode *m_page_tree;
+    const char *m_filein;
     map<string, TreeNode *> m_names;
 
 public:
-    Analyze();
+    Analyze(const char *filein);
     ~Analyze();
 
     Document *analyze_tree(RootNode *tree);
@@ -33,7 +37,7 @@ private:
     void analyze_outlines(MapNode *values, Outline *parent = NULL);
     void analyze_pages(TreeNode *page, ArrayNode *mediabox = NULL);
 
-    Page *process_page(int id, int generation, stringstream &stream_value, ArrayNode * mediabox);
+    Page *process_page(int id, int generation, stringstream *stream_value, ArrayNode * mediabox);
     Glyph *analize_page(TreeNode *node);
 
     string get_string_value(TreeNode *value);
@@ -44,7 +48,8 @@ private:
     TreeNode *get_real_value(TreeNode *value);
     TreeNode *get_real_obj_value(TreeNode *value);
     TreeNode *get_named_value(string name);
-    void get_stream(ArrayNode *array, stringstream &stream_value);
+    void get_stream(ArrayNode *array, stringstream *stream_value);
+    void get_stream(ObjNode *obj, stringstream *stream_value);
 };
 
 #endif

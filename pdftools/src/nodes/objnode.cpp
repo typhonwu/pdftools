@@ -8,16 +8,12 @@ ObjNode::ObjNode(int id, int generation) : TreeNode()
     m_id = id;
     m_generation = generation;
     m_value = NULL;
-    m_stream = NULL;
 }
 
 ObjNode::~ObjNode()
 {
     if (m_value) {
         delete m_value;
-    }
-    if (m_stream) {
-        delete [] m_stream;
     }
 }
 
@@ -36,11 +32,6 @@ TreeNode *ObjNode::value()
     return m_value;
 }
 
-int8_t *ObjNode::stream()
-{
-    return m_stream;
-}
-
 bool ObjNode::this_object(int id, int generation)
 {
     return m_id == id && m_generation == generation;
@@ -51,24 +42,12 @@ void ObjNode::set_value(TreeNode *value)
     m_value = value;
 }
 
-int ObjNode::stream_size()
+void ObjNode::set_stream_pos(int pos)
 {
-    return m_stream_size;
+    m_stream_pos = pos;
 }
 
-void ObjNode::clear_stream()
+int ObjNode::stream_pos()
 {
-    if (m_stream) {
-        delete [] m_stream;
-        m_stream = NULL;
-    }
-}
-
-void ObjNode::set_stream(pair<int, int8_t *> stream)
-{
-    if (m_stream) {
-        delete m_stream;
-    }
-    m_stream_size = stream.first;
-    m_stream = stream.second;
+    return m_stream_pos;
 }

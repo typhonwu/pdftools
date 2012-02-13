@@ -13,15 +13,20 @@
 
 using namespace std;
 
-Analyze::Analyze()
+Analyze::Analyze(const char *filein)
 {
     m_document = NULL;
     m_tree = NULL;
     m_page_tree = NULL;
+    m_filein = filein;
+    m_scanner = new Scanner;
 }
 
 Analyze::~Analyze()
 {
+    if (m_scanner) {
+        delete m_scanner;
+    }
 }
 
 void Analyze::analyze_xref()
@@ -289,9 +294,9 @@ Glyph *Analyze::analize_page(TreeNode *node)
         BDCNode *bdc = dynamic_cast<BDCNode *> (node);
         if (bdc) {
             if (bdc->name() == "/Artifact") {
-            MapNode *map = dynamic_cast<MapNode *>(bdc->value());
+                MapNode *map = dynamic_cast<MapNode *> (bdc->value());
                 if (map) {
-                    NameNode *name = dynamic_cast<NameNode *>(map->get("/Subtype"));
+                    NameNode *name = dynamic_cast<NameNode *> (map->get("/Subtype"));
                     if (name && name->name() == "/Footer") {
                         // Ignore footer
                         return NULL;
@@ -306,7 +311,7 @@ Glyph *Analyze::analize_page(TreeNode *node)
             }
             return p;
         } else {
-            TextNode *text = dynamic_cast<TextNode *>(node);
+            TextNode *text = dynamic_cast<TextNode *> (node);
             if (text) {
                 return new Text(text->text());
             }
@@ -317,11 +322,12 @@ Glyph *Analyze::analize_page(TreeNode *node)
 
 // 193
 
-Page *Analyze::process_page(int id, int generation, stringstream &stream_value, ArrayNode * mediabox)
+Page *Analyze::process_page(int id, int generation, stringstream *stream_value, ArrayNode * mediabox)
 {
     Page *page = new Page;
     page->set_destination(id, generation);
 
+    stream_value->seekg(0);
     PageParser parser(stream_value);
     RootNode *root = parser.parse();
 
@@ -373,25 +379,40 @@ Page *Analyze::process_page(int id, int generation, stringstream &stream_value, 
     return page;
 }
 
-void Analyze::get_stream(ArrayNode *array, stringstream &stream_value)
+void Analyze::get_stream(ArrayNode *array, stringstream *stream_value)
 {
     if (array) {
         for (int loop = 0; loop < array->size(); loop++) {
             ObjNode *obj = dynamic_cast<ObjNode *> (get_real_value(array->value(loop)));
-            MapNode *node = dynamic_cast<MapNode *> (obj->value());
-            NameNode *filter = dynamic_cast<NameNode *> (get_real_value(node->get("/Filter")));
-            if (filter && filter->name() == "/FlateDecode") {
-                const char *value = flat_decode(obj->stream(), obj->stream_size());
-                stream_value << value;
-                delete [] value;
-                obj->clear_stream();
-            } else if (!filter) {
-                stream_value << (char *) obj->stream();
-            } else {
-                error_message(string("Invalid filter ") + filter->name());
-            }
+            get_stream(obj, stream_value);
         }
     }
+}
+
+void Analyze::get_stream(ObjNode *obj, stringstream *stream_value)
+{
+    MapNode *node = dynamic_cast<MapNode *> (obj->value());
+    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(node->get("/Filter")));
+    int length = get_number_value(get_real_obj_value(node->get("/Length")));
+
+    ifstream filein;
+    filein.open(m_filein, ios::binary);
+    m_scanner->set_istream(&filein);
+    m_scanner->to_pos(obj->stream_pos());
+
+    char *stream = m_scanner->get_stream(length);
+    filein.close();
+
+    if (filter && filter->name() == "/FlateDecode") {
+        const char *value = flat_decode(stream, length);
+        (*stream_value) << value;
+        delete [] value;
+    } else if (!filter) {
+        (*stream_value) << stream;
+    } else {
+        error_message(string("Invalid filter ") + filter->name());
+    }
+    delete [] stream;
 }
 
 void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
@@ -412,7 +433,6 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
             }
             if (kids) {
                 int kids_size = kids->size();
-#pragma omp parallel for
                 for (int loop = 0; loop < kids_size; loop++) {
                     analyze_pages(get_real_value(kids->value(loop)), media);
                 }
@@ -429,7 +449,9 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
                 if (snode) {
                     stringstream stream_value;
 
-                    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
+                    get_stream(contents, &stream_value);
+
+                    /*NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
                     if (filter && filter->name() == "/FlateDecode") {
                         const char *uncompressed = flat_decode(contents->stream(), contents->stream_size());
                         stream_value << uncompressed;
@@ -441,17 +463,15 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
                         error_message(string("Invalid filter ") + filter->name());
                     }
                     stream_value.seekg(0);
-
-                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), stream_value, media));
+                     */
+                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), &stream_value, media));
                 } else {
                     stringstream stream_value;
                     ArrayNode *array = dynamic_cast<ArrayNode *> (contents->value());
-                    get_stream(array, stream_value);
-                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), stream_value, media));
+                    get_stream(array, &stream_value);
+                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), &stream_value, media));
                 }
             }
-
-
         }
     }
 }

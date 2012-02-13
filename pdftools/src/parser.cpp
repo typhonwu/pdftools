@@ -19,30 +19,27 @@ const char *_pdf_versions[] = {
     "PDF-1.7"
 };
 
-Parser::Parser()
+Parser::Parser(const char *filein)
 {
     m_token = NULL;
-    m_valid = false;
     m_linear = false;
-    m_scanner = new Scanner();
+    m_scanner = new Scanner;
+    m_filein = filein;
+    
+    m_filestream.open(filein, ios::binary);
+    m_scanner->set_istream(&m_filestream);
+    
+    if (is_valid()) {
+        next_token();
+    }
 }
 
 Parser::~Parser()
 {
-    delete m_scanner;
-    if (m_filein.is_open()) {
-        m_filein.close();
+    if (m_scanner) {
+        delete m_scanner;
     }
-}
-
-bool Parser::open_file(const char *path)
-{
-    m_filein.open(path, ios::binary);
-    m_scanner->set_istream(&m_filein);
-    if (m_filein.is_open()) {
-        next_token();
-    }
-    return m_filein.is_open();
+    m_filestream.close();
 }
 
 void Parser::next_token()
@@ -96,7 +93,11 @@ RootNode *Parser::parse()
     } else {
         error_message("invalid input file");
     }
+    m_filestream.close();
+    m_filestream.open(m_filein, ios::binary);
+    m_scanner->set_istream(&m_filestream);
     object_streams(root);
+    m_filestream.close();
     return root;
 }
 
@@ -113,18 +114,26 @@ void Parser::object_streams(RootNode *root_node)
                 NameNode *type = dynamic_cast<NameNode *> (map->get("/Type"));
                 if (type && type->name() == "/ObjStm") {
                     int qtd = 0;
+                    int length = 0;
                     NumberNode *number = dynamic_cast<NumberNode *> (map->get("/N"));
                     if (number) {
                         qtd = number->value();
                     }
+                    NumberNode *length_node = dynamic_cast<NumberNode *> (map->get("/Length"));
+                    if (number) {
+                        length = length_node->value();
+                    }
                     char *uncompressed = NULL;
+                    
+                    m_scanner->to_pos(root_object->stream_pos());
+                    char *stream = (char *)m_scanner->get_stream(length);
 
                     NameNode *filter = dynamic_cast<NameNode *> (map->get("/Filter"));
                     if (filter && filter->name() == "/FlateDecode") {
-                        uncompressed = flat_decode(root_object->stream(), root_object->stream_size());
-                        root_object->clear_stream();
+                        uncompressed = flat_decode(stream, length);
+                        delete [] stream;
                     } else if (!filter) {
-                        uncompressed = (char *) root_object->stream();
+                        uncompressed = stream;
                     } else {
                         error_message(string("compression not supported: ") + filter->name());
                         return;
@@ -132,6 +141,7 @@ void Parser::object_streams(RootNode *root_node)
                     stringstream stream_value;
                     stream_value << uncompressed;
                     stream_value.seekg(0);
+                    delete [] uncompressed;
 
                     Scanner scanner;
                     Scanner *temp = m_scanner;
@@ -153,11 +163,6 @@ void Parser::object_streams(RootNode *root_node)
                         root_node->add_child(new_obj);
                     }
                     m_scanner = temp;
-                    if (!filter) {
-                        root_object->clear_stream();
-                    } else {
-                        delete [] uncompressed;
-                    }
                 }
             }
         }
@@ -289,7 +294,7 @@ TreeNode *Parser::object_sequence()
                 length = number->value();
             }
         }
-        node->set_stream(m_scanner->get_stream(length));
+        node->set_stream_pos(m_scanner->ignore_stream(length));
         next_token();
         match(END_STREAM);
     }
@@ -300,7 +305,7 @@ TreeNode *Parser::object_sequence()
 
 bool Parser::is_valid()
 {
-    return m_valid;
+    return m_filestream.is_open();
 }
 
 bool Parser::verify_version()

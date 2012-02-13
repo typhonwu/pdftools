@@ -3,8 +3,10 @@
 #include "utils.h"
 #include "analyze.h"
 #include "generator.h"
+#include "scanner.h"
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 using namespace std;
 
@@ -34,10 +36,10 @@ Converter::~Converter()
 
 void Converter::convert()
 {
-    Parser parser;
-    Analyze analyze;
+    Parser parser(m_filein);
+    Analyze analyze(m_filein);
 
-    if (!parser.open_file(m_filein)) {
+    if (!parser.is_valid()) {
         error_message(string(m_filein).append(" not found."));
     } else {
         verbose_message(string("Parsing file ").append(m_filein));

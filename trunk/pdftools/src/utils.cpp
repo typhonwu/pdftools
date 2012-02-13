@@ -121,7 +121,7 @@ char *deflate(const char *raw, int size, int &writed)
     return ret;
 }
 
-char *flat_decode(int8_t *compressed, int size)
+char *flat_decode(char *compressed, int size)
 {
     vector<buffer_struct> values;
 

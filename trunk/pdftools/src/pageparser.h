@@ -14,7 +14,7 @@ private:
     Token *m_token;
 
 public:
-    PageParser(istream &stream);
+    PageParser(istream *stream);
     ~PageParser();
     
     RootNode *parse();

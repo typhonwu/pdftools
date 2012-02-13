@@ -27,7 +27,6 @@ enum StateType {
     START, INNUM, INNAME, INSTRING, INHEXSTR, DONE
 };
 
-
 struct reserved_words {
     TokenType type;
     const char *name;
@@ -89,7 +88,7 @@ Scanner::~Scanner()
 {
 }
 
-void Scanner::set_istream(istream * stream)
+void Scanner::set_istream(istream *stream)
 {
     m_filein = stream;
 }
@@ -101,24 +100,20 @@ int Scanner::pos()
 
 void Scanner::to_pos(int pos)
 {
-    m_filein->seekg(pos);
+    m_filein->seekg(pos, ios::beg);
+    //cout << pos << " " << this->pos() << endl;
 }
 
-pair<int, int8_t *> Scanner::get_stream(int length)
+int Scanner::ignore_stream(int length)
 {
     // Ignore first new line
     while (m_filein->good() && next_char() == '\n');
     unget_char();
+    int ret = m_filein->tellg();
 
     if (length > 0) {
-        pair<int, int8_t *> pair;
-        pair.first = length;
-        pair.second = new int8_t[length];
-        m_filein->read((char *) pair.second, length);
-        return pair;
+        m_filein->ignore(length);
     } else {
-        vector<int8_t> stream;
-
         while (m_filein->good()) {
             int8_t ret = m_filein->get();
             if ((ret == '\n' || ret == '\r') && m_filein->good()) {
@@ -138,14 +133,20 @@ pair<int, int8_t *> Scanner::get_stream(int length)
                 // not endstream
                 m_filein->seekg(pos);
             }
-            stream.push_back(ret);
         }
-        pair<int, int8_t *> pair;
-        pair.first = stream.size();
-        pair.second = new int8_t[stream.size()];
-        copy(stream.begin(), stream.end(), pair.second);
-        return pair;
     }
+    return ret;
+}
+
+char *Scanner::get_stream(int length)
+{
+    // Ignore first new line
+    while (m_filein->good() && next_char() == '\n');
+    unget_char();
+
+    char *stream = new char[length];
+    m_filein->read((char *) stream, length);
+    return stream;
 }
 
 char Scanner::next_char()

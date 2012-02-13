@@ -11,7 +11,7 @@ void error_message(string msg);
 void verbose_message(string msg);
 void set_verbose_mode(const bool verbose);
 bool verbose_mode();
-char *flat_decode(int8_t *compressed, int size);
+char *flat_decode(char *compressed, int size);
 char *deflate(const char *raw, int size, int &writed);
 string utf16_to_utf8(string &str);
 

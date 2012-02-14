@@ -98,6 +98,22 @@ TreeNode *PageParser::sequence()
             match(H);
             return NULL;
             break;
+        case B_UP:
+            match(B_UP);
+            return NULL;
+            break;
+        case B_UP_AST:
+            match(B_UP_AST);
+            return NULL;
+            break;
+        case B_LO:
+            match(B_LO);
+            return NULL;
+            break;
+        case B_LO_AST:
+            match(B_LO_AST);
+            return NULL;
+            break;
         default:
             next_token();
         }
@@ -114,10 +130,8 @@ TreeNode *PageParser::bi_sequence()
         TreeNode *value = value_sequence();
         delete value;
     }
-    match(ID);
-    while(m_token->type() != EI && m_scanner.good()) {
-        next_token();
-    }
+    m_scanner.get_image_stream();
+    next_token();
     match(EI);
     return NULL;
 }

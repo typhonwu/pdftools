@@ -27,6 +27,7 @@ public:
     int pos();
     void to_pos(int pos);
     char *get_stream(int length);
+    char *get_image_stream();
     
 private:
     void unget_char();

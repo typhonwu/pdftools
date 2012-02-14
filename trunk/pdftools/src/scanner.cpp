@@ -102,8 +102,12 @@ static reserved_words words[] = {
     { I, "i"},
     { BI, "BI"},
     { ID, "ID"},
+    { B_UP, "B"},
+    { B_UP_AST, "B*"},
+    { B_LO, "b"},
+    { B_LO_AST, "b*"},
     { EI, "EI"}
-    
+
 };
 
 inline unsigned int xtod(char c)
@@ -136,7 +140,6 @@ int Scanner::pos()
 void Scanner::to_pos(int pos)
 {
     m_filein->seekg(pos, ios::beg);
-    //cout << pos << " " << this->pos() << endl;
 }
 
 int Scanner::ignore_stream(int length)
@@ -150,7 +153,7 @@ int Scanner::ignore_stream(int length)
         m_filein->ignore(length);
     } else {
         while (m_filein->good()) {
-            int8_t ret = m_filein->get();
+            int ret = m_filein->get();
             if ((ret == '\n' || ret == '\r') && m_filein->good()) {
                 int pos = m_filein->tellg();
                 int next = m_filein->get();
@@ -171,6 +174,30 @@ int Scanner::ignore_stream(int length)
         }
     }
     return ret;
+}
+
+char *Scanner::get_image_stream()
+{   
+    while (m_filein->good() && next_char() == '\n');
+    unget_char();
+
+    while (m_filein->good()) {
+        int ret = m_filein->get();
+        if ((ret == '\n' || ret == '\r') && m_filein->good()) {
+            int pos = m_filein->tellg();
+            int next = m_filein->get();
+            // treat '\r\n', '\r' or '\n'
+            if (next == 'E' || m_filein->get() == 'I') {
+                m_filein->unget();
+                m_filein->unget();
+                break;
+            }
+            // not endstream
+            m_filein->seekg(pos);
+        }
+    }
+    // FIXME save image stream
+    return NULL;
 }
 
 char *Scanner::get_stream(int length)

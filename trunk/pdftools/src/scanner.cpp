@@ -97,6 +97,8 @@ static reserved_words words[] = {
     { L, "l"},
     { D, "d"},
     { H, "h"},
+    { V, "v"},
+    { Y, "y"},
     { I, "i"},
     { BI, "BI"},
     { ID, "ID"},

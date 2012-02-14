@@ -330,7 +330,7 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
 #ifdef DEBUG
     //cout << stream_value->str() << endl;
 #endif
-    
+
     stream_value->seekg(0);
     PageParser parser(stream_value);
     RootNode *root = parser.parse();
@@ -407,12 +407,13 @@ void Analyze::get_stream(ObjNode *obj, stringstream *stream_value)
     char *stream = m_scanner->get_stream(length);
     filein.close();
 
+    int total = length;
     if (filter && filter->name() == "/FlateDecode") {
-        const char *value = flat_decode(stream, length);
-        (*stream_value) << value;
+        const char *value = flat_decode(stream, length, total);
+        (*stream_value).write(value, total);
         delete [] value;
     } else if (!filter) {
-        (*stream_value) << stream;
+        (*stream_value).write(stream, total);
     } else {
         error_message(string("Invalid filter ") + filter->name());
     }
@@ -452,11 +453,6 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
                 MapNode *snode = dynamic_cast<MapNode *> (contents->value());
                 if (snode) {
                     stringstream stream_value;
-
-                    if (obj_pages->id() == 124) {
-                        cout << stream_value.str() << endl;
-                    }
-                    
                     get_stream(contents, &stream_value);
 
                     /*NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));

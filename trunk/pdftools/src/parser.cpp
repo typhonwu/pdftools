@@ -128,9 +128,10 @@ void Parser::object_streams(RootNode *root_node)
                     m_scanner->to_pos(root_object->stream_pos());
                     char *stream = (char *)m_scanner->get_stream(length);
 
+                    int total = length;
                     NameNode *filter = dynamic_cast<NameNode *> (map->get("/Filter"));
                     if (filter && filter->name() == "/FlateDecode") {
-                        uncompressed = flat_decode(stream, length);
+                        uncompressed = flat_decode(stream, length, total);
                         delete [] stream;
                     } else if (!filter) {
                         uncompressed = stream;
@@ -139,7 +140,7 @@ void Parser::object_streams(RootNode *root_node)
                         return;
                     }
                     stringstream stream_value;
-                    stream_value << uncompressed;
+                    stream_value.write(uncompressed, total);
                     stream_value.seekg(0);
                     delete [] uncompressed;
 

@@ -119,6 +119,7 @@ TreeNode *PageParser::bi_sequence()
         next_token();
     }
     match(EI);
+    return NULL;
 }
 
 TreeNode *PageParser::text_sequence()
@@ -244,6 +245,12 @@ TreeNode *PageParser::text_sequence()
         return NULL;
     } else if (m_token->type() == K_LO) {
         match(K_LO);
+        return NULL;
+    } else if (m_token->type() == V) {
+        match(V);
+        return NULL;
+    } else if (m_token->type() == Y) {
+        match(Y);
         return NULL;
     }
     string num5 = m_token->value();

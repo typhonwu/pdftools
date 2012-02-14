@@ -29,17 +29,8 @@ XML::~XML()
 
 const char *XML::content()
 {
-    xmlChar *ret = NULL;
-    int size = 0;
     if (m_buffer) {
-
-//        xmlDocDumpFormatMemory(m_buffer,
-//                &ret,
-//                &size,
-//                1);
-//        return ret;
         return (char *)xmlBufferContent(m_buffer);
-        //return (const char *) m_buffer->content;
     }
     return NULL;
 }

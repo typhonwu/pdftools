@@ -121,7 +121,7 @@ char *deflate(const char *raw, int size, int &writed)
     return ret;
 }
 
-char *flat_decode(char *compressed, int size)
+char *flat_decode(char *compressed, int size, int &deflated)
 {
     vector<buffer_struct> values;
 
@@ -160,6 +160,7 @@ char *flat_decode(char *compressed, int size)
 
     char *ret = new char[total + 1];
     ret[total] = 0;
+    deflated = total;
 
     int locate = 0;
     vector<buffer_struct>::iterator i;

@@ -166,8 +166,8 @@ TreeNode *PageParser::text_sequence()
         match(TS);
         return NULL;
         break;
-    case SCN:
-        match(SCN);
+    case SCN_UP:
+        match(SCN_UP);
         return NULL;
         break;
     case G_LO:
@@ -217,12 +217,12 @@ TreeNode *PageParser::text_sequence()
         match(TD_LO);
         return NULL;
         break;
-    case TD_HI:
-        match(TD_HI);
+    case TD_UP:
+        match(TD_UP);
         return NULL;
         break;
-    case SCN:
-        match(SCN);
+    case SCN_UP:
+        match(SCN_UP);
         return NULL;
         break;
     case L:
@@ -235,8 +235,8 @@ TreeNode *PageParser::text_sequence()
     string num3 = m_token->value();
     match(NUM);
 
-    if (m_token->type() == SCN) {
-        match(SCN);
+    if (m_token->type() == SCN_UP) {
+        match(SCN_UP);
         return NULL;
     } else if (m_token->type() == RG_LO) {
         match(RG_LO);
@@ -248,8 +248,8 @@ TreeNode *PageParser::text_sequence()
     string num4 = m_token->value();
     match(NUM);
 
-    if (m_token->type() == SCN) {
-        match(SCN);
+    if (m_token->type() == SCN_UP) {
+        match(SCN_UP);
         return NULL;
     } else if (m_token->type() == RE) {
         match(RE);
@@ -270,8 +270,8 @@ TreeNode *PageParser::text_sequence()
     string num5 = m_token->value();
     match(NUM);
 
-    if (m_token->type() == SCN) {
-        match(SCN);
+    if (m_token->type() == SCN_UP) {
+        match(SCN_UP);
         return NULL;
     }
     string num6 = m_token->value();
@@ -342,12 +342,12 @@ TreeNode *PageParser::bdc_sequence()
         match(GS);
         // Ignore graphic state
         return NULL;
-    } else if (m_token->type() == CS) {
-        match(CS);
+    } else if (m_token->type() == CS_UP) {
+        match(CS_UP);
         // Ignore color space
         return NULL;
-    } else if (m_token->type() == SCN) {
-        match(SCN);
+    } else if (m_token->type() == SCN_UP) {
+        match(SCN_UP);
         // Ignore color space
         return NULL;
     } else if (m_token->type() == DO) {

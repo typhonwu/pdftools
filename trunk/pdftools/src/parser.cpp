@@ -196,7 +196,7 @@ TreeNode * Parser::xref_sequence()
             if (m_token->type() == F_LO) {
                 match(F_LO);
             } else {
-                match(NAME);
+                match(N);
             }
             xref->add_node(id, generation, address, name.at(0));
             id++;

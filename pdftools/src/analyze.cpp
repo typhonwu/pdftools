@@ -320,8 +320,6 @@ Glyph *Analyze::analize_page(TreeNode *node)
     return NULL;
 }
 
-// 193
-
 Page *Analyze::process_page(int id, int generation, stringstream *stream_value, ArrayNode * mediabox)
 {
     Page *page = new Page;
@@ -396,7 +394,8 @@ void Analyze::get_stream(ArrayNode *array, stringstream *stream_value)
 void Analyze::get_stream(ObjNode *obj, stringstream *stream_value)
 {
     MapNode *node = dynamic_cast<MapNode *> (obj->value());
-    NameNode *filter = dynamic_cast<NameNode *> (get_real_value(node->get("/Filter")));
+    NameNode *filter = dynamic_cast<NameNode *> (get_real_obj_value(node->get("/Filter")));
+    ArrayNode *filter_array = dynamic_cast<ArrayNode *> (get_real_obj_value(node->get("/Filter")));
     int length = get_number_value(get_real_obj_value(node->get("/Length")));
 
     ifstream filein;
@@ -412,6 +411,22 @@ void Analyze::get_stream(ObjNode *obj, stringstream *stream_value)
         const char *value = flat_decode(stream, length, total);
         (*stream_value).write(value, total);
         delete [] value;
+    } else if (filter_array) {
+        int size = filter_array->size();
+        if (size > 1) {
+            error_message("More than one filter is not supported.");
+        } else {
+            for (int loop = 0; loop < size; loop++) {
+                filter = dynamic_cast<NameNode *> (get_real_value(filter_array->value(loop)));
+                if (filter && filter->name() == "/FlateDecode") {
+                    const char *value = flat_decode(stream, length, total);
+                    (*stream_value).write(value, total);
+                    delete [] value;
+                } else {
+                    error_message(string("Invalid filter ") + filter->name());
+                }
+            }
+        }
     } else if (!filter) {
         (*stream_value).write(stream, total);
     } else {

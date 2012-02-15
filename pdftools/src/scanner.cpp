@@ -327,7 +327,7 @@ Token *Scanner::next_token()
                 }
             } else if (is_space(c)) {
                 save = false;
-            } else if (isalpha(c) || c == '/') {
+            } else if (isalpha(c) || c == '/' || c == '\'' || c == '"') {
                 state = INNAME;
             } else if (c == '\n' || c == '\r') {
                 state = DONE;

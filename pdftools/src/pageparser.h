@@ -12,6 +12,7 @@ class PageParser {
 private:
     Scanner m_scanner;
     Token *m_token;
+    RootNode *m_root;
 
 public:
     PageParser(istream *stream);

@@ -2,14 +2,21 @@
 #include "utils.h"
 #include "nodes/treenode.h"
 #include <iostream>
+#include <vector>
+
+using namespace std;
 
 PageParser::PageParser(istream *stream)
 {
     m_scanner.set_istream(stream);
+    m_root = NULL;
 }
 
 PageParser::~PageParser()
 {
+    if (m_root) {
+        delete m_root;
+    }
 }
 
 void PageParser::next_token()
@@ -17,17 +24,37 @@ void PageParser::next_token()
     m_token = m_scanner.next_token();
 }
 
-// 196
-
 RootNode *PageParser::parse()
 {
-    RootNode *root = new RootNode();
+    if (m_root) {
+        delete m_root;
+    }
+    m_root = new RootNode();
+    vector<TreeNode *> nodes;
+    nodes.reserve(10);
 
     next_token();
     while (m_scanner.good()) {
-        root->add_child(sequence());
+        //        root->add_child(sequence());
+        TreeNode *value = value_sequence();
+        if (value) {
+            nodes.push_back(value);
+        } else {
+            if (m_token->type() == BI) {
+                m_root->add_child(bi_sequence());
+            } else {
+                next_token();
+            }
+
+            register int size = nodes.size();
+            for (register int loop = 0; loop < size; loop++) {
+                delete nodes[loop];
+            }
+            nodes.clear();
+        }
+
     }
-    return root;
+    return m_root;
 }
 
 TreeNode *PageParser::sequence()
@@ -124,7 +151,7 @@ TreeNode *PageParser::sequence()
 TreeNode *PageParser::bi_sequence()
 {
     match(BI);
-    while(m_token->type() != ID) {
+    while (m_token->type() != ID) {
         string name = m_token->value();
         match(NAME);
         TreeNode *value = value_sequence();
@@ -276,7 +303,7 @@ TreeNode *PageParser::text_sequence()
     }
     string num6 = m_token->value();
     match(NUM);
-    
+
     if (m_token->type() == TM) {
         match(TM);
     } else if (m_token->type() == C) {

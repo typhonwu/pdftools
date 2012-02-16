@@ -11,7 +11,7 @@ libnodes_a_SOURCES = \
 	arraynode.cpp \
 	rootnode.cpp \
 	booleannode.cpp \
-	btnode.cpp \
+	breaknode.cpp \
 	bdcnode.cpp \
 	textnode.cpp \
 	fontnode.cpp
@@ -28,7 +28,7 @@ noinst_HEADERS = \
 	arraynode.h \
 	rootnode.h \
 	booleannode.h \
-	btnode.h \
+	breaknode.h \
 	bdcnode.h \
 	textnode.h \
 	fontnode.h \

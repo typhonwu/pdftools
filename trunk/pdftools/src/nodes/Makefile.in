@@ -55,7 +55,7 @@ am_libnodes_a_OBJECTS = libnodes_a-objnode.$(OBJEXT) \
 	libnodes_a-refnode.$(OBJEXT) libnodes_a-numbernode.$(OBJEXT) \
 	libnodes_a-treenode.$(OBJEXT) libnodes_a-arraynode.$(OBJEXT) \
 	libnodes_a-rootnode.$(OBJEXT) libnodes_a-booleannode.$(OBJEXT) \
-	libnodes_a-btnode.$(OBJEXT) libnodes_a-bdcnode.$(OBJEXT) \
+	libnodes_a-breaknode.$(OBJEXT) libnodes_a-bdcnode.$(OBJEXT) \
 	libnodes_a-textnode.$(OBJEXT) libnodes_a-fontnode.$(OBJEXT)
 libnodes_a_OBJECTS = $(am_libnodes_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -182,7 +182,7 @@ libnodes_a_SOURCES = \
 	arraynode.cpp \
 	rootnode.cpp \
 	booleannode.cpp \
-	btnode.cpp \
+	breaknode.cpp \
 	bdcnode.cpp \
 	textnode.cpp \
 	fontnode.cpp
@@ -199,7 +199,7 @@ noinst_HEADERS = \
 	arraynode.h \
 	rootnode.h \
 	booleannode.h \
-	btnode.h \
+	breaknode.h \
 	bdcnode.h \
 	textnode.h \
 	fontnode.h \
@@ -258,7 +258,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-arraynode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-bdcnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-booleannode.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-btnode.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-breaknode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-fontnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-mapnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-namenode.Po@am__quote@
@@ -439,19 +439,19 @@ libnodes_a-booleannode.obj: booleannode.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-booleannode.obj `if test -f 'booleannode.cpp'; then $(CYGPATH_W) 'booleannode.cpp'; else $(CYGPATH_W) '$(srcdir)/booleannode.cpp'; fi`
 
-libnodes_a-btnode.o: btnode.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-btnode.o -MD -MP -MF $(DEPDIR)/libnodes_a-btnode.Tpo -c -o libnodes_a-btnode.o `test -f 'btnode.cpp' || echo '$(srcdir)/'`btnode.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-btnode.Tpo $(DEPDIR)/libnodes_a-btnode.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='btnode.cpp' object='libnodes_a-btnode.o' libtool=no @AMDEPBACKSLASH@
+libnodes_a-breaknode.o: breaknode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-breaknode.o -MD -MP -MF $(DEPDIR)/libnodes_a-breaknode.Tpo -c -o libnodes_a-breaknode.o `test -f 'breaknode.cpp' || echo '$(srcdir)/'`breaknode.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-breaknode.Tpo $(DEPDIR)/libnodes_a-breaknode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='breaknode.cpp' object='libnodes_a-breaknode.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-btnode.o `test -f 'btnode.cpp' || echo '$(srcdir)/'`btnode.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-breaknode.o `test -f 'breaknode.cpp' || echo '$(srcdir)/'`breaknode.cpp
 
-libnodes_a-btnode.obj: btnode.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-btnode.obj -MD -MP -MF $(DEPDIR)/libnodes_a-btnode.Tpo -c -o libnodes_a-btnode.obj `if test -f 'btnode.cpp'; then $(CYGPATH_W) 'btnode.cpp'; else $(CYGPATH_W) '$(srcdir)/btnode.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-btnode.Tpo $(DEPDIR)/libnodes_a-btnode.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='btnode.cpp' object='libnodes_a-btnode.obj' libtool=no @AMDEPBACKSLASH@
+libnodes_a-breaknode.obj: breaknode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-breaknode.obj -MD -MP -MF $(DEPDIR)/libnodes_a-breaknode.Tpo -c -o libnodes_a-breaknode.obj `if test -f 'breaknode.cpp'; then $(CYGPATH_W) 'breaknode.cpp'; else $(CYGPATH_W) '$(srcdir)/breaknode.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-breaknode.Tpo $(DEPDIR)/libnodes_a-breaknode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='breaknode.cpp' object='libnodes_a-breaknode.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-btnode.obj `if test -f 'btnode.cpp'; then $(CYGPATH_W) 'btnode.cpp'; else $(CYGPATH_W) '$(srcdir)/btnode.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-breaknode.obj `if test -f 'breaknode.cpp'; then $(CYGPATH_W) 'breaknode.cpp'; else $(CYGPATH_W) '$(srcdir)/breaknode.cpp'; fi`
 
 libnodes_a-bdcnode.o: bdcnode.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-bdcnode.o -MD -MP -MF $(DEPDIR)/libnodes_a-bdcnode.Tpo -c -o libnodes_a-bdcnode.o `test -f 'bdcnode.cpp' || echo '$(srcdir)/'`bdcnode.cpp

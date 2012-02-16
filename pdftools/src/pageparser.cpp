@@ -1,6 +1,8 @@
 #include "pageparser.h"
 #include "utils.h"
 #include "nodes/treenode.h"
+#include "semantic/glyph.h"
+#include "semantic/break.h"
 #include <iostream>
 #include <vector>
 
@@ -30,122 +32,47 @@ RootNode *PageParser::parse()
         delete m_root;
     }
     m_root = new RootNode();
-    vector<TreeNode *> nodes;
-    nodes.reserve(10);
+    vector<TreeNode *> values;
+    values.reserve(10);
 
     next_token();
     while (m_scanner.good()) {
         //        root->add_child(sequence());
         TreeNode *value = value_sequence();
         if (value) {
-            nodes.push_back(value);
+            values.push_back(value);
         } else {
-            if (m_token->type() == BI) {
+            switch (m_token->type()) {
+            case BI:
                 m_root->add_child(bi_sequence());
-            } else {
+                break;
+            case TJ_LO:
+                m_root->add_child(tjlo_sequence(values));
+                break;
+            case TJ_UP:
+                m_root->add_child(tjup_sequence(values));
+                break;
+            case T_AST:
+                m_root->add_child(new TextNode);
+                next_token();
+                break;
+            case QUOTE:
+                m_root->add_child(new TextNode);
+                m_root->add_child(tjlo_sequence(values));
+                next_token();
+                break;
+            default:
                 next_token();
             }
-
-            register int size = nodes.size();
+            register int size = values.size();
             for (register int loop = 0; loop < size; loop++) {
-                delete nodes[loop];
+                delete values[loop];
             }
-            nodes.clear();
+            values.clear();
         }
 
     }
     return m_root;
-}
-
-TreeNode *PageParser::sequence()
-{
-    while (m_scanner.good()) {
-        switch (m_token->type()) {
-        case BT:
-            return bt_sequence();
-            break;
-        case BI:
-            return bi_sequence();
-            break;
-        case NAME:
-            return bdc_sequence();
-            break;
-        case NUM:
-            return text_sequence();
-            break;
-        case STRING:
-            return tjlo_sequence();
-            break;
-        case START_ARRAY:
-            return tjup_sequence();
-            break;
-        case T_AST:
-            match(T_AST);
-            // new line
-            break;
-        case W_UP:
-            match(W_UP);
-            // Command
-            next_token();
-            break;
-        case W_AST:
-            match(W_AST);
-            // Command
-            next_token();
-            break;
-        case Q_LO:
-            match(Q_LO);
-            return NULL;
-            break;
-        case Q_UP:
-            match(Q_UP);
-            return NULL;
-            break;
-        case F_AST:
-            match(F_AST);
-            return NULL;
-            break;
-        case F_LO:
-            match(F_LO);
-            return NULL;
-            break;
-        case F_UP:
-            match(F_UP);
-            return NULL;
-            break;
-        case S_LO:
-            match(S_LO);
-            return NULL;
-            break;
-        case S_UP:
-            match(S_UP);
-            return NULL;
-            break;
-        case H:
-            match(H);
-            return NULL;
-            break;
-        case B_UP:
-            match(B_UP);
-            return NULL;
-            break;
-        case B_UP_AST:
-            match(B_UP_AST);
-            return NULL;
-            break;
-        case B_LO:
-            match(B_LO);
-            return NULL;
-            break;
-        case B_LO_AST:
-            match(B_LO_AST);
-            return NULL;
-            break;
-        default:
-            next_token();
-        }
-    }
-    return NULL;
 }
 
 TreeNode *PageParser::bi_sequence()
@@ -163,201 +90,40 @@ TreeNode *PageParser::bi_sequence()
     return NULL;
 }
 
-TreeNode *PageParser::text_sequence()
+TreeNode *PageParser::tjlo_sequence(vector<TreeNode *> &values)
 {
-    string num1 = m_token->value();
-    match(NUM);
-
-    switch (m_token->type()) {
-    case TC:
-        match(TC);
-        return NULL;
-        break;
-    case TW:
-        match(TW);
-        return NULL;
-        break;
-    case TZ:
-        match(TZ);
-        return NULL;
-        break;
-    case TL:
-        match(TL);
-        return NULL;
-        break;
-    case TR:
-        match(TR);
-        return NULL;
-        break;
-    case TS:
-        match(TS);
-        return NULL;
-        break;
-    case SCN_UP:
-        match(SCN_UP);
-        return NULL;
-        break;
-    case G_LO:
-        match(G_LO);
-        return NULL;
-        break;
-    case G_UP:
-        match(G_UP);
-        return NULL;
-        break;
-    case I:
-        match(I);
-        return NULL;
-        break;
-    case J_LO:
-        match(J_LO);
-        return NULL;
-        break;
-    case J_UP:
-        match(J_UP);
-        return NULL;
-        break;
-    case W_LO:
-        match(W_LO);
-        return NULL;
-        break;
-    case M_UP:
-        match(M_UP);
-        return NULL;
-        break;
-    case F_AST:
-        match(F_AST);
-        return NULL;
-        break;
-    default:
-        break;
-    }
-    string num2 = m_token->value();
-    match(NUM);
-
-    switch (m_token->type()) {
-    case M_LO:
-        match(M_LO);
-        return NULL;
-        break;
-    case TD_LO:
-        match(TD_LO);
-        return NULL;
-        break;
-    case TD_UP:
-        match(TD_UP);
-        return NULL;
-        break;
-    case SCN_UP:
-        match(SCN_UP);
-        return NULL;
-        break;
-    case L:
-        match(L);
-        return NULL;
-        break;
-    default:
-        break;
-    }
-    string num3 = m_token->value();
-    match(NUM);
-
-    if (m_token->type() == SCN_UP) {
-        match(SCN_UP);
-        return NULL;
-    } else if (m_token->type() == RG_LO) {
-        match(RG_LO);
-        return NULL;
-    } else if (m_token->type() == RG_UP) {
-        match(RG_UP);
-        return NULL;
-    }
-    string num4 = m_token->value();
-    match(NUM);
-
-    if (m_token->type() == SCN_UP) {
-        match(SCN_UP);
-        return NULL;
-    } else if (m_token->type() == RE) {
-        match(RE);
-        return NULL;
-    } else if (m_token->type() == K_UP) {
-        match(K_UP);
-        return NULL;
-    } else if (m_token->type() == K_LO) {
-        match(K_LO);
-        return NULL;
-    } else if (m_token->type() == V) {
-        match(V);
-        return NULL;
-    } else if (m_token->type() == Y) {
-        match(Y);
-        return NULL;
-    }
-    string num5 = m_token->value();
-    match(NUM);
-
-    if (m_token->type() == SCN_UP) {
-        match(SCN_UP);
-        return NULL;
-    }
-    string num6 = m_token->value();
-    match(NUM);
-
-    if (m_token->type() == TM) {
-        match(TM);
-    } else if (m_token->type() == C) {
-        match(C);
-    } else {
-        match(CM);
-    }
-    return NULL;
-}
-
-TreeNode *PageParser::bt_sequence()
-{
-    match(BT);
-
-    BTNode *bt = new BTNode;
-    while (m_token->type() != ET && m_scanner.good()) {
-        bt->add_child(sequence());
-    }
-    return bt;
-}
-
-TreeNode *PageParser::tjlo_sequence()
-{
-    string value = m_token->value();
-    match(STRING);
     match(TJ_LO);
-
     TextNode *text = new TextNode;
-    text->add(value);
-    return text;
-}
-
-TreeNode *PageParser::tjup_sequence()
-{
-    match(START_ARRAY);
-
-    TextNode *text = new TextNode;
-    while (m_token->type() != END_ARRAY && m_scanner.good()) {
-        if (m_token->type() == STRING) {
-            text->add(m_token->value());
-            match(STRING);
-        } else {
-            match(NUM);
+    int size = values.size();
+    for (int loop = 0; loop < size; loop++) {
+        StringNode *node = dynamic_cast<StringNode *> (values[loop]);
+        if (node) {
+            text->add(node->value());
         }
     }
-    match(END_ARRAY);
-    if (m_token->type() == NUM) {
-        // FIXME d sequence
-        match(NUM);
-        match(D);
-    } else {
-        match(TJ_UP);
-    }
     return text;
+}
+
+TreeNode *PageParser::tjup_sequence(vector<TreeNode *> &values)
+{
+    match(TJ_UP);
+    RootNode *g = new RootNode;
+    int size = values.size();
+    for (int loop = 0; loop < size; loop++) {
+        ArrayNode *array = dynamic_cast<ArrayNode *> (values[loop]);
+        if (array) {
+            int array_size = array->size();
+            for (int y = 0; y < array_size; y++) {
+                StringNode *node = dynamic_cast<StringNode *> (array->value(y));
+                if (node) {
+                    TextNode *text = new TextNode;
+                    text->add(node->value());
+                    g->add_child(text);
+                }
+            }
+        }
+    }
+    return g;
 }
 
 TreeNode *PageParser::bdc_sequence()
@@ -392,14 +158,7 @@ TreeNode *PageParser::bdc_sequence()
         font->set_size(size->value());
         return font;
     }
-
-    BDCNode *bdc = new BDCNode;
-    bdc->set_value(value);
-    bdc->set_name(name);
-    while (m_token->type() != EMC && m_scanner.good()) {
-        bdc->add_child(sequence());
-    }
-    return bdc;
+    return NULL;
 }
 
 bool PageParser::match(TokenType type)

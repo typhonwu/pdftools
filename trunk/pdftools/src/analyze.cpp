@@ -337,47 +337,6 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
     for (int loop = 0; loop < size; loop++) {
         page->add_glyph(analize_page(root->get(loop)));
     }
-    /*
-    int size = root->size();
-    int loop;
-
-    for (loop = 0; loop < size; loop++) {
-        CommandNode *command = dynamic_cast<CommandNode *> (root->get(loop));
-        NameNode *name = dynamic_cast<NameNode *> (command->command());
-        if (name) {
-            if (name->name() == "Tj") {
-                for (int i = 0; i < command->size(); i++) {
-                    page->add_glyph(new Text(get_string_value(command->parameter(i))));
-                }
-            }
-            if (name->name() == "'") {
-                for (int i = 0; i < command->size(); i++) {
-                    page->add_glyph(new Break());
-                    page->add_glyph(new Text(get_string_value(command->parameter(i))));
-                }
-            }
-//            if (name->name() == "\"") {
-//                for (int i = 2; i < command->size(); i++) {
-//                    cout << get_string_value(command->parameter(i));
-//                }
-//            }
-            if (name->name() == "T*") {
-                page->add_glyph(new Break());
-            }
-            if (name->name() == "TJ") {
-                for (int i = 0; i < command->size(); i += 2) {
-                    ArrayNode *array = dynamic_cast<ArrayNode *> (command->parameter(i));
-                    if (array) {
-                        for (int j = 0; j < array->size(); j++) {
-                            page->add_glyph(new Text(get_string_value(array->value(j))));
-                        }
-                    } else {
-                        // FIXME ???
-                    }
-                }
-            }
-        }
-    }*/
     return page;
 }
 
@@ -469,20 +428,6 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
                 if (snode) {
                     stringstream stream_value;
                     get_stream(contents, &stream_value);
-
-                    /*NameNode *filter = dynamic_cast<NameNode *> (get_real_value(snode->get("/Filter")));
-                    if (filter && filter->name() == "/FlateDecode") {
-                        const char *uncompressed = flat_decode(contents->stream(), contents->stream_size());
-                        stream_value << uncompressed;
-                        delete [] uncompressed;
-                        contents->clear_stream();
-                    } else if (!filter) {
-                        stream_value << (char *) contents->stream();
-                    } else {
-                        error_message(string("Invalid filter ") + filter->name());
-                    }
-                    stream_value.seekg(0);
-                     */
                     m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), &stream_value, media));
                 } else {
                     stringstream stream_value;

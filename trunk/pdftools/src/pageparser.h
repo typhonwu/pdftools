@@ -24,14 +24,11 @@ private:
     void next_token();
     bool match(TokenType type);
     
-    TreeNode *sequence();
     TreeNode *value_sequence();
-    TreeNode *bt_sequence();
     TreeNode *bi_sequence();
     TreeNode *bdc_sequence();
-    TreeNode *tjlo_sequence();
-    TreeNode *text_sequence();
-    TreeNode *tjup_sequence();
+    TreeNode *tjlo_sequence(vector<TreeNode *> &values);
+    TreeNode *tjup_sequence(vector<TreeNode *> &values);
 };
 
 #endif

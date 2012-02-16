@@ -281,39 +281,29 @@ Document * Analyze::analyze_tree(RootNode * tree)
 
 Glyph *Analyze::analize_page(TreeNode *node)
 {
-    BTNode *bt = dynamic_cast<BTNode *> (node);
-    if (bt) {
-        Glyph *p = new Glyph;
-
-        int size = bt->size();
-        for (int loop = 0; loop < size; loop++) {
-            p->add_child(analize_page(bt->get(loop)));
-        }
-        return p;
-    } else {
-        BDCNode *bdc = dynamic_cast<BDCNode *> (node);
-        if (bdc) {
-            if (bdc->name() == "/Artifact") {
-                MapNode *map = dynamic_cast<MapNode *> (bdc->value());
-                if (map) {
-                    NameNode *name = dynamic_cast<NameNode *> (map->get("/Subtype"));
-                    if (name && name->name() == "/Footer") {
-                        // Ignore footer
-                        return NULL;
-                    }
+    BDCNode *bdc = dynamic_cast<BDCNode *> (node);
+    if (bdc) {
+        if (bdc->name() == "/Artifact") {
+            MapNode *map = dynamic_cast<MapNode *> (bdc->value());
+            if (map) {
+                NameNode *name = dynamic_cast<NameNode *> (map->get("/Subtype"));
+                if (name && name->name() == "/Footer") {
+                    // Ignore footer
+                    return NULL;
                 }
             }
-            Paragraph *p = new Paragraph;
-
-            int size = bdc->size();
-            for (int loop = 0; loop < size; loop++) {
-                p->add_child(analize_page(bdc->get(loop)));
-            }
-            return p;
+        }
+        if (bdc->name() == "/P") {
+            return new Break;
+        }
+    } else {
+        TextNode *text = dynamic_cast<TextNode *> (node);
+        if (text) {
+            return new Text(text->text());
         } else {
-            TextNode *text = dynamic_cast<TextNode *> (node);
-            if (text) {
-                return new Text(text->text());
+            BreakNode *b = dynamic_cast<BreakNode *> (node);
+            if (b) {
+                return new Break;
             }
         }
     }

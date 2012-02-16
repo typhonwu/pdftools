@@ -1,3 +1,10 @@
+pdftools (0.3ubuntu1) lucid; urgency=low
+
+  * Added a basic ePUB file generation
+  * Added ZIP file functionalities
+
+ -- Leonardo Alves da Costa <leonhad@gmail.com>  Thu, 16 Feb 2012 16:27:24 -0200
+
 pdftools (0.2ubuntu1) lucid; urgency=low
 
   * Finished the parser and scanner

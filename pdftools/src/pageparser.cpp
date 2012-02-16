@@ -37,28 +37,44 @@ RootNode *PageParser::parse()
 
     next_token();
     while (m_scanner.good()) {
-        //        root->add_child(sequence());
         TreeNode *value = value_sequence();
         if (value) {
             values.push_back(value);
         } else {
             switch (m_token->type()) {
+            case BDC:
+                m_root->add_child(bdc_sequence(values));
+                break;
             case BI:
                 m_root->add_child(bi_sequence());
                 break;
             case TJ_LO:
-                m_root->add_child(tjlo_sequence(values));
+                match(TJ_LO);
+                m_root->add_child(text_sequence(values));
                 break;
             case TJ_UP:
-                m_root->add_child(tjup_sequence(values));
+                tjup_sequence(m_root, values);
                 break;
             case T_AST:
-                m_root->add_child(new TextNode);
-                next_token();
+                match(T_AST);
+                m_root->add_child(new BreakNode);
+                break;
+            case DOUBLE_QUOTE:
+                match(DOUBLE_QUOTE);
+                m_root->add_child(new BreakNode);
+            {
+                TextNode *text = new TextNode;
+                StringNode *node = dynamic_cast<StringNode *> (values[3]);
+                if (node) {
+                    text->add(node->value());
+                }
+                m_root->add_child(text);
+            }
                 break;
             case QUOTE:
-                m_root->add_child(new TextNode);
-                m_root->add_child(tjlo_sequence(values));
+                match(QUOTE);
+                m_root->add_child(new BreakNode);
+                m_root->add_child(text_sequence(values));
                 next_token();
                 break;
             default:
@@ -66,7 +82,9 @@ RootNode *PageParser::parse()
             }
             register int size = values.size();
             for (register int loop = 0; loop < size; loop++) {
-                delete values[loop];
+                if (values[loop]) {
+                    delete values[loop];
+                }
             }
             values.clear();
         }
@@ -90,9 +108,8 @@ TreeNode *PageParser::bi_sequence()
     return NULL;
 }
 
-TreeNode *PageParser::tjlo_sequence(vector<TreeNode *> &values)
+TreeNode *PageParser::text_sequence(vector<TreeNode *> &values)
 {
-    match(TJ_LO);
     TextNode *text = new TextNode;
     int size = values.size();
     for (int loop = 0; loop < size; loop++) {
@@ -104,10 +121,9 @@ TreeNode *PageParser::tjlo_sequence(vector<TreeNode *> &values)
     return text;
 }
 
-TreeNode *PageParser::tjup_sequence(vector<TreeNode *> &values)
+void PageParser::tjup_sequence(RootNode *root, vector<TreeNode *> &values)
 {
     match(TJ_UP);
-    RootNode *g = new RootNode;
     int size = values.size();
     for (int loop = 0; loop < size; loop++) {
         ArrayNode *array = dynamic_cast<ArrayNode *> (values[loop]);
@@ -118,47 +134,27 @@ TreeNode *PageParser::tjup_sequence(vector<TreeNode *> &values)
                 if (node) {
                     TextNode *text = new TextNode;
                     text->add(node->value());
-                    g->add_child(text);
+                    root->add_child(text);
                 }
             }
         }
     }
-    return g;
 }
 
-TreeNode *PageParser::bdc_sequence()
+TreeNode *PageParser::bdc_sequence(vector<TreeNode *> &values)
 {
-    string name = m_token->value();
-    match(NAME);
+    match(BDC);
+    BDCNode *node = new BDCNode;
 
-    if (m_token->type() == GS) {
-        match(GS);
-        // Ignore graphic state
-        return NULL;
-    } else if (m_token->type() == CS_UP) {
-        match(CS_UP);
-        // Ignore color space
-        return NULL;
-    } else if (m_token->type() == SCN_UP) {
-        match(SCN_UP);
-        // Ignore color space
-        return NULL;
-    } else if (m_token->type() == DO) {
-        match(DO);
-        // Ignore XObject
-        return NULL;
+    NameNode *name = dynamic_cast<NameNode *> (values[0]);
+    if (name) {
+        node->set_name(name->name());
     }
+    node->set_value(values[1]);
+    // avoid double delete
+    values[1] = NULL;
 
-    TreeNode *value = value_sequence();
-    NumberNode *size = dynamic_cast<NumberNode *> (value);
-    if (size) {
-        match(TF);
-        FontNode *font = new FontNode;
-        font->set_name(name);
-        font->set_size(size->value());
-        return font;
-    }
-    return NULL;
+    return node;
 }
 
 bool PageParser::match(TokenType type)

@@ -26,9 +26,9 @@ private:
     
     TreeNode *value_sequence();
     TreeNode *bi_sequence();
-    TreeNode *bdc_sequence();
-    TreeNode *tjlo_sequence(vector<TreeNode *> &values);
-    TreeNode *tjup_sequence(vector<TreeNode *> &values);
+    TreeNode *bdc_sequence(vector<TreeNode *> &values);
+    TreeNode *text_sequence(vector<TreeNode *> &values);
+    void tjup_sequence(RootNode *root, vector<TreeNode *> &values);
 };
 
 #endif

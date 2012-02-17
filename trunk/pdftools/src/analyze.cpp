@@ -363,6 +363,12 @@ void Analyze::get_stream(ObjNode *obj, stringstream *stream_value)
     } else if (filter_array) {
         int size = filter_array->size();
         if (size > 1) {
+#ifdef DEBUG
+            for (int loop = 0; loop < size; loop++) {
+                filter = dynamic_cast<NameNode *> (get_real_value(filter_array->value(loop)));
+                cout << filter->name() << endl;
+            }
+#endif
             error_message("More than one filter is not supported.");
         } else {
             for (int loop = 0; loop < size; loop++) {

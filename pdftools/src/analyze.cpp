@@ -42,12 +42,16 @@ void Analyze::analyze_xref()
             MapNode *trailer = dynamic_cast<MapNode *> (xref->trailer());
 
             TreeNode *rootValue = get_real_value(trailer->get("/Root"));
+            TreeNode *encrypt = get_real_value(trailer->get("/Encrypt"));
             TreeNode *info = get_real_value(trailer->get("/Info"));
             if (rootValue) {
                 m_document->set_root(rootValue);
             }
             if (info) {
                 m_document->set_info(info);
+            }
+            if (encrypt) {
+                m_document->set_encrypted(true);
             }
 
             ArrayNode *array = dynamic_cast<ArrayNode *> (trailer->get("/ID"));
@@ -262,7 +266,7 @@ void Analyze::analyze_outlines(MapNode *values, Outline * parent)
 
 }
 
-Document * Analyze::analyze_tree(RootNode * tree)
+Document *Analyze::analyze_tree(RootNode * tree)
 {
     if (!tree) {
         // Invalid tree
@@ -272,11 +276,15 @@ Document * Analyze::analyze_tree(RootNode * tree)
     m_document = new Document;
 
     analyze_xref();
-    analyze_info();
-    analyze_root();
-    analyze_pages(m_page_tree);
-
-    return m_document;
+    if (m_document->encrypted()) {
+        error_message("Encrypted file is not supported");
+        return NULL;
+    } else {
+        analyze_info();
+        analyze_root();
+        analyze_pages(m_page_tree);
+        return m_document;
+    }
 }
 
 Glyph *Analyze::analize_page(TreeNode *node)

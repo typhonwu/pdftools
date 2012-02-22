@@ -4,6 +4,7 @@ Document::Document()
 {
     m_root = NULL;
     m_info = NULL;
+    m_encrypted = false;
     m_outlines = NULL;
     m_lang = "en";
 }
@@ -20,6 +21,16 @@ Document::~Document()
         delete *l;
         l++;
     }
+}
+
+void Document::set_encrypted(bool encrypt)
+{
+    m_encrypted = encrypt;
+}
+
+bool Document::encrypted()
+{
+    return m_encrypted;
 }
 
 Page *Document::page(int id, int generation)

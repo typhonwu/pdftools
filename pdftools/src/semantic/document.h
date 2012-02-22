@@ -12,6 +12,7 @@ using namespace std;
 
 class Document {
 private:
+    bool m_encrypted;
     string m_id;
     string m_title;
     string m_subject;
@@ -30,6 +31,7 @@ public:
     void set_id(string first, string second);
     void set_root(TreeNode *root);
     void set_info(TreeNode *info);
+    void set_encrypted(bool encrypt);
     
     void set_title(string title);
     void set_subject(string subject);
@@ -45,6 +47,7 @@ public:
     int pages();
     Page *page(int id, int generation);
     
+    bool encrypted();
     string lang();
     string id();
     string title();

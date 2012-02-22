@@ -43,7 +43,6 @@ private:
     void write_string(const char *str);
     
     uint32_t current_datetime();
-    uint32_t crc32(const char *data, size_t size);
 };
 
 #endif

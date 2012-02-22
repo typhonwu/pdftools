@@ -1,12 +1,12 @@
 #include "utils.h"
 #include "config.h"
-#include <dirent.h>
 #include <iostream>
 #include <cstdlib>
 #include <vector>
 #include <cstring>
 #include <zlib.h>
 #include <iconv.h>
+#include <errno.h>
 
 using namespace std;
 
@@ -56,7 +56,7 @@ const char *doc_encoding_table[256] = {
 
 void verbose_message(string msg)
 {
-    if (verbose_mode()) {
+    if (_verbose) {
         cout << PACKAGE_NAME << ": " << msg << endl;
     }
 }
@@ -133,7 +133,7 @@ char *flat_decode(char *compressed, int size, int &deflated)
     zstream.next_in = Z_NULL;
 
     int total = 0;
-    int rsti = inflateInit(&zstream);
+    int rsti = inflateInit2(&zstream, 32);
     if (rsti == Z_OK) {
         zstream.avail_in = size;
         zstream.next_in = (Bytef *) compressed;
@@ -170,8 +170,6 @@ char *flat_decode(char *compressed, int size, int &deflated)
     }
     return ret;
 }
-
-#include <errno.h>
 
 string utf16_to_utf8(string &str)
 {
@@ -213,7 +211,6 @@ string utf16_to_utf8(string &str)
 
         for (int loop = 0; loop < size; loop++) {
             uint8_t c = str[loop];
-
             const char *new_char = doc_encoding_table[c];
             converted += new_char;
         }

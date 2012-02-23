@@ -1,5 +1,4 @@
 #include "utils.h"
-#include "config.h"
 #include <iostream>
 #include <cstdlib>
 #include <vector>
@@ -7,6 +6,7 @@
 #include <zlib.h>
 #include <iconv.h>
 #include <errno.h>
+#include "config.h"
 
 using namespace std;
 

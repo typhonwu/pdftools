@@ -116,7 +116,6 @@ static reserved_words words[] = {
     { B_LO, "b"},
     { B_LO_AST, "b*"},
     { EI, "EI"}
-
 };
 
 inline unsigned int xtod(char c)
@@ -160,16 +159,8 @@ void Scanner::to_pos(int pos)
 int Scanner::ignore_stream(int length)
 {
     // Ignore first new line
-    register char c;
-    do {
-        c = next_char();
-        if (is_space(c)) {
-            continue;
-        } else if (c != '\n') {
-            break;
-        }
-    } while (m_filein->good());
-    unget_char();
+    while (m_filein->good() && next_char() != '\n');
+    //unget_char();
     int ret = m_filein->tellg();
 
     if (length > 0) {
@@ -233,18 +224,6 @@ char *Scanner::get_image_stream()
 
 char *Scanner::get_stream(int length)
 {
-    // Ignore first new line
-    register char c;
-    do {
-        c = next_char();
-        if (is_space(c)) {
-            continue;
-        } else if (c != '\n') {
-            break;
-        }
-    } while (m_filein->good());
-    unget_char();
-
     char *stream = new char[length];
     m_filein->read((char *) stream, length);
     return stream;

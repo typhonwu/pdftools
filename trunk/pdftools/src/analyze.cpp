@@ -318,10 +318,40 @@ Glyph *Analyze::analize_page(TreeNode *node)
     return NULL;
 }
 
-Page *Analyze::process_page(int id, int generation, stringstream *stream_value, ArrayNode * mediabox)
+Page *Analyze::process_page(int id, int generation, stringstream *stream_value, MapNode *catalog, ArrayNode * mediabox)
 {
     Page *page = new Page;
     page->set_destination(id, generation);
+
+    MapNode *resources = dynamic_cast<MapNode *> (get_real_obj_value(catalog->get("/Resources")));
+    if (resources) {
+        MapNode *fonts = dynamic_cast<MapNode *> (get_real_obj_value(resources->get("/Font")));
+        if (fonts) {
+            vector<string> names = fonts->names();
+            int size = names.size();
+            for (int loop = 0; loop < size; loop++) {
+                MapNode *font = dynamic_cast<MapNode *> (get_real_obj_value(fonts->get(names[loop])));
+                if (font) {
+                    MapNode *descriptor = dynamic_cast<MapNode *> (get_real_obj_value(font->get("/FontDescriptor")));
+                    ObjNode *to_unicode = dynamic_cast<ObjNode *> (get_real_value(font->get("/ToUnicode")));
+                    if (to_unicode) {
+                        stringstream stream;
+                        get_stream(to_unicode, &stream);
+
+                        cout.write(stream.str().c_str(), stream.str().length());
+                    }
+
+                    //                    if (descriptor) {
+                    //                        ObjNode *font_file2 = dynamic_cast<ObjNode *> (get_real_value(descriptor->get("/FontFile2")));
+                    //                        stringstream stream;
+                    //                        get_stream(font_file2, &stream);
+                    //                        
+                    //                        cout.write(stream.str().c_str(), stream.str().length());
+                    //                    }
+                }
+            }
+        }
+    }
 
 #ifdef DEBUG
     //cout << stream_value->str() << endl;
@@ -333,6 +363,7 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
 
     int size = root->size();
     for (int loop = 0; loop < size; loop++) {
+
         page->add_glyph(analize_page(root->get(loop)));
     }
     return page;
@@ -342,6 +373,7 @@ void Analyze::get_stream(ArrayNode *array, stringstream *stream_value)
 {
     if (array) {
         for (int loop = 0; loop < array->size(); loop++) {
+
             ObjNode *obj = dynamic_cast<ObjNode *> (get_real_value(array->value(loop)));
             get_stream(obj, stream_value);
         }
@@ -393,6 +425,7 @@ void Analyze::get_stream(ObjNode *obj, stringstream *stream_value)
     } else if (!filter) {
         (*stream_value).write(stream, total);
     } else {
+
         error_message(string("Invalid filter ") + filter->name());
     }
     delete [] stream;
@@ -428,17 +461,17 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
 
             ObjNode *contents = dynamic_cast<ObjNode *> (get_real_value(catalog->get("/Contents")));
             if (contents) {
+                stringstream stream_value;
                 MapNode *snode = dynamic_cast<MapNode *> (contents->value());
                 if (snode) {
                     stringstream stream_value;
                     get_stream(contents, &stream_value);
-                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), &stream_value, media));
                 } else {
-                    stringstream stream_value;
+
                     ArrayNode *array = dynamic_cast<ArrayNode *> (contents->value());
                     get_stream(array, &stream_value);
-                    m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), &stream_value, media));
                 }
+                m_document->add_page(process_page(obj_pages->id(), obj_pages->generation(), &stream_value, catalog, media));
             }
         }
     }
@@ -448,6 +481,7 @@ TreeNode * Analyze::get_real_value(TreeNode * value)
 {
     RefNode *ref = dynamic_cast<RefNode *> (value);
     if (ref) {
+
         return get_object(ref);
     }
     return value;
@@ -459,6 +493,7 @@ TreeNode * Analyze::get_real_obj_value(TreeNode * value)
     if (ref) {
         ObjNode *node = get_object(ref);
         if (node) {
+
             return node->value();
         }
         return NULL;
@@ -470,6 +505,7 @@ string Analyze::get_string_value(TreeNode * value)
 {
     StringNode *str = dynamic_cast<StringNode *> (value);
     if (str) {
+
         return str->value();
     }
     return string();
@@ -479,6 +515,7 @@ double Analyze::get_number_value(TreeNode *value, int default_value)
 {
     NumberNode *num = dynamic_cast<NumberNode *> (value);
     if (num) {
+
         return num->value();
     }
     return default_value;
@@ -487,6 +524,7 @@ double Analyze::get_number_value(TreeNode *value, int default_value)
 ObjNode * Analyze::get_object(RefNode * ref)
 {
     if (!ref) {
+
         return NULL;
     }
     return get_object(ref->id(), ref->generation());

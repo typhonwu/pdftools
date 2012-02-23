@@ -21,6 +21,38 @@ Document::~Document()
         delete *l;
         l++;
     }
+    vector<Font *>::iterator f = m_fonts.begin();
+    while (f != m_fonts.end()) {
+        delete *f;
+        f++;
+    }
+}
+
+void Document::add_font(Font *font)
+{
+    m_fonts.push_back(font);
+}
+
+Font *Document::get_font_by_alias(const char *alias)
+{
+    vector<Font *>::iterator f = m_fonts.begin();
+    while (f != m_fonts.end()) {
+        if ((*f)->alias() == alias) {
+            return *f;
+        }
+    }
+    return NULL;
+}
+
+Font *Document::get_font(const char *name)
+{
+    vector<Font *>::iterator f = m_fonts.begin();
+    while (f != m_fonts.end()) {
+        if ((*f)->name() == name) {
+            return *f;
+        }
+    }
+    return NULL;
 }
 
 void Document::set_encrypted(bool encrypt)

@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <vector>
 #include "mapnode.h"
 #include "treenode.h"
 
@@ -24,6 +25,17 @@ TreeNode *MapNode::get(string name)
     } catch (out_of_range &) {
         return NULL;
     }
+}
+
+vector<string> MapNode::names()
+{
+    vector<string> names;
+    map<string, TreeNode*>::iterator i = m_values.begin();
+    while (i != m_values.end()) {
+        names.push_back((*i).first);
+        i++;
+    }
+    return names;
 }
 
 map<string, TreeNode *> MapNode::values()

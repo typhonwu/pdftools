@@ -2,6 +2,7 @@
 #define DOCUMENT_H
 
 #include "nodes/nodes.h"
+#include "font.h"
 #include "page.h"
 #include "pagelabel.h"
 #include "outline.h"
@@ -21,6 +22,7 @@ private:
     TreeNode *m_root;
     TreeNode *m_info;
     Outline *m_outlines;
+    vector<Font *> m_fonts;
     vector<Page *> m_pages;
     vector<PageLabel *> m_page_label;
     
@@ -40,6 +42,10 @@ public:
     
     void set_outline(Outline *outline);
     Outline *outline();
+    
+    void add_font(Font *font);
+    Font *get_font(const char *name);
+    Font *get_font_by_alias(const char *alias);
     
     void add_page(Page *page);
     void add_page_label(PageLabel *label);

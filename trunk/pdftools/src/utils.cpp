@@ -133,7 +133,7 @@ char *flat_decode(char *compressed, int size, int &deflated)
     zstream.next_in = Z_NULL;
 
     int total = 0;
-    int rsti = inflateInit2(&zstream, 32);
+    int rsti = inflateInit(&zstream);
     if (rsti == Z_OK) {
         zstream.avail_in = size;
         zstream.next_in = (Bytef *) compressed;

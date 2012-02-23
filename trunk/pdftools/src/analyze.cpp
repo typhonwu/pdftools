@@ -338,7 +338,7 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
                         stringstream stream;
                         get_stream(to_unicode, &stream);
 
-                        cout.write(stream.str().c_str(), stream.str().length());
+                        //cout.write(stream.str().c_str(), stream.str().length());
                     }
 
                     //                    if (descriptor) {

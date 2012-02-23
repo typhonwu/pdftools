@@ -86,11 +86,11 @@ char *deflate(const char *raw, int size, int &writed)
     zstream.zalloc = Z_NULL;
     zstream.zfree = Z_NULL;
     zstream.opaque = Z_NULL;
-    int err = deflateInit(&zstream, Z_BEST_COMPRESSION);
+
+    int err = deflateInit2(&zstream, Z_BEST_COMPRESSION, Z_DEFLATED, -MAX_WBITS, MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
     if (err != Z_OK) {
         return NULL;
     }
-
     zstream.avail_in = size;
     zstream.next_in = (Bytef *) raw;
 

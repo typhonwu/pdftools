@@ -130,10 +130,16 @@ inline unsigned int xtod(char c)
 Scanner::Scanner()
 {
     m_error = NULL;
+    m_charset_conversion = true;
 }
 
 Scanner::~Scanner()
 {
+}
+
+void Scanner::disable_chatset_conversion()
+{
+    m_charset_conversion = false;
 }
 
 void Scanner::set_istream(istream *stream)
@@ -194,7 +200,7 @@ int Scanner::ignore_stream(int length)
 }
 
 char *Scanner::get_image_stream()
-{   
+{
     register char c;
     do {
         c = next_char();
@@ -384,7 +390,7 @@ Token *Scanner::next_token()
                 save = false;
                 state = DONE;
 
-                unsigned int loop;
+                register unsigned int loop;
                 string string;
 
                 for (loop = 0; loop < token_string.length(); loop++) {
@@ -396,7 +402,11 @@ Token *Scanner::next_token()
                     }
                     string.push_back(h + l);
                 }
-                token_string = utf16_to_utf8(string);
+                if (m_charset_conversion) {
+                    token_string = utf16_to_utf8(string);
+                } else {
+                    token_string = string;
+                }
                 current_token = STRING;
             }
             break;
@@ -413,7 +423,9 @@ Token *Scanner::next_token()
                 if (inner_string > 0) {
                     inner_string--;
                 } else {
-                    token_string = utf16_to_utf8(token_string);
+                    if (m_charset_conversion) {
+                        token_string = utf16_to_utf8(token_string);
+                    }
                     save = false;
                     state = DONE;
                     current_token = STRING;

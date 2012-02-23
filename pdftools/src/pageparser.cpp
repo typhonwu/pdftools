@@ -10,6 +10,7 @@ using namespace std;
 
 PageParser::PageParser(istream *stream)
 {
+    m_scanner.disable_chatset_conversion();
     m_scanner.set_istream(stream);
     m_root = NULL;
 }

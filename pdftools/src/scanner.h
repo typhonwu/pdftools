@@ -12,6 +12,7 @@ private:
     istream *m_filein;
     const char *m_error;
     Token m_current;
+    bool m_charset_conversion;
 
 public:
     Scanner();
@@ -28,6 +29,7 @@ public:
     void to_pos(int pos);
     char *get_stream(int length);
     char *get_image_stream();
+    void disable_chatset_conversion();
 
 private:
     void unget_char();

@@ -4,6 +4,7 @@
 #include "treenode.h"
 #include <map>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -17,6 +18,7 @@ public:
     
     void push(string name, TreeNode *value);
     map<string, TreeNode *> values();
+    vector<string> names();
     
     TreeNode *get(string name);
 };

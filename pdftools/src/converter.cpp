@@ -42,12 +42,11 @@ void Converter::convert()
     if (!parser.is_valid()) {
         error_message(string(m_filein).append(" not found."));
     } else {
-        verbose_message(string("Parsing file ").append(m_filein));
         m_syntax_tree = parser.parse();
-        verbose_message("Analyzing file...");
         m_document = analyze.analyze_tree(m_syntax_tree);
         if (m_document) {
             stringstream msg;
+            msg << "Parsin file " << m_filein << " ";
             msg << "Pages: " << m_document->pages();
             msg << " - " << "Title: ";
             if (m_document->title().empty()) {

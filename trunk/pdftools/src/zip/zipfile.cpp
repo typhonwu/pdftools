@@ -66,11 +66,7 @@ void ZipFile::add_source(const char *filename, const char *buffer, int length)
     uLong crc = ::crc32(0L, Z_NULL, 0);
     file.crc = ::crc32(crc, (Bytef *) buffer, length);
 
-    // When using the Compress method, ZLib adds a 2 byte head
-    // and a 4 byte tail. The head must be removed for zip
-    // compatability and the tail is not necessary.
-    char *b = deflate(buffer, length, file.compressed_size);
-    file.compressed_size -= 6;
+    char *deflate_buffer = deflate(buffer, length, file.compressed_size);
 
     if (file.compressed_size < file.length) {
         file.compressed = true;
@@ -86,7 +82,7 @@ void ZipFile::add_source(const char *filename, const char *buffer, int length)
         // Bit flags
         write16(2);
         // Compression mode
-        write16(8);
+        write16(Z_DEFLATED);
     } else {
         write16(0);
         write16(0);
@@ -103,11 +99,11 @@ void ZipFile::add_source(const char *filename, const char *buffer, int length)
     write_string(filename);
 
     if (file.compressed) {
-        m_output.write(b + 2, file.compressed_size);
+        m_output.write(deflate_buffer, file.compressed_size);
     } else {
         m_output.write(buffer, file.length);
     }
-    delete [] b;
+    delete [] deflate_buffer;
     m_files.push_back(file);
 }
 
@@ -127,7 +123,7 @@ void ZipFile::write_central_file()
             // bit flag
             write16(2);
             // compression
-            write16(8);
+            write16(Z_DEFLATED);
         } else {
             write16(0);
             write16(0);

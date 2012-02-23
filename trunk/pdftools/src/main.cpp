@@ -14,7 +14,6 @@
 #include <cstdio>
 #include <cstring>
 #include <getopt.h>
-#include <libxml/xmlversion.h>
 
 using namespace std;
 

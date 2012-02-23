@@ -154,7 +154,15 @@ void Scanner::to_pos(int pos)
 int Scanner::ignore_stream(int length)
 {
     // Ignore first new line
-    while (m_filein->good() && next_char() == '\n');
+    register char c;
+    do {
+        c = next_char();
+        if (is_space(c)) {
+            continue;
+        } else if (c != '\n') {
+            break;
+        }
+    } while (m_filein->good());
     unget_char();
     int ret = m_filein->tellg();
 
@@ -187,7 +195,15 @@ int Scanner::ignore_stream(int length)
 
 char *Scanner::get_image_stream()
 {   
-    while (m_filein->good() && next_char() == '\n');
+    register char c;
+    do {
+        c = next_char();
+        if (is_space(c)) {
+            continue;
+        } else if (c != '\n') {
+            break;
+        }
+    } while (m_filein->good());
     unget_char();
 
     while (m_filein->good()) {
@@ -212,7 +228,15 @@ char *Scanner::get_image_stream()
 char *Scanner::get_stream(int length)
 {
     // Ignore first new line
-    while (m_filein->good() && next_char() == '\n');
+    register char c;
+    do {
+        c = next_char();
+        if (is_space(c)) {
+            continue;
+        } else if (c != '\n') {
+            break;
+        }
+    } while (m_filein->good());
     unget_char();
 
     char *stream = new char[length];
@@ -421,18 +445,4 @@ Token *Scanner::next_token()
     m_current.set_value(token_string);
 
     return &m_current;
-}
-
-const char *Scanner::get_line()
-{
-    string _buffer;
-
-    while (m_filein->good()) {
-        char c = next_char();
-        if (c == '\n') {
-            break;
-        }
-        _buffer += c;
-    }
-    return _buffer.c_str();
 }

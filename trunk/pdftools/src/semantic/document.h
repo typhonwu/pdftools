@@ -45,7 +45,6 @@ public:
     
     void add_font(Font *font);
     Font *get_font(const char *name);
-    Font *get_font_by_alias(const char *alias);
     
     void add_page(Page *page);
     void add_page_label(PageLabel *label);

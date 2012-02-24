@@ -17,13 +17,3 @@ string Font::name()
 {
     return m_name;
 }
-
-void Font::set_alias(string alias)
-{
-    m_alias = alias;
-}
-
-string Font::alias()
-{
-    return m_alias;
-}

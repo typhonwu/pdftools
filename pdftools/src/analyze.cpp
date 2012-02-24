@@ -133,6 +133,7 @@ void Analyze::analyze_root()
             int loop;
             int size = array->size();
 
+#pragma omp parallel for
             for (loop = 0; loop < size; loop += 2) {
                 double page = get_number_value(array->value(loop));
                 MapNode *attributes = dynamic_cast<MapNode *> (get_real_obj_value(array->value(loop + 1)));
@@ -363,7 +364,6 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
 
     int size = root->size();
     for (int loop = 0; loop < size; loop++) {
-
         page->add_glyph(analize_page(root->get(loop)));
     }
     return page;
@@ -373,7 +373,6 @@ void Analyze::get_stream(ArrayNode *array, stringstream *stream_value)
 {
     if (array) {
         for (int loop = 0; loop < array->size(); loop++) {
-
             ObjNode *obj = dynamic_cast<ObjNode *> (get_real_value(array->value(loop)));
             get_stream(obj, stream_value);
         }
@@ -477,7 +476,7 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
     }
 }
 
-TreeNode * Analyze::get_real_value(TreeNode * value)
+TreeNode *Analyze::get_real_value(TreeNode * value)
 {
     RefNode *ref = dynamic_cast<RefNode *> (value);
     if (ref) {
@@ -487,7 +486,7 @@ TreeNode * Analyze::get_real_value(TreeNode * value)
     return value;
 }
 
-TreeNode * Analyze::get_real_obj_value(TreeNode * value)
+TreeNode *Analyze::get_real_obj_value(TreeNode * value)
 {
     RefNode *ref = dynamic_cast<RefNode *> (value);
     if (ref) {
@@ -505,7 +504,6 @@ string Analyze::get_string_value(TreeNode * value)
 {
     StringNode *str = dynamic_cast<StringNode *> (value);
     if (str) {
-
         return str->value();
     }
     return string();
@@ -515,22 +513,20 @@ double Analyze::get_number_value(TreeNode *value, int default_value)
 {
     NumberNode *num = dynamic_cast<NumberNode *> (value);
     if (num) {
-
         return num->value();
     }
     return default_value;
 }
 
-ObjNode * Analyze::get_object(RefNode * ref)
+ObjNode *Analyze::get_object(RefNode * ref)
 {
     if (!ref) {
-
         return NULL;
     }
     return get_object(ref->id(), ref->generation());
 }
 
-ObjNode * Analyze::get_object(int id, int generation)
+ObjNode *Analyze::get_object(int id, int generation)
 {
     int size = m_tree->size();
     int i;

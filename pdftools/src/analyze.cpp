@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "scanner.h"
 #include "pageparser.h"
+#include "cmapparser.h"
 #include "nodes/nodes.h"
 #include "semantic/outline.h"
 #include "semantic/pagelabel.h"
@@ -338,6 +339,10 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
                     if (to_unicode) {
                         stringstream stream;
                         get_stream(to_unicode, &stream);
+
+                        stream.seekg(0);
+                        CMapParser parser(&stream);
+                        RootNode *root = parser.parse();
 
                         //cout.write(stream.str().c_str(), stream.str().length());
                     }

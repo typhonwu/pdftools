@@ -9,7 +9,8 @@ pdftools_SOURCES = main.cpp \
 	analyze.cpp \
 	converter.cpp \
 	generator.cpp \
-	pageparser.cpp
+	pageparser.cpp \
+	cmapparser.cpp
 
 dist_man_MANS = pdftools.1
 
@@ -21,7 +22,8 @@ noinst_HEADERS = \
 	analyze.h \
 	converter.h \
 	generator.h \
-	pageparser.h
+	pageparser.h \
+	cmapparser.h
 
 pdftools_CXXFLAGS = $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 pdftools_LDADD = \

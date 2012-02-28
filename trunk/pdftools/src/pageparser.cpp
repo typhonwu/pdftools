@@ -116,6 +116,7 @@ TreeNode *PageParser::text_sequence(vector<TreeNode *> &values)
     for (int loop = 0; loop < size; loop++) {
         StringNode *node = dynamic_cast<StringNode *> (values[loop]);
         if (node) {
+            cout <<  node->value() << endl;
             text->add(node->value());
         }
     }

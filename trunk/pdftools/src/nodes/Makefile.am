@@ -14,7 +14,10 @@ libnodes_a_SOURCES = \
 	breaknode.cpp \
 	bdcnode.cpp \
 	textnode.cpp \
-	fontnode.cpp
+	fontnode.cpp \
+	charnode.cpp \
+	cmapnode.cpp \
+	codespacenode.cpp
 
 noinst_HEADERS = \
 	objnode.h \
@@ -32,6 +35,9 @@ noinst_HEADERS = \
 	bdcnode.h \
 	textnode.h \
 	fontnode.h \
+	charnode.h \
+	cmapnode.h \
+	codespacenode.h \
 	nodes.h
 
 libnodes_a_CXXFLAGS = -I..

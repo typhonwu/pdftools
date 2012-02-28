@@ -17,6 +17,11 @@ Page::~Page()
     if (m_crop_box) delete [] m_crop_box;
 }
 
+void Page::add_fontmap(string alias, string font_name)
+{
+    m_fontmap[alias] = font_name;
+}
+
 void Page::add_glyph(Glyph *glyph)
 {
     if (glyph) {

@@ -2,6 +2,7 @@
 #define PAGE_H
 
 #include <string>
+#include <map>
 #include "glyph.h"
 #include "html/html.h"
 
@@ -15,6 +16,7 @@ private:
     int m_generation;
     string m_link;
     Glyph m_document;
+    map<string, string> m_fontmap;
 
 public:
     Page();
@@ -30,6 +32,8 @@ public:
 
     void add_glyph(Glyph *glyph);
     void execute(Html *document);
+    
+    void add_fontmap(string alias, string font_name);
 };
 
 

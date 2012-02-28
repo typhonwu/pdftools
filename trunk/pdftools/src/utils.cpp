@@ -171,7 +171,34 @@ char *flat_decode(char *compressed, int size, int &deflated)
     return ret;
 }
 
-string utf16_to_utf8(string &str)
+string utf16be_to_utf8(string &str)
+{
+    string ret;
+    
+    iconv_t conv_desc = iconv_open("UTF-8", "UTF-16BE");
+    if ((size_t) conv_desc == (size_t) - 1) {
+        /* Initialization failure. Do not convert strings */
+    } else {
+        size_t len = str.length();
+        size_t utf8len = len * 2;
+        const int original = utf8len;
+        char *utf16 = (char*) str.c_str();
+        char *utf8 = new char[utf8len];
+        char *utf8start = utf8;
+        memset(utf8, 0, len);
+
+        size_t iconv_value = iconv(conv_desc, &utf16, &len, &utf8, &utf8len);
+        // Handle failures.
+        if ((int) iconv_value != -1) {
+            ret = string(utf8start, original - utf8len);
+        }
+        delete [] utf8start;
+        iconv_close(conv_desc);
+    }
+    return ret;
+}
+
+string charset_to_utf8(string &str)
 {
     string ret = str;
     bool convert_string = false;
@@ -192,6 +219,7 @@ string utf16_to_utf8(string &str)
         } else {
             size_t len = str.length();
             size_t utf8len = len * 2;
+            const int original = utf8len;
             char *utf16 = (char*) str.c_str();
             char *utf8 = new char[utf8len];
             char *utf8start = utf8;
@@ -200,7 +228,7 @@ string utf16_to_utf8(string &str)
             size_t iconv_value = iconv(conv_desc, &utf16, &len, & utf8, & utf8len);
             // Handle failures.
             if ((int) iconv_value != -1) {
-                ret = utf8start;
+                ret = string(utf8start, original - utf8len);
             }
             delete [] utf8start;
             iconv_close(conv_desc);

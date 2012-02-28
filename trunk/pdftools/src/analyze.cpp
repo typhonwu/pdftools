@@ -332,28 +332,11 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
             vector<string> names = fonts->names();
             int size = names.size();
             for (int loop = 0; loop < size; loop++) {
-                MapNode *font = dynamic_cast<MapNode *> (get_real_obj_value(fonts->get(names[loop])));
-                if (font) {
-                    MapNode *descriptor = dynamic_cast<MapNode *> (get_real_obj_value(font->get("/FontDescriptor")));
-                    ObjNode *to_unicode = dynamic_cast<ObjNode *> (get_real_value(font->get("/ToUnicode")));
-                    if (to_unicode) {
-                        stringstream stream;
-                        get_stream(to_unicode, &stream);
-
-                        stream.seekg(0);
-                        CMapParser parser(&stream);
-                        RootNode *root = parser.parse();
-
-                        //cout.write(stream.str().c_str(), stream.str().length());
-                    }
-
-                    //                    if (descriptor) {
-                    //                        ObjNode *font_file2 = dynamic_cast<ObjNode *> (get_real_value(descriptor->get("/FontFile2")));
-                    //                        stringstream stream;
-                    //                        get_stream(font_file2, &stream);
-                    //                        
-                    //                        cout.write(stream.str().c_str(), stream.str().length());
-                    //                    }
+                string alias = names[loop];
+                MapNode *fontmap = dynamic_cast<MapNode *> (get_real_obj_value(fonts->get(alias)));
+                if (fontmap) {
+                    Font *font = analyze_font(fontmap);
+                    page->add_fontmap(alias, font->name());
                 }
             }
         }
@@ -372,6 +355,49 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
         page->add_glyph(analize_page(root->get(loop)));
     }
     return page;
+}
+
+Font *Analyze::analyze_font(MapNode *fontmap)
+{
+    Font *font = new Font;
+
+    font->set_name("Unnamed");
+    MapNode *descriptor = dynamic_cast<MapNode *> (get_real_obj_value(fontmap->get("/FontDescriptor")));
+    if (descriptor) {
+        NameNode *name = dynamic_cast<NameNode *> (descriptor->get("/FontName"));
+        if (name) {
+            font->set_name(name->name());
+        }
+    }
+    register Font *from_document = m_document->get_font(font->name().c_str());
+    if (from_document) {
+        delete font;
+        return from_document;
+    }
+
+    ObjNode *to_unicode = dynamic_cast<ObjNode *> (get_real_value(fontmap->get("/ToUnicode")));
+    if (to_unicode) {
+        stringstream stream;
+        get_stream(to_unicode, &stream);
+
+        stream.seekg(0);
+        CMapParser parser(&stream);
+        CMapNode *root = parser.parse();
+
+        if (root) {
+            CodeSpaceNode *codespace = root->code_space();
+            if (codespace) {
+                font->set_charmap_start(codespace->start());
+                font->set_charmap_finish(codespace->finish());
+            }
+            int size = root->nodes();
+            for (int loop = 0; loop < size; loop++) {
+                CharNode *cnode = root->node(loop);
+                font->add_charmap(cnode->character(), cnode->unicode());
+            }
+        }
+    }
+    return font;
 }
 
 void Analyze::get_stream(ArrayNode *array, stringstream *stream_value)
@@ -429,7 +455,6 @@ void Analyze::get_stream(ObjNode *obj, stringstream *stream_value)
     } else if (!filter) {
         (*stream_value).write(stream, total);
     } else {
-
         error_message(string("Invalid filter ") + filter->name());
     }
     delete [] stream;
@@ -468,10 +493,8 @@ void Analyze::analyze_pages(TreeNode *page, ArrayNode * mediabox)
                 stringstream stream_value;
                 MapNode *snode = dynamic_cast<MapNode *> (contents->value());
                 if (snode) {
-                    stringstream stream_value;
                     get_stream(contents, &stream_value);
                 } else {
-
                     ArrayNode *array = dynamic_cast<ArrayNode *> (contents->value());
                     get_stream(array, &stream_value);
                 }
@@ -485,7 +508,6 @@ TreeNode *Analyze::get_real_value(TreeNode * value)
 {
     RefNode *ref = dynamic_cast<RefNode *> (value);
     if (ref) {
-
         return get_object(ref);
     }
     return value;
@@ -497,7 +519,6 @@ TreeNode *Analyze::get_real_obj_value(TreeNode * value)
     if (ref) {
         ObjNode *node = get_object(ref);
         if (node) {
-
             return node->value();
         }
         return NULL;

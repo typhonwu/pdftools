@@ -36,6 +36,7 @@ private:
     void analyze_names(MapNode *values);
     void analyze_outlines(MapNode *values, Outline *parent = NULL);
     void analyze_pages(TreeNode *page, ArrayNode *mediabox = NULL);
+    Font *analyze_font(MapNode *fontmap);
 
     Page *process_page(int id, int generation, stringstream *stream_value, MapNode *catalog, ArrayNode * mediabox);
     Glyph *analize_page(TreeNode *node);

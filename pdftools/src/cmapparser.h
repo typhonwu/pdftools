@@ -13,19 +13,20 @@ class CMapParser {
 private:
     Scanner m_scanner;
     Token *m_token;
-    RootNode *m_root;
+    CMapNode *m_root;
 
 public:
     CMapParser(istream *stream);
     ~CMapParser();
 
-    RootNode *parse();
+    CMapNode *parse();
 
 private:
     void next_token();
     bool match(TokenType type);
     TreeNode *value_sequence();
-
+    void bfchar_sequence(const int count);
+    CodeSpaceNode *codespace_sequence();
 };
 
 #endif

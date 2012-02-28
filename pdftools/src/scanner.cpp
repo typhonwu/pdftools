@@ -382,7 +382,7 @@ Token *Scanner::next_token()
                     string.push_back(h + l);
                 }
                 if (m_charset_conversion) {
-                    token_string = utf16_to_utf8(string);
+                    token_string = charset_to_utf8(string);
                 } else {
                     token_string = string;
                 }
@@ -403,7 +403,7 @@ Token *Scanner::next_token()
                     inner_string--;
                 } else {
                     if (m_charset_conversion) {
-                        token_string = utf16_to_utf8(token_string);
+                        token_string = charset_to_utf8(token_string);
                     }
                     save = false;
                     state = DONE;

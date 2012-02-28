@@ -1,5 +1,6 @@
 #include "cmapparser.h"
 #include "utils.h"
+#include "nodes/nodes.h"
 
 CMapParser::CMapParser(istream *stream)
 {
@@ -20,12 +21,14 @@ void CMapParser::next_token()
     m_token = m_scanner.next_token();
 }
 
-RootNode *CMapParser::parse()
+CMapNode *CMapParser::parse()
 {
+    int val;
+    
     if (m_root) {
         delete m_root;
     }
-    m_root = new RootNode();
+    m_root = new CMapNode();
 
     next_token();
 
@@ -64,18 +67,55 @@ RootNode *CMapParser::parse()
             } else if (m_token->value() == "/CIDSystemInfo") {
                 match(NAME);
                 delete value_sequence();
+                // def
+                match(NAME);
+            } else {
+                match(NAME);
             }
             break;
         case NUM:
+            val = m_token->to_number();
             match(NUM);
+            if (m_token->value() == "beginbfchar") {
+                match(NAME);
+                bfchar_sequence(val);
+            } else if (m_token->value() == "begincodespacerange") {
+                match(NAME);
+                m_root->set_codespace(codespace_sequence());
+            } else {
+                match(NAME);
+                error_message("invalid mode");
+            }
             break;
         default:
             next_token();
-            //TreeNode *value = value_sequence();
         }
     }
 
     return m_root;
+}
+
+CodeSpaceNode *CMapParser::codespace_sequence()
+{
+    CodeSpaceNode *ret = new CodeSpaceNode;
+    ret->set_start(m_token->value());
+    match(STRING);
+    ret->set_finish(m_token->value());
+    match(STRING);
+    // endcodespacerange
+    match(NAME);
+    return ret;
+}
+
+void CMapParser::bfchar_sequence(const int count)
+{
+    for (int loop = 0; loop < count; loop++) {
+        string character = m_token->value();
+        match(STRING);
+        string unicode = m_token->value();
+        match(STRING);
+        m_root->add(new CharNode(character, unicode));
+    }
 }
 
 bool CMapParser::match(TokenType type)

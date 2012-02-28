@@ -7,6 +7,8 @@
 
 using namespace std;
 
+class Document;
+
 class Glyph {
 private:
     vector<Glyph *> m_childs;

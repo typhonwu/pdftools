@@ -16,5 +16,8 @@
 #include "bdcnode.h"
 #include "textnode.h"
 #include "fontnode.h"
+#include "charnode.h"
+#include "cmapnode.h"
+#include "codespacenode.h"
 
 #endif

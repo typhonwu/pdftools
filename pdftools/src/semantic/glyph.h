@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class Document;
+class Context;
 
 class Glyph {
 private:
@@ -17,11 +17,11 @@ public:
     Glyph();
     virtual ~Glyph();
     void add_child(Glyph *glyph);
-    void execute(Html *document);
+    void execute(Html *document, Context *context);
 
-    virtual void do_glyph(Html *document);
-    virtual void start_glyph(Html *document);
-    virtual void end_glyph(Html *document);
+    virtual void do_glyph(Html *document, Context *context);
+    virtual void start_glyph(Html *document, Context *context);
+    virtual void end_glyph(Html *document, Context *context);
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "page.h"
+#include "context.h"
 #include <cstdlib>
 #include <stdint.h>
 #include <string.h>
@@ -22,6 +23,11 @@ void Page::add_fontmap(string alias, string font_name)
     m_fontmap[alias] = font_name;
 }
 
+string Page::font_name(string &alias)
+{
+	return m_fontmap[alias];
+}
+
 void Page::add_glyph(Glyph *glyph)
 {
     if (glyph) {
@@ -29,9 +35,9 @@ void Page::add_glyph(Glyph *glyph)
     }
 }
 
-void Page::execute(Html *document)
+void Page::execute(Html *document, Context *context)
 {
-    m_document.execute(document);
+    m_document.execute(document, context);
 }
 
 void Page::set_link(char *link)

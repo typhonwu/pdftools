@@ -1,4 +1,5 @@
 #include "glyph.h"
+#include "context.h"
 
 Glyph::Glyph()
 {
@@ -19,27 +20,26 @@ void Glyph::add_child(Glyph *glyph)
     }
 }
 
-void Glyph::execute(Html *document)
+void Glyph::execute(Html *document, Context *context)
 {
-    start_glyph(document);
-    do_glyph(document);
+    start_glyph(document, context);
+    do_glyph(document, context);
 
     int size = m_childs.size();
     for (int i = 0; i < size; i++) {
-        m_childs[i]->execute(document);
+        m_childs[i]->execute(document, context);
     }
-
-    end_glyph(document);
+    end_glyph(document, context);
 }
 
-void Glyph::do_glyph(Html *document)
+void Glyph::do_glyph(Html *document, Context *context)
 {
 }
 
-void Glyph::start_glyph(Html *document)
+void Glyph::start_glyph(Html *document, Context *context)
 {
 }
 
-void Glyph::end_glyph(Html *document)
+void Glyph::end_glyph(Html *document, Context *context)
 {
 }

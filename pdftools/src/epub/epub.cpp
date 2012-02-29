@@ -7,17 +7,20 @@
 #include "xml/xml.h"
 #include "html/html.h"
 #include "semantic/document.h"
+#include "semantic/context.h"
 
 using namespace std;
 
 EPUB::EPUB() : Generator()
 {
     m_zipfile = new ZipFile;
+    m_context = NULL;
 }
 
 EPUB::~EPUB()
 {
     if (m_zipfile) delete m_zipfile;
+    if (m_context) delete m_context;
 }
 
 void EPUB::generate_mimetype()
@@ -64,8 +67,8 @@ void EPUB::generate_content(const char* output)
     xml.add_attribute("xmlns:opf", "http://www.idpf.org/2007/opf");
 
     xml.start_tag("dc:title");
-    if (!m_document->title().empty()) {
-        xml.add_element(m_document->title().c_str());
+    if (!m_context->document()->title().empty()) {
+        xml.add_element(m_context->document()->title().c_str());
     } else {
         xml.add_element("No title");
     }
@@ -73,7 +76,7 @@ void EPUB::generate_content(const char* output)
 
     xml.start_tag("dc:language");
     xml.add_attribute("xsi:type", "dcterms:RFC3066");
-    xml.add_element(m_document->lang().c_str());
+    xml.add_element(m_context->document()->lang().c_str());
     xml.end_tag();
 
     xml.start_tag("dc:identifier");
@@ -83,7 +86,7 @@ void EPUB::generate_content(const char* output)
     xml.end_tag();
 
     xml.start_tag("dc:subject");
-    xml.add_element(m_document->subject().c_str());
+    xml.add_element(m_context->document()->subject().c_str());
     xml.end_tag();
 
     xml.start_tag("dc:relation");
@@ -91,10 +94,10 @@ void EPUB::generate_content(const char* output)
     xml.end_tag();
 
     xml.start_tag("dc:creator");
-    if (m_document->author().empty()) {
+    if (m_context->document()->author().empty()) {
         xml.add_element(PACKAGE_STRING);
     } else {
-        xml.add_element(m_document->author().c_str());
+        xml.add_element(m_context->document()->author().c_str());
     }
     xml.end_tag();
 
@@ -103,13 +106,13 @@ void EPUB::generate_content(const char* output)
     xml.end_tag();
 
     xml.start_tag("dc:publisher");
-    xml.add_element(m_document->author().c_str());
+    xml.add_element(m_context->document()->author().c_str());
     xml.end_tag();
 
     xml.end_tag();
 
     int i;
-    int size = m_document->pages();
+    int size = m_context->document()->pages();
     xml.start_tag("manifest");
 
     xml.start_tag("item");
@@ -152,7 +155,7 @@ void EPUB::generate_content(const char* output)
 
 void EPUB::generate_outline(XML *xml, Outline *outline)
 {
-    Page *page = m_document->page(outline->id(), outline->generation());
+    Page *page = m_context->document()->page(outline->id(), outline->generation());
 
     if (page) {
         stringstream id;
@@ -189,7 +192,7 @@ void EPUB::generate_outline(XML *xml, Outline *outline)
 
 void EPUB::generate_toc(const char* output)
 {
-    Outline *outline = m_document->outline();
+    Outline *outline = m_context->document()->outline();
 
     XML xml;
     xml.start_document("1.0", "UTF-8");
@@ -219,7 +222,7 @@ void EPUB::generate_toc(const char* output)
 
     xml.start_tag("docTitle");
     xml.start_tag("text");
-    xml.add_element(m_document->title().c_str());
+    xml.add_element(m_context->document()->title().c_str());
     xml.end_tag();
     xml.end_tag();
 
@@ -260,7 +263,7 @@ void EPUB::generate_page(Page *page)
 
     html.start_body();
     
-    page->execute(&html);
+    page->execute(&html, m_context);
 
     html.end_tag();
     html.end_document();
@@ -270,13 +273,13 @@ void EPUB::generate_page(Page *page)
 
 bool EPUB::generate(Document* document, const char* output)
 {
-    m_document = document;
+    m_context = new Context(document);
     m_order = 1;
     if (m_zipfile->open(output)) {
         int i;
-        int size = m_document->pages();
+        int size = m_context->document()->pages();
         for (i = 1; i <= size; i++) {
-            Page *page = m_document->page(i - 1);
+            Page *page = m_context->document()->page(i - 1);
             if (page) {
                 stringstream file;
                 file << "page-" << i << ".html";
@@ -288,9 +291,9 @@ bool EPUB::generate(Document* document, const char* output)
         generate_content(output);
         generate_toc(output);
 
-        size = m_document->pages();
+        size = m_context->document()->pages();
         for (i = 1; i <= size; i++) {
-            Page *page = m_document->page(i - 1);
+            Page *page = m_context->document()->page(i - 1);
             if (page) {
                 generate_page(page);
             } else {

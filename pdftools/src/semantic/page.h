@@ -8,6 +8,8 @@
 
 using namespace std;
 
+class Context;
+
 class Page {
 private:
     int *m_media_box;
@@ -31,9 +33,10 @@ public:
     const char *link();
 
     void add_glyph(Glyph *glyph);
-    void execute(Html *document);
+    void execute(Html *document, Context *context);
     
     void add_fontmap(string alias, string font_name);
+    string font_name(string &alias);
 };
 
 

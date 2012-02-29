@@ -5,12 +5,12 @@
 #include <vector>
 #include <stdint.h>
 
-typedef struct {
+struct object_reference {
     uint32_t address;
     uint16_t id;
     uint16_t generation;
     char status;
-} object_reference;
+};
 
 class XREFNode : public TreeNode {
 private:

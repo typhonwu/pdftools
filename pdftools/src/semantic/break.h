@@ -5,7 +5,7 @@
 
 class Break : public Glyph {
 public:
-    virtual void do_glyph(Html *document);
+    virtual void do_glyph(Html *document, Context *context);
 };
 
 #endif

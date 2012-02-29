@@ -1,10 +1,9 @@
 #include "pageparser.h"
 #include "utils.h"
-#include "nodes/treenode.h"
+#include "nodes/nodes.h"
 #include "semantic/glyph.h"
 #include "semantic/break.h"
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -49,6 +48,12 @@ RootNode *PageParser::parse()
             case BI:
                 m_root->add_child(bi_sequence());
                 break;
+
+            case TF:
+                m_root->add_child(font_sequence(values));
+                break;
+
+                // Text
             case TJ_LO:
                 match(TJ_LO);
                 m_root->add_child(text_sequence(values));
@@ -80,6 +85,7 @@ RootNode *PageParser::parse()
                 break;
             default:
                 next_token();
+                break;
             }
             register int size = values.size();
             for (register int loop = 0; loop < size; loop++) {
@@ -92,6 +98,28 @@ RootNode *PageParser::parse()
 
     }
     return m_root;
+}
+
+TreeNode *PageParser::font_sequence(vector<TreeNode *> &values)
+{
+    match(TF);
+
+    if (values.size() == 2) {
+        FontNode *font = new FontNode;
+
+        NameNode *font_name = dynamic_cast<NameNode *> (values[0]);
+        if (font_name) {
+            font->set_name(font_name->name());
+        }
+        NumberNode *font_size = dynamic_cast<NumberNode *> (values[1]);
+        if (font_size) {
+            font->set_size(font_size->value());
+        }
+        return font;
+    } else {
+    	error_message("Error parsing font object");
+    	return NULL;
+    }
 }
 
 TreeNode *PageParser::bi_sequence()
@@ -116,7 +144,6 @@ TreeNode *PageParser::text_sequence(vector<TreeNode *> &values)
     for (int loop = 0; loop < size; loop++) {
         StringNode *node = dynamic_cast<StringNode *> (values[loop]);
         if (node) {
-            cout <<  node->value() << endl;
             text->add(node->value());
         }
     }

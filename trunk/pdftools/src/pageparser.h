@@ -1,12 +1,15 @@
 #ifndef PAGEPARSER_H
 #define PAGEPARSER_H
 
-#include "scanner.h"
 #include "token.h"
-#include "nodes/nodes.h"
+#include "scanner.h"
 #include <istream>
+#include <vector>
 
 using namespace std;
+
+class RootNode;
+class TreeNode;
 
 class PageParser {
 private:
@@ -25,6 +28,7 @@ private:
     bool match(TokenType type);
     
     TreeNode *value_sequence();
+    TreeNode *font_sequence(vector<TreeNode *> &values);
     TreeNode *bi_sequence();
     TreeNode *bdc_sequence(vector<TreeNode *> &values);
     TreeNode *text_sequence(vector<TreeNode *> &values);

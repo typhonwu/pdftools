@@ -8,6 +8,7 @@ libsemantic_a_SOURCES = \
 	paragraph.cpp \
 	text.cpp \
 	break.cpp \
+	context.cpp \
 	font.cpp
 
 noinst_HEADERS = \
@@ -19,6 +20,7 @@ noinst_HEADERS = \
 	paragraph.h \
 	text.h \
 	break.h \
+	context.h \
 	font.h
 
 libsemantic_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)

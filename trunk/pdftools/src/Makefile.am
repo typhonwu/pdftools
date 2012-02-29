@@ -10,6 +10,7 @@ pdftools_SOURCES = main.cpp \
 	converter.cpp \
 	generator.cpp \
 	pageparser.cpp \
+	pageanalyze.cpp \
 	cmapparser.cpp
 
 dist_man_MANS = pdftools.1
@@ -23,13 +24,14 @@ noinst_HEADERS = \
 	converter.h \
 	generator.h \
 	pageparser.h \
+	pageanalyze.h \
 	cmapparser.h
 
 pdftools_CXXFLAGS = $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 pdftools_LDADD = \
 	nodes/libnodes.a \
-	semantic/libsemantic.a \
 	epub/libepub.a \
+	semantic/libsemantic.a \
 	zip/libzip.a \
 	html/libhtml.a \
 	xml/libxml.a \

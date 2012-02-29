@@ -53,7 +53,8 @@ am_libsemantic_a_OBJECTS = libsemantic_a-document.$(OBJEXT) \
 	libsemantic_a-page.$(OBJEXT) libsemantic_a-pagelabel.$(OBJEXT) \
 	libsemantic_a-outline.$(OBJEXT) libsemantic_a-glyph.$(OBJEXT) \
 	libsemantic_a-paragraph.$(OBJEXT) libsemantic_a-text.$(OBJEXT) \
-	libsemantic_a-break.$(OBJEXT) libsemantic_a-font.$(OBJEXT)
+	libsemantic_a-break.$(OBJEXT) libsemantic_a-context.$(OBJEXT) \
+	libsemantic_a-font.$(OBJEXT)
 libsemantic_a_OBJECTS = $(am_libsemantic_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -176,6 +177,7 @@ libsemantic_a_SOURCES = \
 	paragraph.cpp \
 	text.cpp \
 	break.cpp \
+	context.cpp \
 	font.cpp
 
 noinst_HEADERS = \
@@ -187,6 +189,7 @@ noinst_HEADERS = \
 	paragraph.h \
 	text.h \
 	break.h \
+	context.h \
 	font.h
 
 libsemantic_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
@@ -241,6 +244,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsemantic_a-break.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsemantic_a-context.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsemantic_a-document.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsemantic_a-font.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsemantic_a-glyph.Po@am__quote@
@@ -375,6 +379,20 @@ libsemantic_a-break.obj: break.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='break.cpp' object='libsemantic_a-break.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemantic_a_CXXFLAGS) $(CXXFLAGS) -c -o libsemantic_a-break.obj `if test -f 'break.cpp'; then $(CYGPATH_W) 'break.cpp'; else $(CYGPATH_W) '$(srcdir)/break.cpp'; fi`
+
+libsemantic_a-context.o: context.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemantic_a_CXXFLAGS) $(CXXFLAGS) -MT libsemantic_a-context.o -MD -MP -MF $(DEPDIR)/libsemantic_a-context.Tpo -c -o libsemantic_a-context.o `test -f 'context.cpp' || echo '$(srcdir)/'`context.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libsemantic_a-context.Tpo $(DEPDIR)/libsemantic_a-context.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='context.cpp' object='libsemantic_a-context.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemantic_a_CXXFLAGS) $(CXXFLAGS) -c -o libsemantic_a-context.o `test -f 'context.cpp' || echo '$(srcdir)/'`context.cpp
+
+libsemantic_a-context.obj: context.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemantic_a_CXXFLAGS) $(CXXFLAGS) -MT libsemantic_a-context.obj -MD -MP -MF $(DEPDIR)/libsemantic_a-context.Tpo -c -o libsemantic_a-context.obj `if test -f 'context.cpp'; then $(CYGPATH_W) 'context.cpp'; else $(CYGPATH_W) '$(srcdir)/context.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libsemantic_a-context.Tpo $(DEPDIR)/libsemantic_a-context.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='context.cpp' object='libsemantic_a-context.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemantic_a_CXXFLAGS) $(CXXFLAGS) -c -o libsemantic_a-context.obj `if test -f 'context.cpp'; then $(CYGPATH_W) 'context.cpp'; else $(CYGPATH_W) '$(srcdir)/context.cpp'; fi`
 
 libsemantic_a-font.o: font.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsemantic_a_CXXFLAGS) $(CXXFLAGS) -MT libsemantic_a-font.o -MD -MP -MF $(DEPDIR)/libsemantic_a-font.Tpo -c -o libsemantic_a-font.o `test -f 'font.cpp' || echo '$(srcdir)/'`font.cpp

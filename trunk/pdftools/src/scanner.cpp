@@ -1,20 +1,13 @@
 #include "scanner.h"
 #include "utils.h"
-#include <istream>
+#include <fstream>
 #include <cstring>
 #include <cstdlib>
 #include <vector>
+#include <iostream>
 
 #if HAVE_CONFIG_H
 #include <config.h>
-#endif
-
-#ifdef DEBUG
-#include <iostream>
-#endif
-
-#ifndef EOF
-#define EOF -1
 #endif
 
 using namespace std;

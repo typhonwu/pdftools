@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "scanner.h"
 #include "pageparser.h"
+#include "pageanalyze.h"
 #include "cmapparser.h"
 #include "nodes/nodes.h"
 #include "semantic/outline.h"
@@ -197,8 +198,8 @@ TreeNode *Analyze::get_named_value(string name)
     try {
         return m_names.at(name);
     } catch (out_of_range &) {
-        return NULL;
     }
+    return NULL;
 }
 
 void Analyze::analyze_outlines(MapNode *values, Outline * parent)
@@ -289,37 +290,6 @@ Document *Analyze::analyze_tree(RootNode * tree)
     }
 }
 
-Glyph *Analyze::analize_page(TreeNode *node)
-{
-    BDCNode *bdc = dynamic_cast<BDCNode *> (node);
-    if (bdc) {
-        if (bdc->name() == "/Artifact") {
-            MapNode *map = dynamic_cast<MapNode *> (bdc->value());
-            if (map) {
-                NameNode *name = dynamic_cast<NameNode *> (map->get("/Subtype"));
-                if (name && name->name() == "/Footer") {
-                    // Ignore footer
-                    return NULL;
-                }
-            }
-        }
-        if (bdc->name() == "/P") {
-            return new Break;
-        }
-    } else {
-        TextNode *text = dynamic_cast<TextNode *> (node);
-        if (text) {
-            return new Text(text->text());
-        } else {
-            BreakNode *b = dynamic_cast<BreakNode *> (node);
-            if (b) {
-                return new Break;
-            }
-        }
-    }
-    return NULL;
-}
-
 Page *Analyze::process_page(int id, int generation, stringstream *stream_value, MapNode *catalog, ArrayNode * mediabox)
 {
     Page *page = new Page;
@@ -350,10 +320,9 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
     PageParser parser(stream_value);
     RootNode *root = parser.parse();
 
-    int size = root->size();
-    for (int loop = 0; loop < size; loop++) {
-        page->add_glyph(analize_page(root->get(loop)));
-    }
+    PageAnalyze analyze(m_document);
+    page->add_glyph(analyze.analyze_tree(root));
+
     return page;
 }
 

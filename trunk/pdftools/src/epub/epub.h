@@ -4,7 +4,7 @@
 #include "generator.h"
 #include "zip/zipfile.h"
 
-class Document;
+class Context;
 class Outline;
 class Page;
 class XML;
@@ -12,7 +12,7 @@ class XML;
 class EPUB : public Generator {
 private:
     ZipFile *m_zipfile;
-    Document *m_document;
+    Context *m_context;
     int m_order;
     
 public:

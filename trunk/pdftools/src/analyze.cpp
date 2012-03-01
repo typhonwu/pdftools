@@ -7,7 +7,7 @@
 #include "nodes/nodes.h"
 #include "semantic/outline.h"
 #include "semantic/pagelabel.h"
-#include "semantic/glyphs.h"
+#include "glyphs/glyphs.h"
 #include <iostream>
 #include <zlib.h>
 #include <cstdlib>

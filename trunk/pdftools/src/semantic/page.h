@@ -3,12 +3,12 @@
 
 #include <string>
 #include <map>
-#include "glyph.h"
 #include "html/html.h"
 
 using namespace std;
 
 class Context;
+class Glyph;
 
 class Page {
 private:
@@ -17,7 +17,7 @@ private:
     int m_id;
     int m_generation;
     string m_link;
-    Glyph m_document;
+    Glyph *m_document;
     map<string, string> m_fontmap;
 
 public:
@@ -38,6 +38,5 @@ public:
     void add_fontmap(string alias, string font_name);
     string font_name(string &alias);
 };
-
 
 #endif

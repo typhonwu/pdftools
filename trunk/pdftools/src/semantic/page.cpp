@@ -1,5 +1,6 @@
 #include "page.h"
 #include "context.h"
+#include "glyphs/glyph.h"
 #include <cstdlib>
 #include <stdint.h>
 #include <string.h>
@@ -31,13 +32,13 @@ string Page::font_name(string &alias)
 void Page::add_glyph(Glyph *glyph)
 {
     if (glyph) {
-        m_document.add_child(glyph);
+        m_document->add_child(glyph);
     }
 }
 
 void Page::execute(Html *document, Context *context)
 {
-    m_document.execute(document, context);
+    m_document->execute(document);
 }
 
 void Page::set_link(char *link)

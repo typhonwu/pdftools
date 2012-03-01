@@ -11,12 +11,14 @@ Page::Page()
     m_crop_box = NULL;
     m_id = 0;
     m_generation = 0;
+    m_document = new Glyph;
 }
 
 Page::~Page()
 {
     if (m_media_box) delete [] m_media_box;
     if (m_crop_box) delete [] m_crop_box;
+    if (m_document) delete m_document;
 }
 
 void Page::add_fontmap(string alias, string font_name)

@@ -50,8 +50,10 @@ ARFLAGS = cru
 libglyphs_a_AR = $(AR) $(ARFLAGS)
 libglyphs_a_LIBADD =
 am_libglyphs_a_OBJECTS = libglyphs_a-glyph.$(OBJEXT) \
-	libglyphs_a-paragraph.$(OBJEXT) libglyphs_a-text.$(OBJEXT) \
-	libglyphs_a-break.$(OBJEXT)
+	libglyphs_a-paragraphglyph.$(OBJEXT) \
+	libglyphs_a-textglyph.$(OBJEXT) \
+	libglyphs_a-breakglyph.$(OBJEXT) \
+	libglyphs_a-fontglyph.$(OBJEXT)
 libglyphs_a_OBJECTS = $(am_libglyphs_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -167,16 +169,18 @@ top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libglyphs.a
 libglyphs_a_SOURCES = \
 	glyph.cpp \
-	paragraph.cpp \
-	text.cpp \
-	break.cpp
+	paragraphglyph.cpp \
+	textglyph.cpp \
+	breakglyph.cpp \
+	fontglyph.cpp
 
 noinst_HEADERS = \
 	glyphs.h \
 	glyph.h \
-	paragraph.h \
-	text.h \
-	break.h
+	paragraphglyph.h \
+	textglyph.h \
+	breakglyph.h \
+	fontglyph.h
 
 libglyphs_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 AM_CXXFLAGS = $(OPENMP_CXXFLAGS)
@@ -228,10 +232,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libglyphs_a-break.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libglyphs_a-breakglyph.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libglyphs_a-fontglyph.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libglyphs_a-glyph.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libglyphs_a-paragraph.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libglyphs_a-text.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libglyphs_a-paragraphglyph.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libglyphs_a-textglyph.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -261,47 +266,61 @@ libglyphs_a-glyph.obj: glyph.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-glyph.obj `if test -f 'glyph.cpp'; then $(CYGPATH_W) 'glyph.cpp'; else $(CYGPATH_W) '$(srcdir)/glyph.cpp'; fi`
 
-libglyphs_a-paragraph.o: paragraph.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-paragraph.o -MD -MP -MF $(DEPDIR)/libglyphs_a-paragraph.Tpo -c -o libglyphs_a-paragraph.o `test -f 'paragraph.cpp' || echo '$(srcdir)/'`paragraph.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-paragraph.Tpo $(DEPDIR)/libglyphs_a-paragraph.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='paragraph.cpp' object='libglyphs_a-paragraph.o' libtool=no @AMDEPBACKSLASH@
+libglyphs_a-paragraphglyph.o: paragraphglyph.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-paragraphglyph.o -MD -MP -MF $(DEPDIR)/libglyphs_a-paragraphglyph.Tpo -c -o libglyphs_a-paragraphglyph.o `test -f 'paragraphglyph.cpp' || echo '$(srcdir)/'`paragraphglyph.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-paragraphglyph.Tpo $(DEPDIR)/libglyphs_a-paragraphglyph.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='paragraphglyph.cpp' object='libglyphs_a-paragraphglyph.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-paragraph.o `test -f 'paragraph.cpp' || echo '$(srcdir)/'`paragraph.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-paragraphglyph.o `test -f 'paragraphglyph.cpp' || echo '$(srcdir)/'`paragraphglyph.cpp
 
-libglyphs_a-paragraph.obj: paragraph.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-paragraph.obj -MD -MP -MF $(DEPDIR)/libglyphs_a-paragraph.Tpo -c -o libglyphs_a-paragraph.obj `if test -f 'paragraph.cpp'; then $(CYGPATH_W) 'paragraph.cpp'; else $(CYGPATH_W) '$(srcdir)/paragraph.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-paragraph.Tpo $(DEPDIR)/libglyphs_a-paragraph.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='paragraph.cpp' object='libglyphs_a-paragraph.obj' libtool=no @AMDEPBACKSLASH@
+libglyphs_a-paragraphglyph.obj: paragraphglyph.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-paragraphglyph.obj -MD -MP -MF $(DEPDIR)/libglyphs_a-paragraphglyph.Tpo -c -o libglyphs_a-paragraphglyph.obj `if test -f 'paragraphglyph.cpp'; then $(CYGPATH_W) 'paragraphglyph.cpp'; else $(CYGPATH_W) '$(srcdir)/paragraphglyph.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-paragraphglyph.Tpo $(DEPDIR)/libglyphs_a-paragraphglyph.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='paragraphglyph.cpp' object='libglyphs_a-paragraphglyph.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-paragraph.obj `if test -f 'paragraph.cpp'; then $(CYGPATH_W) 'paragraph.cpp'; else $(CYGPATH_W) '$(srcdir)/paragraph.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-paragraphglyph.obj `if test -f 'paragraphglyph.cpp'; then $(CYGPATH_W) 'paragraphglyph.cpp'; else $(CYGPATH_W) '$(srcdir)/paragraphglyph.cpp'; fi`
 
-libglyphs_a-text.o: text.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-text.o -MD -MP -MF $(DEPDIR)/libglyphs_a-text.Tpo -c -o libglyphs_a-text.o `test -f 'text.cpp' || echo '$(srcdir)/'`text.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-text.Tpo $(DEPDIR)/libglyphs_a-text.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='text.cpp' object='libglyphs_a-text.o' libtool=no @AMDEPBACKSLASH@
+libglyphs_a-textglyph.o: textglyph.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-textglyph.o -MD -MP -MF $(DEPDIR)/libglyphs_a-textglyph.Tpo -c -o libglyphs_a-textglyph.o `test -f 'textglyph.cpp' || echo '$(srcdir)/'`textglyph.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-textglyph.Tpo $(DEPDIR)/libglyphs_a-textglyph.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='textglyph.cpp' object='libglyphs_a-textglyph.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-text.o `test -f 'text.cpp' || echo '$(srcdir)/'`text.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-textglyph.o `test -f 'textglyph.cpp' || echo '$(srcdir)/'`textglyph.cpp
 
-libglyphs_a-text.obj: text.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-text.obj -MD -MP -MF $(DEPDIR)/libglyphs_a-text.Tpo -c -o libglyphs_a-text.obj `if test -f 'text.cpp'; then $(CYGPATH_W) 'text.cpp'; else $(CYGPATH_W) '$(srcdir)/text.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-text.Tpo $(DEPDIR)/libglyphs_a-text.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='text.cpp' object='libglyphs_a-text.obj' libtool=no @AMDEPBACKSLASH@
+libglyphs_a-textglyph.obj: textglyph.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-textglyph.obj -MD -MP -MF $(DEPDIR)/libglyphs_a-textglyph.Tpo -c -o libglyphs_a-textglyph.obj `if test -f 'textglyph.cpp'; then $(CYGPATH_W) 'textglyph.cpp'; else $(CYGPATH_W) '$(srcdir)/textglyph.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-textglyph.Tpo $(DEPDIR)/libglyphs_a-textglyph.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='textglyph.cpp' object='libglyphs_a-textglyph.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-text.obj `if test -f 'text.cpp'; then $(CYGPATH_W) 'text.cpp'; else $(CYGPATH_W) '$(srcdir)/text.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-textglyph.obj `if test -f 'textglyph.cpp'; then $(CYGPATH_W) 'textglyph.cpp'; else $(CYGPATH_W) '$(srcdir)/textglyph.cpp'; fi`
 
-libglyphs_a-break.o: break.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-break.o -MD -MP -MF $(DEPDIR)/libglyphs_a-break.Tpo -c -o libglyphs_a-break.o `test -f 'break.cpp' || echo '$(srcdir)/'`break.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-break.Tpo $(DEPDIR)/libglyphs_a-break.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='break.cpp' object='libglyphs_a-break.o' libtool=no @AMDEPBACKSLASH@
+libglyphs_a-breakglyph.o: breakglyph.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-breakglyph.o -MD -MP -MF $(DEPDIR)/libglyphs_a-breakglyph.Tpo -c -o libglyphs_a-breakglyph.o `test -f 'breakglyph.cpp' || echo '$(srcdir)/'`breakglyph.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-breakglyph.Tpo $(DEPDIR)/libglyphs_a-breakglyph.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='breakglyph.cpp' object='libglyphs_a-breakglyph.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-break.o `test -f 'break.cpp' || echo '$(srcdir)/'`break.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-breakglyph.o `test -f 'breakglyph.cpp' || echo '$(srcdir)/'`breakglyph.cpp
 
-libglyphs_a-break.obj: break.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-break.obj -MD -MP -MF $(DEPDIR)/libglyphs_a-break.Tpo -c -o libglyphs_a-break.obj `if test -f 'break.cpp'; then $(CYGPATH_W) 'break.cpp'; else $(CYGPATH_W) '$(srcdir)/break.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-break.Tpo $(DEPDIR)/libglyphs_a-break.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='break.cpp' object='libglyphs_a-break.obj' libtool=no @AMDEPBACKSLASH@
+libglyphs_a-breakglyph.obj: breakglyph.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-breakglyph.obj -MD -MP -MF $(DEPDIR)/libglyphs_a-breakglyph.Tpo -c -o libglyphs_a-breakglyph.obj `if test -f 'breakglyph.cpp'; then $(CYGPATH_W) 'breakglyph.cpp'; else $(CYGPATH_W) '$(srcdir)/breakglyph.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-breakglyph.Tpo $(DEPDIR)/libglyphs_a-breakglyph.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='breakglyph.cpp' object='libglyphs_a-breakglyph.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-break.obj `if test -f 'break.cpp'; then $(CYGPATH_W) 'break.cpp'; else $(CYGPATH_W) '$(srcdir)/break.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-breakglyph.obj `if test -f 'breakglyph.cpp'; then $(CYGPATH_W) 'breakglyph.cpp'; else $(CYGPATH_W) '$(srcdir)/breakglyph.cpp'; fi`
+
+libglyphs_a-fontglyph.o: fontglyph.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-fontglyph.o -MD -MP -MF $(DEPDIR)/libglyphs_a-fontglyph.Tpo -c -o libglyphs_a-fontglyph.o `test -f 'fontglyph.cpp' || echo '$(srcdir)/'`fontglyph.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-fontglyph.Tpo $(DEPDIR)/libglyphs_a-fontglyph.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fontglyph.cpp' object='libglyphs_a-fontglyph.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-fontglyph.o `test -f 'fontglyph.cpp' || echo '$(srcdir)/'`fontglyph.cpp
+
+libglyphs_a-fontglyph.obj: fontglyph.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -MT libglyphs_a-fontglyph.obj -MD -MP -MF $(DEPDIR)/libglyphs_a-fontglyph.Tpo -c -o libglyphs_a-fontglyph.obj `if test -f 'fontglyph.cpp'; then $(CYGPATH_W) 'fontglyph.cpp'; else $(CYGPATH_W) '$(srcdir)/fontglyph.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libglyphs_a-fontglyph.Tpo $(DEPDIR)/libglyphs_a-fontglyph.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fontglyph.cpp' object='libglyphs_a-fontglyph.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libglyphs_a_CXXFLAGS) $(CXXFLAGS) -c -o libglyphs_a-fontglyph.obj `if test -f 'fontglyph.cpp'; then $(CYGPATH_W) 'fontglyph.cpp'; else $(CYGPATH_W) '$(srcdir)/fontglyph.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

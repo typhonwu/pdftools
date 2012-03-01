@@ -12,7 +12,7 @@ private:
     
 public:
     Text(string text);
-    virtual void do_glyph(Html *document, Context *context);
+    virtual void do_glyph(Html *document);
 };
 
 #endif

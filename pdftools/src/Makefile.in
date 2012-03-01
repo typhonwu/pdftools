@@ -57,7 +57,7 @@ pdftools_OBJECTS = $(am_pdftools_OBJECTS)
 am__DEPENDENCIES_1 =
 pdftools_DEPENDENCIES = nodes/libnodes.a epub/libepub.a \
 	semantic/libsemantic.a zip/libzip.a html/libhtml.a \
-	xml/libxml.a $(am__DEPENDENCIES_1)
+	xml/libxml.a glyphs/libglyphs.a $(am__DEPENDENCIES_1)
 pdftools_LINK = $(CXXLD) $(pdftools_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -233,7 +233,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = nodes semantic zip xml html epub
+SUBDIRS = nodes glyphs semantic zip xml html epub
 pdftools_SOURCES = main.cpp \
 	parser.cpp \
 	scanner.cpp \
@@ -267,6 +267,7 @@ pdftools_LDADD = \
 	zip/libzip.a \
 	html/libhtml.a \
 	xml/libxml.a \
+	glyphs/libglyphs.a \
 	$(XML_LIBS)
 
 all: all-recursive

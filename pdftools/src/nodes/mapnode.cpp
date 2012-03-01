@@ -23,8 +23,8 @@ TreeNode *MapNode::get(string name)
     try {
         return m_values.at(name);
     } catch (out_of_range &) {
-        return NULL;
     }
+    return NULL;
 }
 
 vector<string> MapNode::names()

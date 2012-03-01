@@ -89,6 +89,7 @@ CMapNode *CMapParser::parse()
             break;
         default:
             next_token();
+            break;
         }
     }
 

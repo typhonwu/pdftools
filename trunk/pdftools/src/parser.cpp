@@ -88,6 +88,7 @@ RootNode *Parser::parse()
             default:
                 next_token();
                 error = true;
+                break;
             }
         }
     } else {

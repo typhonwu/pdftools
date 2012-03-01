@@ -1,8 +1,7 @@
 #include "pageparser.h"
 #include "utils.h"
 #include "nodes/nodes.h"
-#include "semantic/glyph.h"
-#include "semantic/break.h"
+#include "glyphs/glyphs.h"
 #include <iostream>
 
 using namespace std;

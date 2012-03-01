@@ -92,7 +92,6 @@ CMapNode *CMapParser::parse()
             break;
         }
     }
-
     return m_root;
 }
 

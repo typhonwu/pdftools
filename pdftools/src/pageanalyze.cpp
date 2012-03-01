@@ -1,5 +1,5 @@
 #include "pageanalyze.h"
-#include "semantic/glyphs.h"
+#include "glyphs/glyphs.h"
 #include "semantic/font.h"
 #include "nodes/nodes.h"
 #include <cstdlib>

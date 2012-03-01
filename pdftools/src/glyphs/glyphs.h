@@ -3,8 +3,8 @@
 #define GLYPHS_H
 
 #include "glyph.h"
-#include "text.h"
-#include "paragraph.h"
-#include "break.h"
+#include "textglyph.h"
+#include "paragraphglyph.h"
+#include "breakglyph.h"
 
 #endif

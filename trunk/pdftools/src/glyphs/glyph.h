@@ -15,6 +15,7 @@ private:
 
 protected:
     Context *m_context;
+    Glyph *m_last_glyph;
 
 public:
     Glyph();
@@ -25,6 +26,8 @@ public:
     virtual void do_glyph(Html *document);
     virtual void start_glyph(Html *document);
     virtual void end_glyph(Html *document);
+
+    void set_last(Glyph *glyph);
 };
 
 #endif

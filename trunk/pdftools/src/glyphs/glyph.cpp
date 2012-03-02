@@ -3,6 +3,7 @@
 
 Glyph::Glyph()
 {
+    m_last_glyph = NULL;
 }
 
 Glyph::~Glyph()
@@ -28,10 +29,20 @@ void Glyph::execute(Html *document, Context *context)
     do_glyph(document);
 
     int size = m_childs.size();
+    if (size > 0) {
+        m_last_glyph = this;
+    }
     for (int i = 0; i < size; i++) {
+        m_childs[i]->set_last(m_last_glyph);
         m_childs[i]->execute(document, context);
+        m_last_glyph = m_childs[i];
     }
     end_glyph(document);
+}
+
+void Glyph::set_last(Glyph *glyph)
+{
+    m_last_glyph = glyph;
 }
 
 void Glyph::do_glyph(Html *document)

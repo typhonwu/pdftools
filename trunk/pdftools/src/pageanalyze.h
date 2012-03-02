@@ -7,6 +7,7 @@ class Glyph;
 class FontGlyph;
 class TextGlyph;
 class Font;
+class TreeNode;
 class FontNode;
 class TextNode;
 class RootNode;
@@ -25,7 +26,7 @@ public:
 
 private:
 	FontGlyph *analyze_font(FontNode *font);
-	TextGlyph * analyze_text(TextNode *text);
+	void analyze_text(TextNode *text, Glyph *parent);
 };
 
 #endif

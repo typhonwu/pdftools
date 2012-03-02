@@ -29,9 +29,9 @@ noinst_HEADERS = \
 
 pdftools_CXXFLAGS = $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 pdftools_LDADD = \
+	semantic/libsemantic.a \
 	nodes/libnodes.a \
 	epub/libepub.a \
-	semantic/libsemantic.a \
 	zip/libzip.a \
 	html/libhtml.a \
 	xml/libxml.a \

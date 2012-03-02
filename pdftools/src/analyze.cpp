@@ -342,6 +342,8 @@ Font *Analyze::analyze_font(MapNode *fontmap)
     if (from_document) {
         delete font;
         return from_document;
+    } else {
+        m_document->add_font(font);
     }
 
     ObjNode *to_unicode = dynamic_cast<ObjNode *> (get_real_value(fontmap->get("/ToUnicode")));

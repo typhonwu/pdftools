@@ -28,7 +28,7 @@ void Page::add_fontmap(string alias, string font_name)
 
 string Page::font_name(string &alias)
 {
-	return m_fontmap[alias];
+    return m_fontmap[alias];
 }
 
 void Page::add_glyph(Glyph *glyph)
@@ -40,7 +40,8 @@ void Page::add_glyph(Glyph *glyph)
 
 void Page::execute(Html *document, Context *context)
 {
-    m_document->execute(document);
+    context->set_current_page(this);
+    m_document->execute(document, context);
 }
 
 void Page::set_link(char *link)

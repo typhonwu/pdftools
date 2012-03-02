@@ -40,6 +40,7 @@ Font *Document::get_font(const char *name)
         if ((*f)->name() == name) {
             return *f;
         }
+        f++;
     }
     return NULL;
 }

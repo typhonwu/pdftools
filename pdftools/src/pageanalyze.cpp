@@ -7,6 +7,7 @@
 PageAnalyze::PageAnalyze(Document *document)
 {
 	m_document = document;
+	m_font = NULL;
 }
 
 PageAnalyze::~PageAnalyze()
@@ -16,29 +17,36 @@ PageAnalyze::~PageAnalyze()
 Glyph *PageAnalyze::analyze_tree(RootNode *tree)
 {
 	m_root = new Glyph;
+	ParagraphGlyph *p = NULL;
+
 	int size = tree->size();
 	for (int loop = 0; loop < size; loop++) {
 		TreeNode *node = tree->get(loop);
 
+		if (!p) {
+			p = new ParagraphGlyph;
+			m_root->add_child(p);
+		}
+
 		FontNode *font = dynamic_cast<FontNode *>(node);
 		if (font) {
-			analyze_font(font);
+			p->add_child(analyze_font(font));
 		} else {
 			TextNode *text = dynamic_cast<TextNode *>(node);
 			if (text) {
-				analyze_text(text);
+				p->add_child(analyze_text(text));
 			}
 		}
 	}
 	return m_root;
 }
 
-void PageAnalyze::analyze_font(FontNode *font)
+FontGlyph *PageAnalyze::analyze_font(FontNode *font)
 {
-
+	return new FontGlyph(font->name(), font->size());
 }
 
-void PageAnalyze::analyze_text(TextNode *text)
+TextGlyph *PageAnalyze::analyze_text(TextNode *text)
 {
-
+	return new TextGlyph(text->text());
 }

@@ -19,14 +19,16 @@ void Glyph::add_child(Glyph *glyph)
     }
 }
 
-void Glyph::execute(Html *document)
+void Glyph::execute(Html *document, Context *context)
 {
+    m_context = context;
+
     start_glyph(document);
     do_glyph(document);
 
     int size = m_childs.size();
     for (int i = 0; i < size; i++) {
-        m_childs[i]->execute(document);
+        m_childs[i]->execute(document, context);
     }
     end_glyph(document);
 }

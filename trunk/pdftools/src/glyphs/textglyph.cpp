@@ -1,4 +1,6 @@
 #include "textglyph.h"
+#include "semantic/context.h"
+#include "semantic/font.h"
 
 TextGlyph::TextGlyph(string text)
 {
@@ -7,5 +9,11 @@ TextGlyph::TextGlyph(string text)
 
 void TextGlyph::do_glyph(Html *document)
 {
-    document->add_element(m_text.c_str());
+    Font *current = m_context->font();
+
+    if (current) {
+        document->add_element(current->translate(m_text).c_str());
+    } else {
+        document->add_element(m_text.c_str());
+    }
 }

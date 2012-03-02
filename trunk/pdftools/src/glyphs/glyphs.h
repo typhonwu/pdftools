@@ -6,5 +6,6 @@
 #include "textglyph.h"
 #include "paragraphglyph.h"
 #include "breakglyph.h"
+#include "fontglyph.h"
 
 #endif

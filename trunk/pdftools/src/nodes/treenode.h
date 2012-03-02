@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TREENODE_H
 #define TREENODE_H
 

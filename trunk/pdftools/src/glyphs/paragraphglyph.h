@@ -4,6 +4,8 @@
 
 #include "glyph.h"
 
+class Html;
+
 class ParagraphGlyph : public Glyph {
 public:
     virtual void start_glyph(Html *document);

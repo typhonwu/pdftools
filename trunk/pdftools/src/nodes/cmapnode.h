@@ -2,12 +2,13 @@
 #ifndef CMAPNODE_H
 #define CMAPNODE_H
 
-#include "charnode.h"
 #include "treenode.h"
-#include "codespacenode.h"
 #include <vector>
 
 using namespace std;
+
+class CodeSpaceNode;
+class CharNode;
 
 class CMapNode : public TreeNode {
 private:

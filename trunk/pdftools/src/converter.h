@@ -1,15 +1,19 @@
+#pragma once
 #ifndef CONVERTER_H
 #define CONVERTER_H
 
 #include <string>
-#include "nodes/nodes.h"
-#include "semantic/document.h"
+
+using namespace std;
+
+class Document;
+class RootNode;
 
 class Converter {
 private:
     const char *m_filein;
     const char *m_format;
-    std::string m_fileout;
+    string m_fileout;
     RootNode *m_syntax_tree;
     Document *m_document;
     

@@ -1,9 +1,11 @@
+#pragma once
 #ifndef EPUB_H
 #define EPUB_H
 
 #include "generator.h"
-#include "zip/zipfile.h"
 
+class ZipFile;
+class Document;
 class Context;
 class Outline;
 class Page;
@@ -11,8 +13,8 @@ class XML;
 
 class EPUB : public Generator {
 private:
+	Document *m_document;
     ZipFile *m_zipfile;
-    Context *m_context;
     int m_order;
     
 public:

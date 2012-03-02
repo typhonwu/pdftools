@@ -1,4 +1,5 @@
 #include "textglyph.h"
+#include "html/html.h"
 #include "semantic/context.h"
 #include "semantic/font.h"
 

@@ -2,15 +2,16 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include "nodes/nodes.h"
-#include "font.h"
-#include "page.h"
-#include "pagelabel.h"
-#include "outline.h"
 #include <string>
 #include <vector>
 
 using namespace std;
+
+class Font;
+class TreeNode;
+class Outline;
+class Page;
+class PageLabel;
 
 class Document {
 private:

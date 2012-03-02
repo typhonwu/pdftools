@@ -1,7 +1,8 @@
+#pragma once
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
-#include "semantic/document.h"
+class Document;
 
 class Generator {
 protected:

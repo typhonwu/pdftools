@@ -2,11 +2,11 @@
 #ifndef GLYPH_H
 #define GLYPH_H
 
-#include "html/html.h"
 #include <vector>
 
 using namespace std;
 
+class Html;
 class Context;
 
 class Glyph {

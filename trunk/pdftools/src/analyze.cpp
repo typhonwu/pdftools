@@ -5,7 +5,10 @@
 #include "pageanalyze.h"
 #include "cmapparser.h"
 #include "nodes/nodes.h"
+#include "semantic/document.h"
 #include "semantic/outline.h"
+#include "semantic/font.h"
+#include "semantic/page.h"
 #include "semantic/pagelabel.h"
 #include "glyphs/glyphs.h"
 #include <iostream>
@@ -167,7 +170,7 @@ void Analyze::analyze_root()
     if (outlines) {
         analyze_outlines(outlines);
     }
-    //FIXME StructTreeRoot
+    // TODO Parse the StructTreeRoot
 }
 
 void Analyze::analyze_names(MapNode *values)
@@ -292,7 +295,7 @@ Document *Analyze::analyze_tree(RootNode * tree)
 
 Page *Analyze::process_page(int id, int generation, stringstream *stream_value, MapNode *catalog, ArrayNode * mediabox)
 {
-    Page *page = new Page;
+    Page *page = new Page(m_document);
     page->set_destination(id, generation);
 
     MapNode *resources = dynamic_cast<MapNode *> (get_real_obj_value(catalog->get("/Resources")));
@@ -321,7 +324,7 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
     RootNode *root = parser.parse();
 
     PageAnalyze analyze(m_document);
-    page->add_glyph(analyze.analyze_tree(root));
+    page->set_root(analyze.analyze_tree(root));
 
     return page;
 }

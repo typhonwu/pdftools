@@ -4,6 +4,8 @@
 #include "analyze.h"
 #include "generator.h"
 #include "scanner.h"
+#include "semantic/document.h"
+#include "nodes/nodes.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>

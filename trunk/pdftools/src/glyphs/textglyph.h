@@ -7,6 +7,8 @@
 
 using namespace std;
 
+class Html;
+
 class TextGlyph : public Glyph {
 private:
     string m_text;

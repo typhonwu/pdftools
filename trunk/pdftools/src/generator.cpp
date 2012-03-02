@@ -1,4 +1,5 @@
 #include "generator.h"
+#include "semantic/document.h"
 #include "epub/epub.h"
 #include <cstdlib>
 #include <cstring>

@@ -1,4 +1,5 @@
 #include "paragraphglyph.h"
+#include "html/html.h"
 
 void ParagraphGlyph::start_glyph(Html *document)
 {

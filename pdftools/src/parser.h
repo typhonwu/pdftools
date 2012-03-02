@@ -1,12 +1,13 @@
+#pragma once
 #ifndef PARSER_H
 #define PARSER_H
 
 #include <fstream>
 #include "token.h"
-#include "nodes/nodes.h"
 
 class Scanner;
 class TreeNode;
+class RootNode;
 
 class Parser {
 private:

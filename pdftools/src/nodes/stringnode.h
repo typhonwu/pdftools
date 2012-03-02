@@ -1,3 +1,4 @@
+#pragma once
 #ifndef STRINGNODE_H
 #define STRINGNODE_H
 

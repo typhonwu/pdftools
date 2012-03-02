@@ -1,4 +1,6 @@
 #include "cmapnode.h"
+#include "codespacenode.h"
+#include "charnode.h"
 
 CMapNode::CMapNode() : TreeNode()
 {

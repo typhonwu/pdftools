@@ -1,7 +1,7 @@
+#pragma once
 #ifndef PAGEPARSER_H
 #define PAGEPARSER_H
 
-#include "token.h"
 #include "scanner.h"
 #include <istream>
 #include <vector>
@@ -10,6 +10,7 @@ using namespace std;
 
 class RootNode;
 class TreeNode;
+class Token;
 
 class PageParser {
 private:

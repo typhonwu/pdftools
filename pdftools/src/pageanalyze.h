@@ -2,12 +2,14 @@
 #ifndef PAGEANALYZE_H
 #define PAGEANALYZE_H
 
-#include "nodes/nodes.h"
-#include "glyphs/glyphs.h"
-#include "semantic/font.h"
-
 class Document;
 class Glyph;
+class FontGlyph;
+class TextGlyph;
+class Font;
+class FontNode;
+class TextNode;
+class RootNode;
 
 class PageAnalyze {
 private:

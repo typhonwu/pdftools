@@ -1,3 +1,4 @@
+#pragma once
 #ifndef NAMENODE_H
 #define NAMENODE_H
 

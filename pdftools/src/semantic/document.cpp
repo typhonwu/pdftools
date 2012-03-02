@@ -1,4 +1,8 @@
 #include "document.h"
+#include "font.h"
+#include "outline.h"
+#include "page.h"
+#include "pagelabel.h"
 
 Document::Document()
 {

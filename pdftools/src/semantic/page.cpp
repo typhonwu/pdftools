@@ -1,24 +1,32 @@
 #include "page.h"
 #include "context.h"
+#include "document.h"
 #include "glyphs/glyph.h"
+#include "html/html.h"
 #include <cstdlib>
 #include <stdint.h>
 #include <string.h>
 
-Page::Page()
+Page::Page(Document *parent)
 {
     m_media_box = NULL;
     m_crop_box = NULL;
+    m_document = parent;
     m_id = 0;
     m_generation = 0;
-    m_document = new Glyph;
+    m_root = NULL;
 }
 
 Page::~Page()
 {
     if (m_media_box) delete [] m_media_box;
     if (m_crop_box) delete [] m_crop_box;
-    if (m_document) delete m_document;
+    if (m_root) delete m_root;
+}
+
+void Page::set_root(Glyph *root)
+{
+	m_root = root;
 }
 
 void Page::add_fontmap(string alias, string font_name)
@@ -31,17 +39,11 @@ string Page::font_name(string &alias)
     return m_fontmap[alias];
 }
 
-void Page::add_glyph(Glyph *glyph)
+void Page::execute(Html *html)
 {
-    if (glyph) {
-        m_document->add_child(glyph);
-    }
-}
-
-void Page::execute(Html *document, Context *context)
-{
-    context->set_current_page(this);
-    m_document->execute(document, context);
+	Context context(m_document);
+    context.set_current_page(this);
+    m_root->execute(html, &context);
 }
 
 void Page::set_link(char *link)

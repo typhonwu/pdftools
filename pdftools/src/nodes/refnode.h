@@ -1,3 +1,4 @@
+#pragma once
 #ifndef REFNODE_H
 #define REFNODE_H
 

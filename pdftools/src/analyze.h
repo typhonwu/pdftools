@@ -1,9 +1,7 @@
+#pragma once
 #ifndef ANALYSE_H
 #define ANALYSE_H
 
-#include "semantic/document.h"
-#include "nodes/nodes.h"
-#include "scanner.h"
 #include <vector>
 #include <map>
 #include <sstream>
@@ -12,7 +10,17 @@
 
 using namespace std;
 
+class Scanner;
 class Outline;
+class Document;
+class RootNode;
+class TreeNode;
+class MapNode;
+class ArrayNode;
+class ObjNode;
+class RefNode;
+class Font;
+class Page;
 
 class Analyze {
 private:

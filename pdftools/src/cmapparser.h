@@ -3,11 +3,13 @@
 #define CMAPPARSER_H
 
 #include "scanner.h"
-#include "token.h"
-#include "nodes/nodes.h"
 #include <istream>
 
 using namespace std;
+
+class TreeNode;
+class CMapNode;
+class CodeSpaceNode;
 
 class CMapParser {
 private:

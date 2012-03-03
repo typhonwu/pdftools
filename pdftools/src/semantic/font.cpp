@@ -39,6 +39,10 @@ string Font::translate(string &value)
 {
     string ret;
     int size = m_charmap_start.size();
+    
+    if (m_charmap.size() == 0) {
+        return value;
+    }
 
     const char *start = m_charmap_start.c_str();
     const char *finish = m_charmap_finish.c_str();

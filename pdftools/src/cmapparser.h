@@ -28,6 +28,7 @@ private:
     bool match(TokenType type);
     TreeNode *value_sequence();
     void bfchar_sequence(const int count);
+    void bfrange_sequence(const int count);
     CodeSpaceNode *codespace_sequence();
 };
 

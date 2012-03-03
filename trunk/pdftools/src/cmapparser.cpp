@@ -26,7 +26,7 @@ void CMapParser::next_token()
 CMapNode *CMapParser::parse()
 {
     int val;
-    
+
     if (m_root) {
         delete m_root;
     }
@@ -84,6 +84,9 @@ CMapNode *CMapParser::parse()
             } else if (m_token->value() == "begincodespacerange") {
                 match(NAME);
                 m_root->set_codespace(codespace_sequence());
+            } else if (m_token->value() == "beginbfrange") {
+                match(NAME);
+                bfrange_sequence(val);
             } else {
                 match(NAME);
                 error_message("invalid mode");
@@ -118,6 +121,58 @@ void CMapParser::bfchar_sequence(const int count)
         match(STRING);
         m_root->add(new CharNode(character, unicode));
     }
+    match(NAME);
+}
+
+void CMapParser::bfrange_sequence(const int count)
+{
+    for (int loop = 0; loop < count; loop++) {
+        string start = m_token->value();
+        match(STRING);
+        string end = m_token->value();
+        match(STRING);
+        TreeNode *node = value_sequence();
+        StringNode *name = dynamic_cast<StringNode *> (node);
+        if (name) {
+            char *chars = const_cast<char *> (start.c_str());
+            char *b = chars;
+            b++;
+            int size = start.size();
+
+            // TODO find a better solution
+            while (strcmp(chars, end.c_str()) <= 0) {
+                m_root->add(new CharNode(string(chars, size), name->value()));
+                if (size == 1) {
+                    (*chars)++;
+                } else {
+                    uint16_t c = (*chars << 8) + (*b & 255);
+                    //uint16_t c = *b & 255;
+                    c++;
+                    *chars = c >> 8;
+                    *b = c & 0xFF;
+                }
+            }
+        } else {
+            error_message("test map");
+            ArrayNode *array = dynamic_cast<ArrayNode *> (node);
+            char *chars = const_cast<char *> (start.c_str());
+            int size = start.size();
+            int loop2 = 0;
+
+            while (memcmp(chars, end.c_str(), size) < 0) {
+                name = dynamic_cast<StringNode *> (array->value(loop2));
+                m_root->add(new CharNode(string(chars, size), name->value()));
+                if (size == 1) {
+                    (*chars)++;
+                } else {
+                    uint16_t *c = (uint16_t *) chars;
+                    (*c)++;
+                }
+                loop2++;
+            }
+        }
+    }
+    match(NAME);
 }
 
 bool CMapParser::match(TokenType type)

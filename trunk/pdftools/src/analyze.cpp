@@ -354,6 +354,8 @@ Font *Analyze::analyze_font(MapNode *fontmap)
         stringstream stream;
         get_stream(to_unicode, &stream);
 
+        //cout << stream.str() << endl;
+        
         stream.seekg(0);
         CMapParser parser(&stream);
         CMapNode *root = parser.parse();

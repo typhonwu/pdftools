@@ -30,6 +30,9 @@ Document::~Document()
         delete *f;
         f++;
     }
+    if (m_outlines) {
+        delete m_outlines;
+    }
 }
 
 void Document::add_font(Font *font)

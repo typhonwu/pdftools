@@ -15,8 +15,6 @@ class Token;
 
 class PageParser : public GenericParser {
 private:
-    Scanner m_scanner;
-    Token *m_token;
     RootNode *m_root;
 
 public:
@@ -26,10 +24,6 @@ public:
     RootNode *parse();
     
 private:
-    void next_token();
-    bool match(TokenType type);
-    
-    TreeNode *value_sequence();
     TreeNode *font_sequence(vector<TreeNode *> &values);
     TreeNode *bi_sequence();
     TreeNode *bdc_sequence(vector<TreeNode *> &values);

@@ -25,97 +25,37 @@ struct reserved_words {
     const char *name;
 };
 
-static reserved_words words[] = {
-    { OBJ, "obj"},
-    { END_OBJ, "endobj"},
-    { END_PDF, "EOF"},
-    { XREF, "xref"},
-    { TRUE, "true"},
-    { FALSE, "false"},
-    { STREAM, "stream"},
-    { END_STREAM, "endstream"},
-    { START_XREF, "startxref"},
-    { TRAILER, "trailer"},
-    { BT, "BT"},
-    { ET, "ET"},
-    { MP, "MP"},
-    { DP, "DP"},
-    { BMC, "BMC"},
-    { BDC, "BDC"},
-    { EMC, "EMC"},
-    { BX, "BX"},
-    { EX, "EX"},
-    { TJ_UP, "TJ"},
-    { TJ_LO, "Tj"},
-    { QUOTE, "'"},
-    { DOUBLE_QUOTE, "\""},
-    { GS, "gs"},
-    { TF, "Tf"},
-    { TW, "Tw"},
-    { TZ, "Tz"},
-    { TL, "TL"},
-    { T_AST, "T*"},
-    { TR, "Tr"},
-    { TS, "Ts"},
-    { TC, "Tc"},
-    { TM, "Tm"},
-    { D0, "d0"},
-    { D1, "d1"},
-    { SH, "sh"},
-    { N, "n"},
-    { TD_LO, "Td"},
-    { TD_UP, "TD"},
-    { SCN_UP, "SCN"},
-    { SCN_LO, "scn"},
-    { SC_UP, "SC"},
-    { SC_LO, "sc"},
-    { G_LO, "g"},
-    { G_UP, "G"},
-    { RE, "re"},
-    { RI, "ri"},
-    { CS_UP, "CS"},
-    { CS_LO, "cs"},
-    { W_LO, "w"},
-    { W_UP, "W"},
-    { W_AST, "W*"},
-    { Q_UP, "Q"},
-    { Q_LO, "q"},
-    { F_AST, "f*"},
-    { F_UP, "F"},
-    { F_LO, "f"},
-    { RG_UP, "RG"},
-    { RG_LO, "rg"},
-    { M_LO, "m"},
-    { M_UP, "M"},
-    { K_LO, "k"},
-    { K_UP, "K"},
-    { J_LO, "j"},
-    { J_UP, "J"},
-    { S_LO, "s"},
-    { S_UP, "S"},
-    { C, "c"},
-    { CM, "cm"},
-    { DO, "Do"},
-    { L, "l"},
-    { D, "d"},
-    { H, "h"},
-    { V, "v"},
-    { Y, "y"},
-    { I, "i"},
-    { BI, "BI"},
-    { ID, "ID"},
-    { B_UP, "B"},
-    { B_UP_AST, "B*"},
-    { B_LO, "b"},
-    { B_LO_AST, "b*"},
-    { EI, "EI"}
-};
+static reserved_words words[] = { { OBJ, "obj" }, { END_OBJ, "endobj" }, {
+        END_PDF, "EOF" }, { XREF, "xref" }, { TRUE, "true" },
+        { FALSE, "false" }, { STREAM, "stream" }, { END_STREAM, "endstream" }, {
+                START_XREF, "startxref" }, { TRAILER, "trailer" }, { BT, "BT" },
+        { ET, "ET" }, { MP, "MP" }, { DP, "DP" }, { BMC, "BMC" },
+        { BDC, "BDC" }, { EMC, "EMC" }, { BX, "BX" }, { EX, "EX" }, { TJ_UP,
+                "TJ" }, { TJ_LO, "Tj" }, { QUOTE, "'" }, { DOUBLE_QUOTE, "\"" },
+        { GS, "gs" }, { TF, "Tf" }, { TW, "Tw" }, { TZ, "Tz" }, { TL, "TL" }, {
+                T_AST, "T*" }, { TR, "Tr" }, { TS, "Ts" }, { TC, "Tc" }, { TM,
+                "Tm" }, { D0, "d0" }, { D1, "d1" }, { SH, "sh" }, { N, "n" }, {
+                TD_LO, "Td" }, { TD_UP, "TD" }, { SCN_UP, "SCN" }, { SCN_LO,
+                "scn" }, { SC_UP, "SC" }, { SC_LO, "sc" }, { G_LO, "g" }, {
+                G_UP, "G" }, { RE, "re" }, { RI, "ri" }, { CS_UP, "CS" }, {
+                CS_LO, "cs" }, { W_LO, "w" }, { W_UP, "W" }, { W_AST, "W*" }, {
+                Q_UP, "Q" }, { Q_LO, "q" }, { F_AST, "f*" }, { F_UP, "F" }, {
+                F_LO, "f" }, { RG_UP, "RG" }, { RG_LO, "rg" }, { M_LO, "m" }, {
+                M_UP, "M" }, { K_LO, "k" }, { K_UP, "K" }, { J_LO, "j" }, {
+                J_UP, "J" }, { S_LO, "s" }, { S_UP, "S" }, { C, "c" }, { CM,
+                "cm" }, { DO, "Do" }, { L, "l" }, { D, "d" }, { H, "h" }, { V,
+                "v" }, { Y, "y" }, { I, "i" }, { BI, "BI" }, { ID, "ID" }, {
+                B_UP, "B" }, { B_UP_AST, "B*" }, { B_LO, "b" },
+        { B_LO_AST, "b*" }, { EI, "EI" } };
 
 inline unsigned int xtod(char c)
 {
-    if (c >= '0' && c <= '9') return c - '0';
-    if (c >= 'A' && c <= 'F') return c - 'A' + 10;
-    if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+    if (c >= '0' && c <= '9')
+        return c - '0';
+    if (c >= 'A' && c <= 'F')
+        return c - 'A' + 10;
+    if (c >= 'a' && c <= 'f')
+        return c - 'a' + 10;
     return 0; // not a hex digit
 }
 
@@ -152,7 +92,8 @@ void Scanner::to_pos(int pos)
 int Scanner::ignore_stream(int length)
 {
     // Ignore first new line
-    while (m_filein->good() && next_char() != '\n');
+    while (m_filein->good() && next_char() != '\n') {
+    }
     //unget_char();
     int ret = m_filein->tellg();
 
@@ -185,15 +126,9 @@ int Scanner::ignore_stream(int length)
 
 char *Scanner::get_image_stream()
 {
-    register char c;
-    do {
-        c = next_char();
-        if (is_space(c)) {
-            continue;
-        } else if (c != '\n') {
-            break;
-        }
-    } while (m_filein->good());
+    // Ignore first new line
+    while (m_filein->good() && next_char() != '\n') {
+    }
     unget_char();
 
     while (m_filein->good()) {
@@ -246,7 +181,8 @@ bool Scanner::good()
 
 void Scanner::ignore_line()
 {
-    while (next_char() != '\n');
+    while (next_char() != '\n')
+        ;
     unget_char();
 }
 
@@ -267,7 +203,7 @@ bool Scanner::is_space(const char c)
 
 TokenType Scanner::reserved_lookup(const char *s)
 {
-    int size = sizeof (words) / sizeof (reserved_words);
+    int size = sizeof(words) / sizeof(reserved_words);
     for (int i = 0; i < size; i++) {
         if (!strcmp(words[i].name, s)) {
             return words[i].type;

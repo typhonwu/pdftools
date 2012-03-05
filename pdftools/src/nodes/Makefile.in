@@ -58,7 +58,8 @@ am_libnodes_a_OBJECTS = libnodes_a-objnode.$(OBJEXT) \
 	libnodes_a-breaknode.$(OBJEXT) libnodes_a-bdcnode.$(OBJEXT) \
 	libnodes_a-textnode.$(OBJEXT) libnodes_a-fontnode.$(OBJEXT) \
 	libnodes_a-charnode.$(OBJEXT) libnodes_a-cmapnode.$(OBJEXT) \
-	libnodes_a-codespacenode.$(OBJEXT)
+	libnodes_a-codespacenode.$(OBJEXT) \
+	libnodes_a-statenode.$(OBJEXT)
 libnodes_a_OBJECTS = $(am_libnodes_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -190,7 +191,8 @@ libnodes_a_SOURCES = \
 	fontnode.cpp \
 	charnode.cpp \
 	cmapnode.cpp \
-	codespacenode.cpp
+	codespacenode.cpp \
+	statenode.cpp
 
 noinst_HEADERS = \
 	objnode.h \
@@ -211,6 +213,7 @@ noinst_HEADERS = \
 	charnode.h \
 	cmapnode.h \
 	codespacenode.h \
+	statenode.h \
 	nodes.h
 
 libnodes_a_CXXFLAGS = -I..
@@ -277,6 +280,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-objnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-refnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-rootnode.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-statenode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-stringnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-textnode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnodes_a-treenode.Po@am__quote@
@@ -547,6 +551,20 @@ libnodes_a-codespacenode.obj: codespacenode.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='codespacenode.cpp' object='libnodes_a-codespacenode.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-codespacenode.obj `if test -f 'codespacenode.cpp'; then $(CYGPATH_W) 'codespacenode.cpp'; else $(CYGPATH_W) '$(srcdir)/codespacenode.cpp'; fi`
+
+libnodes_a-statenode.o: statenode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-statenode.o -MD -MP -MF $(DEPDIR)/libnodes_a-statenode.Tpo -c -o libnodes_a-statenode.o `test -f 'statenode.cpp' || echo '$(srcdir)/'`statenode.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-statenode.Tpo $(DEPDIR)/libnodes_a-statenode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='statenode.cpp' object='libnodes_a-statenode.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-statenode.o `test -f 'statenode.cpp' || echo '$(srcdir)/'`statenode.cpp
+
+libnodes_a-statenode.obj: statenode.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -MT libnodes_a-statenode.obj -MD -MP -MF $(DEPDIR)/libnodes_a-statenode.Tpo -c -o libnodes_a-statenode.obj `if test -f 'statenode.cpp'; then $(CYGPATH_W) 'statenode.cpp'; else $(CYGPATH_W) '$(srcdir)/statenode.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libnodes_a-statenode.Tpo $(DEPDIR)/libnodes_a-statenode.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='statenode.cpp' object='libnodes_a-statenode.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libnodes_a_CXXFLAGS) $(CXXFLAGS) -c -o libnodes_a-statenode.obj `if test -f 'statenode.cpp'; then $(CYGPATH_W) 'statenode.cpp'; else $(CYGPATH_W) '$(srcdir)/statenode.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

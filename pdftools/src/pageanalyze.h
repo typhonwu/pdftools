@@ -11,12 +11,14 @@ class TreeNode;
 class FontNode;
 class TextNode;
 class RootNode;
+class GraphicState;
 
 class PageAnalyze {
 private:
 	Document *m_document;
 	Glyph *m_root;
 	Font *m_font;
+	GraphicState *m_state;
 
 public:
 	PageAnalyze(Document *document);

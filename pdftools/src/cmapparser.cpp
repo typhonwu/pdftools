@@ -3,11 +3,12 @@
 #include "scanner.h"
 #include "token.h"
 #include "nodes/nodes.h"
+#include <cstring>
 
 CMapParser::CMapParser(istream *stream)
 {
-    m_scanner.disable_chatset_conversion();
-    m_scanner.set_istream(stream);
+    m_scanner->disable_chatset_conversion();
+    m_scanner->set_istream(stream);
     m_root = NULL;
 }
 
@@ -16,11 +17,6 @@ CMapParser::~CMapParser()
     if (m_root) {
         delete m_root;
     }
-}
-
-void CMapParser::next_token()
-{
-    m_token = m_scanner.next_token();
 }
 
 CMapNode *CMapParser::parse()
@@ -51,7 +47,7 @@ CMapNode *CMapParser::parse()
     //begincmap
     match(NAME);
 
-    while (m_scanner.good()) {
+    while (m_scanner->good()) {
         switch (m_token->type()) {
         case NAME:
             if (m_token->value() == "/CMapName") {
@@ -132,9 +128,9 @@ void CMapParser::bfrange_sequence(const int count)
         string end = m_token->value();
         match(STRING);
         TreeNode *node = value_sequence();
-        StringNode *name = dynamic_cast<StringNode *> (node);
+        StringNode *name = dynamic_cast<StringNode *>(node);
         if (name) {
-            char *chars = const_cast<char *> (start.c_str());
+            char *chars = const_cast<char *>(start.c_str());
             char *b = chars;
             b++;
             int size = start.size();
@@ -146,7 +142,6 @@ void CMapParser::bfrange_sequence(const int count)
                     (*chars)++;
                 } else {
                     uint16_t c = (*chars << 8) + (*b & 255);
-                    //uint16_t c = *b & 255;
                     c++;
                     *chars = c >> 8;
                     *b = c & 0xFF;
@@ -154,13 +149,13 @@ void CMapParser::bfrange_sequence(const int count)
             }
         } else {
             error_message("test map");
-            ArrayNode *array = dynamic_cast<ArrayNode *> (node);
-            char *chars = const_cast<char *> (start.c_str());
+            ArrayNode *array = dynamic_cast<ArrayNode *>(node);
+            char *chars = const_cast<char *>(start.c_str());
             int size = start.size();
             int loop2 = 0;
 
             while (memcmp(chars, end.c_str(), size) < 0) {
-                name = dynamic_cast<StringNode *> (array->value(loop2));
+                name = dynamic_cast<StringNode *>(array->value(loop2));
                 m_root->add(new CharNode(string(chars, size), name->value()));
                 if (size == 1) {
                     (*chars)++;
@@ -173,85 +168,4 @@ void CMapParser::bfrange_sequence(const int count)
         }
     }
     match(NAME);
-}
-
-bool CMapParser::match(TokenType type)
-{
-    if (m_token && m_token->type() == type) {
-        next_token();
-    } else {
-#ifdef DEBUG
-        string msg = "unexpected token: ";
-        if (m_token) {
-            msg += m_token->value();
-        }
-        error_message(msg.c_str());
-#endif
-        next_token();
-        return false;
-    }
-    return true;
-}
-
-TreeNode *CMapParser::value_sequence()
-{
-    if (m_token->type() == START_DICT) {
-        match(START_DICT);
-        MapNode *map = new MapNode;
-
-        while (m_scanner.good() && m_token && m_token->type() != END_DICT) {
-            string name = m_token->value();
-            match(NAME);
-            TreeNode *value = value_sequence();
-            NameNode *n = dynamic_cast<NameNode *> (value);
-            if (n && n->name()[0] != '/') {
-                value = value_sequence();
-            }
-            map->push(name, value);
-        }
-        match(END_DICT);
-        return map;
-    } else if (m_token->type() == TRUE) {
-        match(TRUE);
-        return new BooleanNode(true);
-    } else if (m_token->type() == FALSE) {
-        match(FALSE);
-        return new BooleanNode(false);
-    } else if (m_token->type() == NAME) {
-        string name = m_token->value();
-        match(NAME);
-        return new NameNode(name);
-    } else if (m_token->type() == STRING) {
-        string value = m_token->value();
-        match(STRING);
-        return new StringNode(value);
-    } else if (m_token->type() == NUM) {
-        double value = m_token->to_number();
-        int pos = m_scanner.pos();
-        match(NUM);
-
-        if (m_token->type() == NUM) {
-            double generation = m_token->to_number();
-            match(NUM);
-            if (m_token->type() == NAME && m_token->value() == "R") {
-                match(NAME);
-                return new RefNode(value, generation);
-            } else {
-                m_scanner.to_pos(pos);
-            }
-        } else {
-            m_scanner.to_pos(pos);
-        }
-        next_token();
-        return new NumberNode(value);
-    } else if (m_token->type() == START_ARRAY) {
-        ArrayNode *array = new ArrayNode;
-        match(START_ARRAY);
-        while (m_scanner.good() && m_token->type() != END_ARRAY) {
-            array->push(value_sequence());
-        }
-        match(END_ARRAY);
-        return array;
-    }
-    return NULL;
 }

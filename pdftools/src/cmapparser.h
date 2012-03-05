@@ -3,6 +3,7 @@
 #define CMAPPARSER_H
 
 #include "scanner.h"
+#include "genericparser.h"
 #include <istream>
 
 using namespace std;
@@ -11,10 +12,8 @@ class TreeNode;
 class CMapNode;
 class CodeSpaceNode;
 
-class CMapParser {
+class CMapParser : public GenericParser {
 private:
-    Scanner m_scanner;
-    Token *m_token;
     CMapNode *m_root;
 
 public:
@@ -24,9 +23,6 @@ public:
     CMapNode *parse();
 
 private:
-    void next_token();
-    bool match(TokenType type);
-    TreeNode *value_sequence();
     void bfchar_sequence(const int count);
     void bfrange_sequence(const int count);
     CodeSpaceNode *codespace_sequence();

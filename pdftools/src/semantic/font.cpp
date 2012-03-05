@@ -35,6 +35,8 @@ void Font::add_charmap(string character, string utf16value)
     m_charmap[character] = utf16be_to_utf8(utf16value);
 }
 
+#include <iostream>
+
 string Font::translate(string &value)
 {
     string ret;

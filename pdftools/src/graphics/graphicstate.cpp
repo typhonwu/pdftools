@@ -5,7 +5,6 @@ using namespace std;
 
 GraphicState::GraphicState()
 {
-
 }
 
 GraphicState::~GraphicState()

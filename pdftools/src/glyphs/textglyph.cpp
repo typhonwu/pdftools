@@ -13,11 +13,11 @@ void TextGlyph::do_glyph(Html *document)
 {
     Font *current = m_context->font();
 
-    const char *text;
+    string text;
     if (current) {
-        text = current->translate(m_text).c_str();
+        text = current->translate(m_text);
     } else {
-        text = m_text.c_str();
+        text = m_text;
     }
-    document->add_element(text);
+    document->add_element(text.c_str());
 }

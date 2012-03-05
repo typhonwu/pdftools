@@ -3,6 +3,7 @@
 #define PAGEPARSER_H
 
 #include "scanner.h"
+#include "genericparser.h"
 #include <istream>
 #include <vector>
 
@@ -12,7 +13,7 @@ class RootNode;
 class TreeNode;
 class Token;
 
-class PageParser {
+class PageParser : public GenericParser {
 private:
     Scanner m_scanner;
     Token *m_token;

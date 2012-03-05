@@ -7,7 +7,8 @@
 
 using namespace std;
 
-PageParser::PageParser(istream *stream) : GenericParser()
+PageParser::PageParser(istream *stream) :
+        GenericParser()
 {
     m_scanner->disable_chatset_conversion();
     m_scanner->set_istream(stream);
@@ -27,6 +28,7 @@ RootNode *PageParser::parse()
         delete m_root;
     }
     m_root = new RootNode();
+
     vector<TreeNode *> values;
     values.reserve(10);
 
@@ -48,6 +50,16 @@ RootNode *PageParser::parse()
                 m_root->add_child(font_sequence(values));
                 break;
 
+                // Graphic State
+            case Q_LO:
+                m_root->add_child(new StateNode(true));
+                next_token();
+                break;
+            case Q_UP:
+                m_root->add_child(new StateNode(false));
+                next_token();
+                break;
+
                 // Text
             case TJ_LO:
                 match(TJ_LO);
@@ -60,18 +72,14 @@ RootNode *PageParser::parse()
                 match(T_AST);
                 m_root->add_child(new BreakNode);
                 break;
-            case DOUBLE_QUOTE:
+            case DOUBLE_QUOTE: {
                 match(DOUBLE_QUOTE);
                 m_root->add_child(new BreakNode);
-            {
-                TextNode *text = new TextNode;
-                StringNode *node = dynamic_cast<StringNode *> (values[3]);
-                if (node) {
-                    text->add(node->value());
-                }
-                m_root->add_child(text);
-            }
+                vector<TreeNode *> vector;
+                vector.assign(values.begin() + 3, values.end());
+                m_root->add_child(text_sequence(vector));
                 break;
+            }
             case QUOTE:
                 match(QUOTE);
                 m_root->add_child(new BreakNode);
@@ -102,18 +110,18 @@ TreeNode *PageParser::font_sequence(vector<TreeNode *> &values)
     if (values.size() == 2) {
         FontNode *font = new FontNode;
 
-        NameNode *font_name = dynamic_cast<NameNode *> (values[0]);
+        NameNode *font_name = dynamic_cast<NameNode *>(values[0]);
         if (font_name) {
             font->set_name(font_name->name());
         }
-        NumberNode *font_size = dynamic_cast<NumberNode *> (values[1]);
+        NumberNode *font_size = dynamic_cast<NumberNode *>(values[1]);
         if (font_size) {
             font->set_size(font_size->value());
         }
         return font;
     } else {
-    	error_message("Error parsing font object");
-    	return NULL;
+        error_message("Error parsing font object");
+        return NULL;
     }
 }
 
@@ -137,7 +145,7 @@ TreeNode *PageParser::text_sequence(vector<TreeNode *> &values)
     TextNode *text = new TextNode;
     int size = values.size();
     for (int loop = 0; loop < size; loop++) {
-        StringNode *node = dynamic_cast<StringNode *> (values[loop]);
+        StringNode *node = dynamic_cast<StringNode *>(values[loop]);
         if (node) {
             text->add(node->value());
         }
@@ -150,11 +158,11 @@ void PageParser::tjup_sequence(RootNode *root, vector<TreeNode *> &values)
     match(TJ_UP);
     int size = values.size();
     for (int loop = 0; loop < size; loop++) {
-        ArrayNode *array = dynamic_cast<ArrayNode *> (values[loop]);
+        ArrayNode *array = dynamic_cast<ArrayNode *>(values[loop]);
         if (array) {
             int array_size = array->size();
             for (int y = 0; y < array_size; y++) {
-                StringNode *node = dynamic_cast<StringNode *> (array->value(y));
+                StringNode *node = dynamic_cast<StringNode *>(array->value(y));
                 if (node) {
                     TextNode *text = new TextNode;
                     text->add(node->value());
@@ -170,7 +178,7 @@ TreeNode *PageParser::bdc_sequence(vector<TreeNode *> &values)
     match(BDC);
     BDCNode *node = new BDCNode;
 
-    NameNode *name = dynamic_cast<NameNode *> (values[0]);
+    NameNode *name = dynamic_cast<NameNode *>(values[0]);
     if (name) {
         node->set_name(name->name());
     }

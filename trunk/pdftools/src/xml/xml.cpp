@@ -71,7 +71,8 @@ bool XML::add_attribute(const char *attribute, const char *value)
 bool XML::add_element(const char *value)
 {
     if (m_writer) {
-        return xmlTextWriterWriteString(m_writer, BAD_CAST value) >= 0;
+        xmlTextWriterWriteRaw(m_writer, BAD_CAST value);
+        return true;
     }
     return false;
 }

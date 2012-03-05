@@ -8,6 +8,9 @@ private:
 public:
     GraphicState();
     ~GraphicState();
+
+    void push();
+    void pop();
 };
 
 #endif

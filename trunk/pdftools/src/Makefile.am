@@ -1,4 +1,4 @@
-SUBDIRS = nodes glyphs semantic zip xml html epub
+SUBDIRS = nodes glyphs semantic zip xml html epub graphics
 
 bin_PROGRAMS = pdftools
 pdftools_SOURCES = main.cpp \
@@ -38,6 +38,7 @@ pdftools_LDADD = \
 	html/libhtml.a \
 	xml/libxml.a \
 	glyphs/libglyphs.a \
+	graphics/libgraphics.a \
 	$(XML_LIBS)
 
 if HELP2MAN

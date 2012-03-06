@@ -30,7 +30,7 @@ public:
     void to_pos(int pos);
     char *get_stream(int length);
     char *get_image_stream();
-    void disable_chatset_conversion();
+    void disable_charset_conversion();
 
 private:
     void unget_char();

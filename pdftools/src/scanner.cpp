@@ -69,7 +69,7 @@ Scanner::~Scanner()
 {
 }
 
-void Scanner::disable_chatset_conversion()
+void Scanner::disable_charset_conversion()
 {
     m_charset_conversion = false;
 }

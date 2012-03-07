@@ -27,6 +27,7 @@ public:
 	Glyph *analyze_tree(RootNode *tree);
 
 private:
+	void analyze_tree(RootNode *tree, Glyph *parent);
 	FontGlyph *analyze_font(FontNode *font);
 	void analyze_text(TextNode *text, Glyph *parent);
 };

@@ -44,18 +44,20 @@ void PageAnalyze::analyze_tree(RootNode *tree, Glyph *parent)
                     // Ignore
                     continue;
                 }
-            } else {
-                parent->add_child(analyze_tree(bdc));
             }
+            parent->add_child(analyze_tree(bdc));
+            continue;
         }
 
         FontNode *font = dynamic_cast<FontNode *>(node);
         if (font) {
             parent->add_child(analyze_font(font));
+            continue;
         }
         TextNode *text = dynamic_cast<TextNode *>(node);
         if (text) {
             analyze_text(text, parent);
+            continue;
         }
         StateNode *state = dynamic_cast<StateNode *>(node);
         if (state) {

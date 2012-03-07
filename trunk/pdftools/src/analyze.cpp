@@ -170,7 +170,6 @@ void Analyze::analyze_root()
     if (outlines) {
         analyze_outlines(outlines);
     }
-    // TODO Parse the StructTreeRoot
 }
 
 void Analyze::analyze_names(MapNode *values)

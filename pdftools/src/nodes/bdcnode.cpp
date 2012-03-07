@@ -1,8 +1,9 @@
 #include "bdcnode.h"
 
-BDCNode::BDCNode() : RootNode()
+BDCNode::BDCNode(RootNode *parent) : RootNode()
 {
     m_value = NULL;
+    m_parent = parent;
 }
 
 BDCNode::~BDCNode()
@@ -30,4 +31,9 @@ void BDCNode::set_value(TreeNode *value)
 void BDCNode::set_name(string name)
 {
     m_name = name;
+}
+
+RootNode *BDCNode::parent()
+{
+    return m_parent;
 }

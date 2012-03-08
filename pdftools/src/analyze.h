@@ -43,6 +43,7 @@ private:
     void analyze_root();
     void analyze_names(MapNode *values);
     void analyze_outlines(MapNode *values, Outline *parent = NULL);
+    void analyze_outline(ArrayNode *values, Outline *outline);
     void analyze_pages(TreeNode *page, ArrayNode *mediabox = NULL);
     Font *analyze_font(MapNode *fontmap);
 

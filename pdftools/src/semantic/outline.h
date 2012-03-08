@@ -13,6 +13,8 @@ private:
     string m_title;
     int m_id;
     int m_generation;
+    double m_x;
+    double m_y;
     
 public:
     Outline();
@@ -20,6 +22,7 @@ public:
     
     void add_child(Outline *child);
     void set_destination(int id, int generation);
+    void set_location(double x, double y);
     void set_title(string title);
     
     int id();

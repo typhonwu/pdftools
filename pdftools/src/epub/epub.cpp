@@ -14,14 +14,16 @@
 
 using namespace std;
 
-EPUB::EPUB() : Generator()
+EPUB::EPUB() :
+        Generator()
 {
     m_zipfile = new ZipFile;
 }
 
 EPUB::~EPUB()
 {
-    if (m_zipfile) delete m_zipfile;
+    if (m_zipfile)
+        delete m_zipfile;
 }
 
 void EPUB::generate_mimetype()
@@ -112,8 +114,8 @@ void EPUB::generate_content(const char* output)
 
     xml.end_tag();
 
-    int i;
-    int size = m_document->pages();
+//    int i;
+//    int size = m_document->pages();
     xml.start_tag("manifest");
 
     xml.start_tag("item");
@@ -122,30 +124,42 @@ void EPUB::generate_content(const char* output)
     xml.add_attribute("media-type", "application/x-dtbncx+xml");
     xml.end_tag();
 
-    for (i = 1; i <= size; i++) {
-        stringstream part;
-        part << "part" << i;
-        stringstream file;
-        file << "page-" << i << ".html";
+//    for (i = 1; i <= size; i++) {
+//        stringstream part;
+//        part << "part" << i;
+//        stringstream file;
+//        file << "page-" << i << ".html";
+//
+//        xml.start_tag("item");
+//        xml.add_attribute("id", part.str().c_str());
+//        xml.add_attribute("href", file.str().c_str());
+//        xml.add_attribute("media-type", "application/xhtml+xml");
+//        xml.end_tag();
+//    }
 
-        xml.start_tag("item");
-        xml.add_attribute("id", part.str().c_str());
-        xml.add_attribute("href", file.str().c_str());
-        xml.add_attribute("media-type", "application/xhtml+xml");
-        xml.end_tag();
-    }
+    xml.start_tag("item");
+    xml.add_attribute("id", "part1");
+    xml.add_attribute("href", "pages.html");
+    xml.add_attribute("media-type", "application/xhtml+xml");
+    xml.end_tag();
+
     xml.end_tag();
 
     xml.start_tag("spine");
     xml.add_attribute("toc", "ncx");
-    for (i = 1; i <= size; i++) {
-        stringstream part;
-        part << "part" << i;
+//    for (i = 1; i <= size; i++) {
+//        stringstream part;
+//        part << "part" << i;
+//
+//        xml.start_tag("itemref");
+//        xml.add_attribute("idref", part.str().c_str());
+//        xml.end_tag();
+//    }
 
-        xml.start_tag("itemref");
-        xml.add_attribute("idref", part.str().c_str());
-        xml.end_tag();
-    }
+    xml.start_tag("itemref");
+    xml.add_attribute("idref", "part1");
+    xml.end_tag();
+
     xml.end_tag();
 
     xml.end_tag();
@@ -171,7 +185,6 @@ void EPUB::generate_outline(XML *xml, Outline *outline)
 
         xml->start_tag("navLabel");
         xml->start_tag("text");
-        //cout << outline->title() << endl;
         xml->add_element(outline->title());
         xml->end_tag();
         xml->end_tag();
@@ -242,7 +255,8 @@ void EPUB::generate_toc(const char* output)
         xml.end_tag();
 
         xml.start_tag("content");
-        xml.add_attribute("src", "page-1.html");
+//        xml.add_attribute("src", "page-1.html");
+        xml.add_attribute("src", "pages.html");
         xml.end_tag();
         xml.end_tag();
     }
@@ -254,6 +268,26 @@ void EPUB::generate_toc(const char* output)
     m_zipfile->add_source("toc.ncx", content.c_str());
 }
 
+void EPUB::generate_pages()
+{
+    Page *page;
+    Html html;
+    html.start_document();
+    html.start_header();
+    html.set_title(m_document->title().c_str());
+    html.start_body();
+
+    int size = m_document->pages();
+    for (int i = 0; i < size; i++) {
+        page = m_document->page(i);
+        page->execute(&html);
+    }
+    html.end_tag();
+    html.end_document();
+
+    m_zipfile->add_source("pages.html", html.content());
+}
+
 void EPUB::generate_page(Page *page)
 {
     Html html;
@@ -263,7 +297,7 @@ void EPUB::generate_page(Page *page)
     html.end_tag();
 
     html.start_body();
-    
+
     page->execute(&html);
 
     html.end_tag();
@@ -274,33 +308,34 @@ void EPUB::generate_page(Page *page)
 
 bool EPUB::generate(Document* document, const char* output)
 {
-	m_document = document;
+    m_document = document;
     m_order = 1;
     if (m_zipfile->open(output)) {
-        int i;
-        int size = m_document->pages();
-        for (i = 1; i <= size; i++) {
-            Page *page = m_document->page(i - 1);
-            if (page) {
-                stringstream file;
-                file << "page-" << i << ".html";
-                page->set_link((char *) file.str().c_str());
-            }
-        }
+//        int i;
+//        int size = m_document->pages();
+//        for (i = 1; i <= size; i++) {
+//            Page *page = m_document->page(i - 1);
+//            if (page) {
+//                stringstream file;
+//                file << "page-" << i << ".html";
+//                page->set_link((char *) file.str().c_str());
+//            }
+//        }
         generate_mimetype();
         generate_container();
         generate_content(output);
+        generate_pages();
         generate_toc(output);
 
-        size = m_document->pages();
-        for (i = 1; i <= size; i++) {
-            Page *page = m_document->page(i - 1);
-            if (page) {
-                generate_page(page);
-            } else {
-                cout << "Invalid page " << i << endl;
-            }
-        }
+//        size = m_document->pages();
+//        for (i = 1; i <= size; i++) {
+//            Page *page = m_document->page(i - 1);
+//            if (page) {
+//                generate_page(page);
+//            } else {
+//                cout << "Invalid page " << i << endl;
+//            }
+//        }
         m_zipfile->close();
     } else {
         return false;

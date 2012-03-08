@@ -41,9 +41,10 @@ string Page::font_name(string &alias)
 
 void Page::execute(Html *html)
 {
-	Context context(m_document);
-    context.set_current_page(this);
-    m_root->execute(html, &context);
+	Context *context = new Context(m_document);
+    context->set_current_page(this);
+    m_root->execute(html, context);
+    delete context;
 }
 
 void Page::set_link(char *link)

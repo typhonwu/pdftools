@@ -4,6 +4,8 @@ Outline::Outline()
 {
     m_id = 0;
     m_generation = 0;
+    m_x = 0;
+    m_y = 0;
 }
 
 Outline::~Outline()
@@ -18,6 +20,12 @@ Outline::~Outline()
 const char *Outline::title()
 {
     return m_title.c_str();
+}
+
+void Outline::set_location(double x, double y)
+{
+    m_x = x;
+    m_y = y;
 }
 
 int Outline::size()

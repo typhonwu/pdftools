@@ -24,6 +24,7 @@ public:
 
 private:
     void generate_container();
+    void generate_pages();
     void generate_page(Page *page);
     void generate_content(const char* output);
     void generate_toc(const char* output);

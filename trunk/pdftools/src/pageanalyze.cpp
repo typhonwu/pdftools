@@ -44,8 +44,9 @@ void PageAnalyze::analyze_tree(RootNode *tree, Glyph *parent)
                     // Ignore
                     continue;
                 }
+            } else {
+                analyze_tree(bdc, parent);
             }
-            parent->add_child(analyze_tree(bdc));
             continue;
         }
 

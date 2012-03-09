@@ -270,13 +270,14 @@ void EPUB::generate_toc(const char* output)
 
 void EPUB::generate_pages()
 {
-    Page *page;
     Html html;
     html.start_document();
     html.start_header();
     html.set_title(m_document->title().c_str());
+    html.end_tag();
     html.start_body();
 
+    Page *page;
     int size = m_document->pages();
     for (int i = 0; i < size; i++) {
         page = m_document->page(i);

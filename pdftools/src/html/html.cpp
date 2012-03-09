@@ -34,8 +34,8 @@ void Html::start_body()
 void Html::set_title(const char* title)
 {
     m_xml.start_tag("title");
-    add_element(title);
-    end_tag();
+    m_xml.add_element(title);
+    m_xml.end_tag();
 }
 
 void Html::add_element(const char *value)

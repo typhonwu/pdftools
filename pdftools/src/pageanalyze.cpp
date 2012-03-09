@@ -43,6 +43,8 @@ void PageAnalyze::analyze_tree(RootNode *tree, Glyph *parent)
                 if (type && type->name() == "/Pagination") {
                     // Ignore
                     continue;
+                } else {
+                    analyze_tree(bdc, parent);
                 }
             } else {
                 analyze_tree(bdc, parent);

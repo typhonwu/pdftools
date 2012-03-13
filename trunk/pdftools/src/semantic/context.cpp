@@ -23,7 +23,6 @@ Document *Context::document()
 
 void Context::set_current_font(string &alias, int size)
 {
-    // FIXME process font size
     if (m_document && m_page) {
         m_font = m_document->get_font(m_page->font_name(alias).c_str());
     }

@@ -22,6 +22,7 @@ public:
     void break_line();
     
     void add_paragraph();
+    void add_font(int size, bool bold, bool italic, bool fixed);
     void add_element(const char *element);
     
     void set_title(const char *title);

@@ -4,14 +4,45 @@
 
 Font::Font()
 {
+    m_italic = false;
+    m_bold = false;
+    m_fixed = false;
 }
 
 Font::~Font()
 {
 }
 
+bool Font::fixed()
+{
+    return m_fixed;
+}
+
+void Font::set_fixed(bool fixed)
+{
+    m_fixed = fixed;
+}
+
+void Font::set_italic(bool italic)
+{
+    m_italic = italic;
+}
+
+bool Font::italic()
+{
+    return m_italic;
+}
+
+bool Font::bold()
+{
+    return m_bold;
+}
+
 void Font::set_name(string name)
 {
+    if (name.find("Bold") != string::npos) {
+        m_bold = true;
+    }
     m_name = name;
 }
 

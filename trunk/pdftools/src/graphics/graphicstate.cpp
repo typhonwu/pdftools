@@ -21,3 +21,13 @@ void GraphicState::pop()
 {
     //cout << "pop" << endl;
 }
+
+Font *GraphicState::font()
+{
+    return m_font;
+}
+
+void GraphicState::set_font(Font *font)
+{
+    m_font = font;
+}

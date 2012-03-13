@@ -16,6 +16,7 @@ class PageLabel;
 class Document {
 private:
     bool m_encrypted;
+    bool m_tree_root;
     string m_id;
     string m_title;
     string m_subject;
@@ -36,6 +37,7 @@ public:
     void set_root(TreeNode *root);
     void set_info(TreeNode *info);
     void set_encrypted(bool encrypt);
+    void set_tree_root(bool tree_root);
     
     void set_title(string title);
     void set_subject(string subject);
@@ -55,6 +57,7 @@ public:
     Page *page(int id, int generation);
     
     bool encrypted();
+    bool tree_root();
     string lang();
     string id();
     string title();

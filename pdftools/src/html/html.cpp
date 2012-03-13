@@ -1,4 +1,7 @@
 #include "html.h"
+#include <sstream>
+
+using namespace std;
 
 Html::Html()
 {
@@ -36,6 +39,27 @@ void Html::set_title(const char* title)
     m_xml.start_tag("title");
     m_xml.add_element(title);
     m_xml.end_tag();
+}
+
+#include <iostream>
+
+void Html::add_font(int size, bool bold, bool italic, bool fixed)
+{
+    stringstream style;
+    style << "font-size:" << size << "pt";
+
+    if (italic) {
+        style << ";font-style:italic";
+    }
+    if (bold) {
+        style << ";font-weight:bold";
+    }
+    if (fixed) {
+        style << ";font-family:courier,\"Courier New\",monospace";
+    }
+
+    m_xml.start_tag("span");
+    m_xml.add_attribute("style", style.str().c_str());
 }
 
 void Html::add_element(const char *value)

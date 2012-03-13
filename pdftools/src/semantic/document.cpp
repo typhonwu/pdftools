@@ -9,6 +9,7 @@ Document::Document()
     m_root = NULL;
     m_info = NULL;
     m_encrypted = false;
+    m_tree_root = false;
     m_outlines = NULL;
     m_lang = "en";
 }
@@ -33,6 +34,16 @@ Document::~Document()
     if (m_outlines) {
         delete m_outlines;
     }
+}
+
+void Document::set_tree_root(bool tree_root)
+{
+    m_tree_root = tree_root;
+}
+
+bool Document::tree_root()
+{
+    return m_tree_root;
 }
 
 void Document::add_font(Font *font)

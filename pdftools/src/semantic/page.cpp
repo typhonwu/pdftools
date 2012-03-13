@@ -73,7 +73,6 @@ void Page::set_crop_box(int a, int b, int c, int d)
     m_crop_box[1] = b;
     m_crop_box[2] = c;
     m_crop_box[3] = d;
-
 }
 
 void Page::set_destination(int id, int generation)

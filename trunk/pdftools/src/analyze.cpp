@@ -321,7 +321,7 @@ Page *Analyze::process_page(int id, int generation, stringstream *stream_value, 
     }
 
 #ifdef DEBUG
-    cout << stream_value->str() << endl;
+    //cout << stream_value->str() << endl;
 #endif
 
     stream_value->seekg(0);
@@ -361,14 +361,8 @@ Font *Analyze::analyze_font(MapNode *fontmap)
         if (flags & 64) {
             font->set_italic(true);
         }
-        ArrayNode *bbox = dynamic_cast<ArrayNode *>(descriptor->get("/FontBBox"));
-        if (bbox) {
-            cout << font->name() << " [" << get_number_value(bbox->value(0)) << ", " << get_number_value(bbox->value(1)) << ", " << get_number_value(bbox->value(2)) << ", "
-                    << get_number_value(bbox->value(3)) << "]" << endl;
-        } else {
-            cout << font->name() << " no bbox" << endl;
-        }
     }
+    // TODO check for FontWeight
 
     ObjNode *to_unicode = dynamic_cast<ObjNode *>(get_real_value(fontmap->get("/ToUnicode")));
     if (to_unicode) {

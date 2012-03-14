@@ -41,8 +41,6 @@ void Html::set_title(const char* title)
     m_xml.end_tag();
 }
 
-#include <iostream>
-
 void Html::add_font(int size, bool bold, bool italic, bool fixed)
 {
     stringstream style;

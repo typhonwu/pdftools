@@ -30,13 +30,10 @@ Glyph *FontGlyph::parent()
     return m_parent;
 }
 
-#include <iostream>
-
 void FontGlyph::start_glyph(Html *document)
 {
     m_context->set_current_font(m_font, m_size);
     Font *font = m_context->font();
-    //cout << font->name() << endl;
     document->add_font(m_size, font->bold(), font->italic(), font->fixed());
 }
 

@@ -12,6 +12,7 @@ private:
     bool m_italic;
     bool m_bold;
     bool m_fixed;
+    double m_size;
     string m_name;
     string m_charmap_start;
     string m_charmap_finish;
@@ -21,10 +22,12 @@ public:
     Font();
     ~Font();
 
+    void set_size(double size);
     void set_fixed(bool fixed);
     void set_name(string name);
     void set_italic(bool italic);
     string name();
+    double size();
     bool italic();
     bool bold();
     bool fixed();

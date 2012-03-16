@@ -11,18 +11,11 @@ class FontGlyph: public Glyph {
 private:
     int m_size;
     string m_font;
-    Glyph *m_parent;
 
 public:
     FontGlyph(string font, int size);
 
-    virtual void start_glyph(Html *document);
-    virtual void end_glyph(Html *document);
-
-    void set_parent(Glyph *parent);
-    Glyph *parent();
-    int size();
-    string font();
+    virtual void do_glyph(Html *document);
 };
 
 #endif

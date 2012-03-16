@@ -9,6 +9,39 @@ Context::Context(Document *document)
     m_document = document;
     m_page = NULL;
     m_font = NULL;
+    m_font_changed = false;
+    m_use_font = false;
+    m_state = new GraphicState(this);
+}
+
+Context::~Context()
+{
+    delete m_state;
+}
+
+void Context::set_font_changed(bool changed)
+{
+    m_font_changed = changed;
+}
+
+bool Context::font_changed()
+{
+    return m_font_changed;
+}
+
+bool Context::use_font()
+{
+    return m_use_font;
+}
+
+void Context::set_use_font(bool use_font)
+{
+    m_use_font = use_font;
+}
+
+GraphicState *Context::state()
+{
+    return m_state;
 }
 
 void Context::set_current_page(Page *page)
@@ -24,7 +57,9 @@ Document *Context::document()
 void Context::set_current_font(string &alias, int size)
 {
     if (m_document && m_page) {
+        m_font_changed = true;
         m_font = m_document->get_font(m_page->font_name(alias).c_str());
+        m_font->set_size(size);
     }
 }
 

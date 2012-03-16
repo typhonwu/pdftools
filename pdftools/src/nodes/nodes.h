@@ -21,5 +21,6 @@
 #include "cmapnode.h"
 #include "codespacenode.h"
 #include "statenode.h"
+#include "textmatrixnode.h"
 
 #endif

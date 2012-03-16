@@ -18,7 +18,8 @@ libnodes_a_SOURCES = \
 	charnode.cpp \
 	cmapnode.cpp \
 	codespacenode.cpp \
-	statenode.cpp
+	statenode.cpp \
+	textmatrixnode.cpp
 
 noinst_HEADERS = \
 	objnode.h \
@@ -40,6 +41,7 @@ noinst_HEADERS = \
 	cmapnode.h \
 	codespacenode.h \
 	statenode.h \
+	textmatrixnode.h \
 	nodes.h
 
 libnodes_a_CXXFLAGS = -I..

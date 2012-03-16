@@ -2,34 +2,29 @@
 #ifndef PAGEANALYZE_H
 #define PAGEANALYZE_H
 
-class Document;
-class Glyph;
-class FontGlyph;
-class TextGlyph;
+#include "glyphs/glyphs.h"
+#include "nodes/nodes.h"
+
 class Font;
-class TreeNode;
-class FontNode;
-class TextNode;
-class RootNode;
-class GraphicState;
+class Document;
 
 class PageAnalyze {
 private:
-	Document *m_document;
-	Glyph *m_root;
-	Font *m_font;
-	GraphicState *m_state;
+    Document *m_document;
+    Glyph *m_root;
+    Font *m_font;
 
 public:
-	PageAnalyze(Document *document);
-	~PageAnalyze();
+    PageAnalyze(Document *document);
+    ~PageAnalyze();
 
-	Glyph *analyze_tree(RootNode *tree);
+    Glyph *analyze_tree(RootNode *tree);
 
 private:
-	void analyze_tree(RootNode *tree, Glyph *parent);
-	FontGlyph *analyze_font(FontNode *font);
-	void analyze_text(TextNode *text, Glyph *parent);
+    void analyze_tree(RootNode *tree, Glyph *parent);
+    void analyze_text(TextNode *text, Glyph *parent);
+    FontGlyph *analyze_font(FontNode *font);
+    TextMatrixGlyph *analyze_text_matrix(TextMatrixNode *text_matrix);
 };
 
 #endif

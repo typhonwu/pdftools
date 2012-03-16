@@ -10,13 +10,10 @@ PageAnalyze::PageAnalyze(Document *document)
 {
     m_document = document;
     m_font = NULL;
-    m_state = new GraphicState;
 }
 
 PageAnalyze::~PageAnalyze()
 {
-    if (m_state)
-        delete m_state;
 }
 
 Glyph *PageAnalyze::analyze_tree(RootNode *tree)
@@ -60,16 +57,14 @@ void PageAnalyze::analyze_tree(RootNode *tree, Glyph *parent)
                 analyze_tree(bdc, node_parent);
             }
         }
+        TextMatrixNode *text_matrix = dynamic_cast<TextMatrixNode *>(node);
+        if (text_matrix) {
+            node_parent->add_child(analyze_text_matrix(text_matrix));
+            continue;
+        }
         FontNode *font = dynamic_cast<FontNode *>(node);
         if (font) {
-            FontGlyph *font_parent = dynamic_cast<FontGlyph *>(node_parent);
-            if (font_parent) {
-                node_parent = font_parent->parent();
-            }
-            FontGlyph *font_glyph = analyze_font(font);
-            font_glyph->set_parent(node_parent);
-            node_parent->add_child(font_glyph);
-            node_parent = font_glyph;
+            node_parent->add_child(analyze_font(font));
             continue;
         }
         TextNode *text = dynamic_cast<TextNode *>(node);
@@ -77,14 +72,14 @@ void PageAnalyze::analyze_tree(RootNode *tree, Glyph *parent)
             analyze_text(text, node_parent);
             continue;
         }
-        StateNode *state = dynamic_cast<StateNode *>(node);
-        if (state) {
-            if (state->save()) {
-                m_state->push();
-            } else {
-                m_state->pop();
-            }
-        }
+//        StateNode *state = dynamic_cast<StateNode *>(node);
+//        if (state) {
+//            if (state->save()) {
+//                m_state->push();
+//            } else {
+//                m_state->pop();
+//            }
+//        }
     }
 }
 
@@ -96,4 +91,9 @@ FontGlyph *PageAnalyze::analyze_font(FontNode *font)
 void PageAnalyze::analyze_text(TextNode *text, Glyph *parent)
 {
     parent->add_child(new TextGlyph(text->text()));
+}
+
+TextMatrixGlyph *PageAnalyze::analyze_text_matrix(TextMatrixNode *text_matrix)
+{
+    return new TextMatrixGlyph(text_matrix->a(), text_matrix->b(), text_matrix->c(), text_matrix->d(), text_matrix->e(), text_matrix->f());
 }

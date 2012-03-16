@@ -25,6 +25,7 @@ public:
     RootNode *parse();
 
 private:
+    TreeNode *tm_sequence(vector<TreeNode *> &values);
     TreeNode *font_sequence(vector<TreeNode *> &values);
     TreeNode *bi_sequence();
     BDCNode *bdc_sequence(vector<TreeNode *> &values, RootNode *parent);

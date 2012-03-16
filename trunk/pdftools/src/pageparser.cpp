@@ -8,7 +8,7 @@
 using namespace std;
 
 PageParser::PageParser(istream *stream) :
-        GenericParser()
+GenericParser()
 {
     m_scanner->disable_charset_conversion();
     m_scanner->set_istream(stream);
@@ -43,9 +43,10 @@ RootNode *PageParser::parse()
             case BDC:
                 root = bdc_sequence(values, root);
                 break;
-            case EMC: {
+            case EMC:
+            {
                 match(EMC);
-                BDCNode *bdc = dynamic_cast<BDCNode *>(root);
+                BDCNode *bdc = dynamic_cast<BDCNode *> (root);
                 if (bdc) {
                     root = bdc->parent();
                 }
@@ -53,6 +54,11 @@ RootNode *PageParser::parse()
             }
             case BI:
                 root->add_child(bi_sequence());
+                break;
+
+                // Text positioning
+            case TM:
+                root->add_child(tm_sequence(values));
                 break;
 
             case TF:
@@ -81,7 +87,8 @@ RootNode *PageParser::parse()
                 match(T_AST);
                 root->add_child(new BreakNode);
                 break;
-            case DOUBLE_QUOTE: {
+            case DOUBLE_QUOTE:
+            {
                 match(DOUBLE_QUOTE);
                 root->add_child(new BreakNode);
                 vector<TreeNode *> vector;
@@ -111,6 +118,23 @@ RootNode *PageParser::parse()
     return m_root;
 }
 
+TreeNode *PageParser::tm_sequence(vector<TreeNode *> &values)
+{
+    match(TM);
+    
+    if (values.size() == 6) {
+        NumberNode *a = dynamic_cast<NumberNode *>(values[0]);
+        NumberNode *b = dynamic_cast<NumberNode *>(values[1]);
+        NumberNode *c = dynamic_cast<NumberNode *>(values[2]);
+        NumberNode *d = dynamic_cast<NumberNode *>(values[3]);
+        NumberNode *e = dynamic_cast<NumberNode *>(values[4]);
+        NumberNode *f = dynamic_cast<NumberNode *>(values[5]);
+        
+        return new TextMatrixNode(a->value(), b->value(), c->value(), d->value(), e->value(), f->value());
+    }
+    return NULL;
+}
+
 TreeNode *PageParser::font_sequence(vector<TreeNode *> &values)
 {
     match(TF);
@@ -118,11 +142,11 @@ TreeNode *PageParser::font_sequence(vector<TreeNode *> &values)
     if (values.size() == 2) {
         FontNode *font = new FontNode;
 
-        NameNode *font_name = dynamic_cast<NameNode *>(values[0]);
+        NameNode *font_name = dynamic_cast<NameNode *> (values[0]);
         if (font_name) {
             font->set_name(font_name->name());
         }
-        NumberNode *font_size = dynamic_cast<NumberNode *>(values[1]);
+        NumberNode *font_size = dynamic_cast<NumberNode *> (values[1]);
         if (font_size) {
             font->set_size(font_size->value());
         }
@@ -153,7 +177,7 @@ TreeNode *PageParser::text_sequence(vector<TreeNode *> &values)
     TextNode *text = new TextNode;
     int size = values.size();
     for (int loop = 0; loop < size; loop++) {
-        StringNode *node = dynamic_cast<StringNode *>(values[loop]);
+        StringNode *node = dynamic_cast<StringNode *> (values[loop]);
         if (node) {
             text->add(node->value());
         }
@@ -166,11 +190,11 @@ void PageParser::tjup_sequence(RootNode *root, vector<TreeNode *> &values)
     match(TJ_UP);
     int size = values.size();
     for (int loop = 0; loop < size; loop++) {
-        ArrayNode *array = dynamic_cast<ArrayNode *>(values[loop]);
+        ArrayNode *array = dynamic_cast<ArrayNode *> (values[loop]);
         if (array) {
             int array_size = array->size();
             for (int y = 0; y < array_size; y++) {
-                StringNode *node = dynamic_cast<StringNode *>(array->value(y));
+                StringNode *node = dynamic_cast<StringNode *> (array->value(y));
                 if (node) {
                     TextNode *text = new TextNode;
                     text->add(node->value());
@@ -187,7 +211,7 @@ BDCNode *PageParser::bdc_sequence(vector<TreeNode *> &values, RootNode *parent)
     BDCNode *node = new BDCNode(parent);
     parent->add_child(node);
 
-    NameNode *name = dynamic_cast<NameNode *>(values[0]);
+    NameNode *name = dynamic_cast<NameNode *> (values[0]);
     if (name) {
         node->set_name(name->name());
     }

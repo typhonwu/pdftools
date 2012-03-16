@@ -7,10 +7,21 @@ Font::Font()
     m_italic = false;
     m_bold = false;
     m_fixed = false;
+    m_size = 0;
 }
 
 Font::~Font()
 {
+}
+
+void Font::set_size(double size)
+{
+    m_size = size;
+}
+
+double Font::size()
+{
+    return m_size;
 }
 
 bool Font::fixed()

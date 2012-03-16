@@ -32,13 +32,13 @@ noinst_HEADERS = \
 pdftools_CXXFLAGS = $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 pdftools_LDADD = \
 	semantic/libsemantic.a \
-	nodes/libnodes.a \
 	epub/libepub.a \
 	zip/libzip.a \
 	html/libhtml.a \
 	xml/libxml.a \
 	glyphs/libglyphs.a \
 	graphics/libgraphics.a \
+	nodes/libnodes.a \
 	$(XML_LIBS)
 
 if HELP2MAN

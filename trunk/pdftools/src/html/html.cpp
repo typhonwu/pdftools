@@ -48,9 +48,13 @@ void Html::add_font(int size, bool bold, bool italic, bool fixed)
 
     if (italic) {
         style << ";font-style:italic";
+    } else {
+        style << ";font-style:normal";
     }
     if (bold) {
         style << ";font-weight:bold";
+    } else {
+        style << ";font-weight:normal";
     }
     if (fixed) {
         style << ";font-family:courier,\"Courier New\",monospace";

@@ -43,25 +43,46 @@ void Html::set_title(const char* title)
 
 void Html::add_font(int size, bool bold, bool italic, bool fixed)
 {
-    stringstream style;
-    style << "font-size:" << size << "pt";
+    m_xml.start_tag("span");
+
+    stringstream css;
+    if (size <= 8) {
+        css << "f8";
+    } else if (size <= 10) {
+        css << "f10";
+    } else if (size <= 12) {
+        css << "f12";
+    } else if (size <= 14) {
+        css << "f14";
+    } else if (size <= 16) {
+        css << "f16";
+    } else {
+        css << "f18";
+    }
 
     if (italic) {
-        style << ";font-style:italic";
+        css << " i";
     } else {
-        style << ";font-style:normal";
+        css << " n";
     }
     if (bold) {
-        style << ";font-weight:bold";
+        css << " b";
     } else {
-        style << ";font-weight:normal";
+        css << " l";
     }
     if (fixed) {
-        style << ";font-family:courier,\"Courier New\",monospace";
+        css << " m";
     }
+    m_xml.add_attribute("class", css.str().c_str());
+}
 
-    m_xml.start_tag("span");
-    m_xml.add_attribute("style", style.str().c_str());
+void Html::set_link(const char *rel, const char *type, const char *href)
+{
+    m_xml.start_tag("link");
+    m_xml.add_attribute("rel", rel);
+    m_xml.add_attribute("type", type);
+    m_xml.add_attribute("href", href);
+    m_xml.end_tag();
 }
 
 void Html::add_element(const char *value)

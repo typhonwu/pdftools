@@ -30,6 +30,7 @@ private:
     void generate_toc(const char* output);
     void generate_outline(XML *xml, Outline *outline);
     void generate_mimetype();
+    void generate_css();
 };
 
 #endif

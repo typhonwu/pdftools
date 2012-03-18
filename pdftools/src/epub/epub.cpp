@@ -33,6 +33,23 @@ void EPUB::generate_mimetype()
     m_zipfile->add_source("mimetype", mime);
 }
 
+void EPUB::generate_css()
+{
+    stringstream css;
+    css << ".b {font-weight: bold}\n";
+    css << ".l {font-weight: normal}\n";
+    css << ".i {font-style: italic}\n";
+    css << ".n {font-style: normal}\n";
+    css << ".m {font-family:courier,\"Courier New\",monospace}";
+    css << ".f8 {font-size: 8pt}\n";
+    css << ".f10 {font-size: 10pt}\n";
+    css << ".f12 {font-size: 12pt}\n";
+    css << ".f14 {font-size: 14pt}\n";
+    css << ".f16 {font-size: 16pt}\n";
+    css << ".f18 {font-size: 18pt}\n";
+    m_zipfile->add_source("style.css", css.str().c_str());
+}
+
 void EPUB::generate_container()
 {
     XML xml;
@@ -129,6 +146,12 @@ void EPUB::generate_content(const char* output)
     xml.add_attribute("media-type", "application/xhtml+xml");
     xml.end_tag();
 
+    xml.start_tag("item");
+    xml.add_attribute("id", "css");
+    xml.add_attribute("href", "style.css");
+    xml.add_attribute("media-type", "text/css");
+    xml.end_tag();
+    
     xml.end_tag();
 
     xml.start_tag("spine");
@@ -251,6 +274,7 @@ void EPUB::generate_pages()
     html.start_document();
     html.start_header();
     html.set_title(m_document->title().c_str());
+    html.set_link("stylesheet", "text/css", "style.css");
     html.end_tag();
     html.start_body();
 
@@ -290,6 +314,7 @@ bool EPUB::generate(Document* document, const char* output)
     m_order = 1;
     if (m_zipfile->open(output)) {
         generate_mimetype();
+        generate_css();
         generate_container();
         generate_content(output);
         generate_pages();

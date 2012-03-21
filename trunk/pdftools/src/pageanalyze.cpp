@@ -59,7 +59,7 @@ void PageAnalyze::analyze_tree(RootNode *tree, Glyph *parent)
         }
         TextMatrixNode *text_matrix = dynamic_cast<TextMatrixNode *>(node);
         if (text_matrix) {
-            analyze_text_matrix(text_matrix);
+            node_parent->add_child(analyze_text_matrix(text_matrix));
             continue;
         }
         FontNode *font = dynamic_cast<FontNode *>(node);
@@ -93,7 +93,8 @@ void PageAnalyze::analyze_text(TextNode *text, Glyph *parent)
     parent->add_child(new TextGlyph(text->text()));
 }
 
-void PageAnalyze::analyze_text_matrix(TextMatrixNode *text_matrix)
+FontSizeGlyph *PageAnalyze::analyze_text_matrix(TextMatrixNode *text_matrix)
 {
     m_state.set_text_matrix(text_matrix->a(), text_matrix->b(), text_matrix->c(), text_matrix->d(), text_matrix->e(), text_matrix->f());
+    return new FontSizeGlyph(m_state.get_text_font());
 }

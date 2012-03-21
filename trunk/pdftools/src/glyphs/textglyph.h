@@ -16,7 +16,6 @@ private:
 public:
     TextGlyph(string text);
     virtual void do_glyph(Html *document);
-    virtual void start_glyph(Html *document);
 };
 
 #endif

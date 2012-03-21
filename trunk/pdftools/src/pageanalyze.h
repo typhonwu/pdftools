@@ -2,6 +2,7 @@
 #ifndef PAGEANALYZE_H
 #define PAGEANALYZE_H
 
+#include "graphics/graphicstate.h"
 #include "glyphs/glyphs.h"
 #include "nodes/nodes.h"
 
@@ -10,6 +11,7 @@ class Document;
 
 class PageAnalyze {
 private:
+    GraphicState m_state;
     Document *m_document;
     Glyph *m_root;
     Font *m_font;
@@ -23,8 +25,8 @@ public:
 private:
     void analyze_tree(RootNode *tree, Glyph *parent);
     void analyze_text(TextNode *text, Glyph *parent);
+    void analyze_text_matrix(TextMatrixNode *text_matrix);
     FontGlyph *analyze_font(FontNode *font);
-    TextMatrixGlyph *analyze_text_matrix(TextMatrixNode *text_matrix);
 };
 
 #endif

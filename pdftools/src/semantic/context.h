@@ -3,7 +3,6 @@
 #define CONTEXT_H
 
 #include <string>
-#include "graphics/graphicstate.h"
 
 using namespace std;
 
@@ -16,7 +15,6 @@ private:
     Document *m_document;
     Page *m_page;
     Font *m_font;
-    GraphicState *m_state;
     bool m_font_changed;
     bool m_use_font;
 
@@ -33,7 +31,6 @@ public:
     bool font_changed();
     Font *font();
     Document *document();
-    GraphicState *state();
 };
 
 #endif

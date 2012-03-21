@@ -6,19 +6,17 @@
 
 using namespace std;
 
-class Context;
 class Font;
 class State;
 
 class GraphicState {
 private:
-    Context *m_context;
     Font *m_font;
     vector<State *> m_states;
     State *m_current_state;
 
 public:
-    GraphicState(Context *owner);
+    GraphicState();
     ~GraphicState();
 
     void push();

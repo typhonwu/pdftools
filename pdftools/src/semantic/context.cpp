@@ -11,12 +11,10 @@ Context::Context(Document *document)
     m_font = NULL;
     m_font_changed = false;
     m_use_font = false;
-    m_state = new GraphicState(this);
 }
 
 Context::~Context()
 {
-    delete m_state;
 }
 
 void Context::set_font_changed(bool changed)
@@ -37,11 +35,6 @@ bool Context::use_font()
 void Context::set_use_font(bool use_font)
 {
     m_use_font = use_font;
-}
-
-GraphicState *Context::state()
-{
-    return m_state;
 }
 
 void Context::set_current_page(Page *page)

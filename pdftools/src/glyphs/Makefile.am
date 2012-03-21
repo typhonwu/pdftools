@@ -5,7 +5,7 @@ libglyphs_a_SOURCES = \
 	textglyph.cpp \
 	breakglyph.cpp \
 	fontglyph.cpp \
-	textmatrixglyph.cpp
+	fontsizeglyph.cpp
 
 noinst_HEADERS = \
 	glyphs.h \
@@ -14,7 +14,7 @@ noinst_HEADERS = \
 	textglyph.h \
 	breakglyph.h \
 	fontglyph.h \
-	textmatrixglyph.h
+	fontsizeglyph.h
 
 libglyphs_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
 AM_CXXFLAGS = $(OPENMP_CXXFLAGS)

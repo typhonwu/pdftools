@@ -11,10 +11,21 @@ Context::Context(Document *document)
     m_font = NULL;
     m_font_changed = false;
     m_use_font = false;
+    m_font_size = 1;
 }
 
 Context::~Context()
 {
+}
+
+void Context::set_font_size(double size)
+{
+    m_font_size = size;
+}
+
+double Context::font_size()
+{
+    return m_font_size;
 }
 
 void Context::set_font_changed(bool changed)

@@ -17,6 +17,7 @@ private:
     Font *m_font;
     bool m_font_changed;
     bool m_use_font;
+    double m_font_size;
 
 public:
     Context(Document *document);
@@ -26,10 +27,12 @@ public:
     void set_font_changed(bool changed);
     void set_current_font(string &alias, int size);
     void set_current_page(Page *page);
+    void set_font_size(double size);
 
     bool use_font();
     bool font_changed();
     Font *font();
+    double font_size();
     Document *document();
 };
 

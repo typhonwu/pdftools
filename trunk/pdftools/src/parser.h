@@ -1,6 +1,4 @@
 #pragma once
-#ifndef PARSER_H
-#define PARSER_H
 
 #include <fstream>
 #include "token.h"
@@ -33,5 +31,3 @@ private:
     TreeNode *object_sequence();
     TreeNode *xref_sequence();
 };
-
-#endif

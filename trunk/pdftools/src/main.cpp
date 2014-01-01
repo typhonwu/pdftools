@@ -100,10 +100,7 @@ int main(int argc, char *argv[])
         cout << "Try `" << PACKAGE_NAME << " --help' for usage." << endl;
         return -1;
     } else {
-        int loop;
-
-#pragma omp parallel for
-        for (loop = optind; loop < argc; loop++) {
+        for (int loop = optind; loop < argc; loop++) {
             Converter converter(argv[loop], format);
             converter.convert();
         }

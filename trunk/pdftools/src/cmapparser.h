@@ -1,6 +1,4 @@
 #pragma once
-#ifndef CMAPPARSER_H
-#define CMAPPARSER_H
 
 #include "scanner.h"
 #include "genericparser.h"
@@ -27,5 +25,3 @@ private:
     void bfrange_sequence(const int count);
     CodeSpaceNode *codespace_sequence();
 };
-
-#endif

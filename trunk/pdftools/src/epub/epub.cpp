@@ -287,7 +287,7 @@ void EPUB::generate_pages()
     html.end_tag();
     html.end_document();
 
-    m_zipfile->add_source("pages.html", html.content());
+    m_zipfile->add_source("pages.html", html.content().c_str());
 }
 
 void EPUB::generate_page(Page *page)
@@ -305,7 +305,7 @@ void EPUB::generate_page(Page *page)
     html.end_tag();
     html.end_document();
 
-    m_zipfile->add_source(page->link(), html.content());
+    m_zipfile->add_source(page->link(), html.content().c_str());
 }
 
 bool EPUB::generate(Document* document, const char* output)

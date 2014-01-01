@@ -1,28 +1,26 @@
 #pragma once
-#ifndef XML_H
-#define XML_H
 
-#include <libxml/xmlwriter.h>
+#include <string>
+
+using namespace std;
 
 class XML {
 private:
-    xmlTextWriterPtr m_writer;
-    xmlBufferPtr m_buffer;
-    bool m_ended;
+    string m_buffer;
     
 public:
     XML();
     ~XML();
     
-    bool start_document(const char *version, const char *charset);
-    bool add_doctype(const char *name, const char *public_id, const char *sys_id, const char *subset = NULL);
-    bool add_attribute(const char *attribute, const char *value);
-    bool add_element(const char *value);
-    bool start_tag(const char *tag_name);
-    bool end_tag();
-    bool end_document();
+    void start_document(const string&, const string& charset);
+    void add_doctype(const string& name, const string& public_id, const string& sys_id);
+    void add_attribute(const string& attribute, const string& value);
+    void add_element(const string& value);
+    void start_tag(const string& tag_name);
+    void end_tag();
+    void end_document();
     
-    const char *content();
+    inline string content() const {
+        return m_buffer;
+    }
 };
-
-#endif

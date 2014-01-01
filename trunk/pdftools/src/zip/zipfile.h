@@ -30,7 +30,7 @@ public:
     ZipFile();
     ~ZipFile();
     
-    bool open(const char *output);
+    bool open(const string& output);
     void close();
     void add_source(const char *filename, const char *buffer, int length = 0);
     
@@ -41,9 +41,9 @@ private:
     void write8(uint8_t c);
     void write16(uint16_t c);
     void write32(uint32_t c);
-    void write_string(const char *str);
+    void write_string(const string& str);
     
-    uint32_t current_datetime();
+    uint32_t current_datetime() const;
 };
 
 #endif

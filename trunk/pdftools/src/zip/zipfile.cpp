@@ -8,7 +8,7 @@
 
 using namespace std;
 
-uint32_t ZipFile::current_datetime()
+uint32_t ZipFile::current_datetime() const
 {
     time_t rawtime;
     struct tm * t;
@@ -35,7 +35,7 @@ ZipFile::~ZipFile()
     close();
 }
 
-bool ZipFile::open(const char *output)
+bool ZipFile::open(const string& output)
 {
     m_output.open(output, ios::binary);
     return m_output.is_open();
@@ -54,7 +54,7 @@ void ZipFile::close()
 void ZipFile::add_source(const char *filename, const char *buffer, int length)
 {
     if (length == 0) {
-        length = strlen(buffer);
+        length = strlen((char *)buffer);
     }
 
     appended_files file;
@@ -171,7 +171,7 @@ void ZipFile::write_central_directory()
     write16(0);
 }
 
-void ZipFile::write_string(const char *str)
+void ZipFile::write_string(const string& str)
 {
     m_output << str;
 }

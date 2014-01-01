@@ -1,6 +1,4 @@
 #pragma once
-#ifndef PAGEANALYZE_H
-#define PAGEANALYZE_H
 
 #include "graphics/graphicstate.h"
 #include "glyphs/glyphs.h"
@@ -28,5 +26,3 @@ private:
     FontSizeGlyph *analyze_text_matrix(TextMatrixNode *text_matrix);
     FontGlyph *analyze_font(FontNode *font);
 };
-
-#endif

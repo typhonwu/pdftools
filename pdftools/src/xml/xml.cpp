@@ -8,90 +8,38 @@ using namespace std;
 
 XML::XML()
 {
-    m_buffer = xmlBufferCreate();
-    if (!m_buffer) {
-        throw runtime_error("Error creating XML Buffer");
-    }
-    m_writer = xmlNewTextWriterMemory(m_buffer, false);
-    if (!m_writer) {
-        throw runtime_error("Error creating XML Writter");
-    }
-    m_ended = false;
 }
 
 XML::~XML()
 {
-    if (!m_ended && m_writer) {
-        xmlFreeTextWriter(m_writer);
-    }
-    if (m_buffer)
-        xmlBufferFree(m_buffer);
 }
 
-const char *XML::content()
-{
-    if (m_buffer) {
-        return (char *) xmlBufferContent(m_buffer);
-    }
-    return NULL;
+void XML::start_document(const string& version, const string& charset) {
+    m_buffer += "<?xml version=\"" + version + "\" encoding=\"" + charset + "\"?>";
 }
 
-bool XML::start_document(const char* version, const char* charset)
-{
-    if (m_writer) {
-        return xmlTextWriterStartDocument(m_writer, version, charset, NULL) >= 0;
+void XML::add_doctype(const string& name, const string& public_id, const string& sys_id) {
+    m_buffer += "<!DOCTYPE " + name;
+    if (!public_id.empty()) {
+        m_buffer += " PUBLIC \"" + public_id + "\"";
     }
-    return false;
+    if (!sys_id.empty()) {
+        m_buffer += "\"" + sys_id + "\"";
+    }
+    m_buffer += ">\n";
 }
 
-bool XML::add_doctype(const char *name, const char *public_id, const char *sys_id, const char *subset)
-{
-    if (m_writer) {
-        return xmlTextWriterWriteDTD(m_writer, BAD_CAST name, BAD_CAST public_id, BAD_CAST sys_id, BAD_CAST subset);
-    }
-    return false;
+void XML::end_document() {
 }
 
-bool XML::end_document()
-{
-    if (m_writer) {
-        m_ended = true;
-        xmlFreeTextWriter(m_writer);
-    }
-    return false;
+void XML::add_attribute(const string& attribute, const string& value) {
 }
 
-bool XML::add_attribute(const char *attribute, const char *value)
-{
-    if (m_writer) {
-        return xmlTextWriterWriteAttribute(m_writer, BAD_CAST attribute, BAD_CAST value) >= 0;
-    }
-    return false;
+void XML::add_element(const string& value) {
 }
 
-bool XML::add_element(const char *value)
-{
-    if (m_writer) {
-        xmlChar *c = xmlCharStrdup(value);
-        int ret = xmlTextWriterWriteString(m_writer, c);
-        xmlFree(c);
-        return ret >= 0;
-    }
-    return false;
+void XML::start_tag(const string& tag_name) {
 }
 
-bool XML::start_tag(const char *tag_name)
-{
-    if (m_writer) {
-        return xmlTextWriterStartElement(m_writer, BAD_CAST tag_name) >= 0;
-    }
-    return false;
-}
-
-bool XML::end_tag()
-{
-    if (m_writer) {
-        return xmlTextWriterEndElement(m_writer) >= 0;
-    }
-    return false;
+void XML::end_tag() {
 }

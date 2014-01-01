@@ -39,7 +39,6 @@ void Analyze::analyze_xref()
     int i;
     int size = m_tree->size();
 
-#pragma omp parallel for
     for (i = 0; i < size; i++) {
         TreeNode *value = m_tree->get(i);
         XREFNode *xref = dynamic_cast<XREFNode *>(value);
@@ -138,7 +137,6 @@ void Analyze::analyze_root()
             int loop;
             int size = array->size();
 
-#pragma omp parallel for
             for (loop = 0; loop < size; loop += 2) {
                 double page = get_number_value(array->value(loop));
                 MapNode *attributes = dynamic_cast<MapNode *>(get_real_obj_value(array->value(loop + 1)));
@@ -182,7 +180,7 @@ void Analyze::analyze_names(MapNode *values)
     ArrayNode *kids = dynamic_cast<ArrayNode *>(values->get("/Kids"));
     if (kids) {
         int size = kids->size();
-#pragma omp parallel for
+
         for (int i = 0; i < size; i++) {
             MapNode *map_kids = dynamic_cast<MapNode *>(get_real_obj_value(kids->value(i)));
             analyze_names(map_kids);
@@ -191,7 +189,7 @@ void Analyze::analyze_names(MapNode *values)
         ArrayNode *names = dynamic_cast<ArrayNode *>(values->get("/Names"));
         if (names) {
             int size = names->size();
-#pragma omp parallel for
+
             for (int i = 0; i < size; i += 2) {
                 string name = get_string_value(names->value(i));
                 m_names[name] = names->value(i + 1);
@@ -548,15 +546,12 @@ ObjNode *Analyze::get_object(int id, int generation)
     ObjNode *ret = NULL;
     bool done = false;
 
-#pragma omp parallel for
     for (i = 0; i < size; i++) {
-#pragma omp flush(done)
         if (!done) {
             ObjNode *obj = dynamic_cast<ObjNode *>(m_tree->get(i));
             if (obj && obj->this_object(id, generation)) {
                 // Value found
                 done = true;
-#pragma omp flush(done)
                 ret = obj;
             }
         }

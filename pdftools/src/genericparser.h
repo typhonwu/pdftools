@@ -1,6 +1,4 @@
 #pragma once
-#ifndef GENERICPARSER_H
-#define GENERICPARSER_H
 
 #include "scanner.h"
 
@@ -20,5 +18,3 @@ protected:
     bool match(TokenType type);
     void next_token();
 };
-
-#endif

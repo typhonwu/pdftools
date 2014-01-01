@@ -26,12 +26,10 @@ void GraphicState::set_text_matrix(double a, double b, double c, double d, doubl
 
 void GraphicState::push()
 {
-    //cout << "push" << endl;
 }
 
 void GraphicState::pop()
 {
-    //cout << "pop" << endl;
 }
 
 Font *GraphicState::font()

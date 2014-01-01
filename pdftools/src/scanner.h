@@ -1,6 +1,4 @@
 #pragma once
-#ifndef SCANNER_H
-#define SCANNER_H
 
 #include <istream>
 #include <stdint.h>
@@ -38,5 +36,3 @@ private:
     char next_char();
     TokenType reserved_lookup(const char *s);
 };
-
-#endif

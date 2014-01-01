@@ -34,7 +34,7 @@ void Html::start_body()
     m_xml.start_tag("body");
 }
 
-void Html::set_title(const char* title)
+void Html::set_title(const string& title)
 {
     m_xml.start_tag("title");
     m_xml.add_element(title);
@@ -73,10 +73,10 @@ void Html::add_font(int size, bool bold, bool italic, bool fixed)
     if (fixed) {
         css << " m";
     }
-    m_xml.add_attribute("class", css.str().c_str());
+    m_xml.add_attribute("class", css.str());
 }
 
-void Html::set_link(const char *rel, const char *type, const char *href)
+void Html::set_link(const string& rel, const string& type, const string& href)
 {
     m_xml.start_tag("link");
     m_xml.add_attribute("rel", rel);
@@ -85,7 +85,7 @@ void Html::set_link(const char *rel, const char *type, const char *href)
     m_xml.end_tag();
 }
 
-void Html::add_element(const char *value)
+void Html::add_element(const string& value)
 {
     m_xml.add_element(value);
 }
@@ -105,9 +105,4 @@ void Html::end_document()
 {
     end_tag();
     m_xml.end_document();
-}
-
-const char *Html::content()
-{
-    return m_xml.content();
 }

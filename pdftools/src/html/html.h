@@ -23,12 +23,14 @@ public:
     
     void add_paragraph();
     void add_font(int size, bool bold, bool italic, bool fixed);
-    void add_element(const char *element);
+    void add_element(const string& element);
     
-    void set_title(const char *title);
-    void set_link(const char *rel, const char *type, const char *href);
+    void set_title(const string& title);
+    void set_link(const string& rel, const string& type, const string& href);
     
-    const char *content();
+    inline const string content() const {
+        return m_xml.content();
+    }
 };
 
 #endif

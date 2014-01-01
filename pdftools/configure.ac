@@ -1,3 +1,4 @@
+m4_include([stdcxx11.m4])
 AC_PREREQ(2.62)
 AC_INIT([pdftools],[0.4.0],[leonhad@gmail.com],[pdftools],[http://code.google.com/p/pdftools/])
 AM_INIT_AUTOMAKE([-Wall tar-ustar])
@@ -17,10 +18,11 @@ CXXFLAGS="$DEBUG_CFLAGS $CXXFLAGS"
 
 # Checks for programs.
 AC_LANG([C++])
-AC_PROG_CC
 AC_PROG_CXX
+AX_CXX_COMPILE_STDCXX_11
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
+AM_PROG_AR
 AC_PROG_RANLIB
 AC_CHECK_TOOL(HELP2MAN, help2man, :)
 AM_CONDITIONAL(HELP2MAN, [test "$HELP2MAN" != :])
@@ -29,17 +31,14 @@ AM_PROG_INSTALL_STRIP
 # Checks for libraries.
 AC_CHECK_LIB([z], [gzread], , [AC_MSG_ERROR([zlib not found, see http://www.zlib.net])])
 AC_CHECK_LIB([iconv], [iconv_open])
-AC_OPENMP
-AM_PATH_XML2(2.4.0)
-# PKG_CHECK_MODULES([libxml2], libxml-2.0 >= 2.4)
 
 # Checks for header files.
-AC_HEADER_STDC
+# AC_HEADER_STDC
 AC_CHECK_HEADERS([iconv.h],,AC_MSG_ERROR(libiconv is missing))
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
+# AC_HEADER_STDBOOL
+# AC_C_CONST
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile

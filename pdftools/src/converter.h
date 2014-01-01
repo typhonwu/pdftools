@@ -1,6 +1,4 @@
 #pragma once
-#ifndef CONVERTER_H
-#define CONVERTER_H
 
 #include <string>
 
@@ -23,5 +21,3 @@ public:
     
     void convert();
 };
-
-#endif

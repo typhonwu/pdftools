@@ -44,5 +44,4 @@ noinst_HEADERS = \
 	textmatrixnode.h \
 	nodes.h
 
-libnodes_a_CXXFLAGS = -I..
-AM_CXXFLAGS = $(OPENMP_CXXFLAGS)
+libnodes_a_CXXFLAGS = 

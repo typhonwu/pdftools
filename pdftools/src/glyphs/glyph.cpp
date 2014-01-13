@@ -1,4 +1,4 @@
-#include "html/html.h"
+#include "../html/html.h"
 #include "glyph.h"
 
 Glyph::Glyph()

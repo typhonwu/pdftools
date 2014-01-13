@@ -2735,7 +2735,7 @@ DEBUG_CFLAGS="-O3 -DNDEBUG -pedantic -Wall -funroll-loops"
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
   enableval=$enable_debug;   if test "$enable_debug" = "yes"; then
-      DEBUG_CFLAGS="-g -DDEBUG -pedantic -Wall -fno-inline -fno-eliminate-unused-debug-types"
+      DEBUG_CFLAGS="-g3 -DDEBUG -pedantic -Wall -fno-inline"
    fi
 
 fi

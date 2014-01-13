@@ -11,12 +11,12 @@ class RootNode;
 class Parser : public GenericParser {
 private:
     bool m_linear;
-    const char *m_version;
-    const char *m_filein;
+    string m_version;
+    const string m_filein;
     ifstream m_filestream;
 
 public:
-    Parser(const char *filein);
+    Parser(const string& filein);
     ~Parser();
 
     RootNode *parse();

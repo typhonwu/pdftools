@@ -2,14 +2,13 @@
 #include "scanner.h"
 #include "utils.h"
 #include "nodes/nodes.h"
-#include <cstdlib>
 #include <string>
 #include <sstream>
 #include <iostream>
 
 using namespace std;
 
-const char *_pdf_versions[] = {
+const string _pdf_versions[] {
     "PDF-1.1",
     "PDF-1.2",
     "PDF-1.3",
@@ -19,10 +18,9 @@ const char *_pdf_versions[] = {
     "PDF-1.7"
 };
 
-Parser::Parser(const char *filein) : GenericParser()
+Parser::Parser(const string& filein) : GenericParser(),m_filein {filein}
 {
     m_linear = false;
-    m_filein = filein;
     
     m_filestream.open(filein, ios::binary);
     m_scanner->set_istream(&m_filestream);

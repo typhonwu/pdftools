@@ -1,5 +1,5 @@
 #include "font.h"
-#include "utils.h"
+#include "../utils.h"
 #include <cstring>
 
 Font::Font()

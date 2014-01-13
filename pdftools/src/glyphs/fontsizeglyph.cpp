@@ -1,5 +1,5 @@
 #include "fontsizeglyph.h"
-#include "semantic/context.h"
+#include "../semantic/context.h"
 
 FontSizeGlyph::FontSizeGlyph(double size) : Glyph()
 {

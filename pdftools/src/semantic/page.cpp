@@ -1,8 +1,8 @@
 #include "page.h"
 #include "context.h"
 #include "document.h"
-#include "glyphs/glyph.h"
-#include "html/html.h"
+#include "../glyphs/glyph.h"
+#include "../html/html.h"
 #include <cstdlib>
 #include <stdint.h>
 #include <string.h>

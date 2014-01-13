@@ -26,11 +26,11 @@ private:
     RootNode *m_tree;
     Scanner *m_scanner;
     TreeNode *m_page_tree;
-    const char *m_filein;
+    const string m_filein;
     map<string, TreeNode *> m_names;
 
 public:
-    Analyze(const char *filein);
+    Analyze(const string& filein);
     ~Analyze();
 
     Document *analyze_tree(RootNode *tree);

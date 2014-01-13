@@ -18,13 +18,9 @@
 
 using namespace std;
 
-Analyze::Analyze(const char *filein)
+Analyze::Analyze(const string& filein) : m_filein{filein},
+    m_document{nullptr}, m_scanner{new Scanner},  m_tree{nullptr}, m_page_tree{nullptr}
 {
-    m_document = NULL;
-    m_tree = NULL;
-    m_page_tree = NULL;
-    m_filein = filein;
-    m_scanner = new Scanner;
 }
 
 Analyze::~Analyze()

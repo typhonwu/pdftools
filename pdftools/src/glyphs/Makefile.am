@@ -16,5 +16,4 @@ noinst_HEADERS = \
 	fontglyph.h \
 	fontsizeglyph.h
 
-libglyphs_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
-AM_CXXFLAGS = $(OPENMP_CXXFLAGS)
+libglyphs_a_CXXFLAGS =

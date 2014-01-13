@@ -5,4 +5,4 @@ libhtml_a_SOURCES = \
 noinst_HEADERS = \
 	html.h
 
-libhtml_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
+libhtml_a_CXXFLAGS = 

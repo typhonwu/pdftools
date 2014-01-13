@@ -1,6 +1,6 @@
 #include "config.h"
 #include "zipfile.h"
-#include "utils.h"
+#include "../utils.h"
 #include <iostream>
 #include <cstring>
 #include <zlib.h>

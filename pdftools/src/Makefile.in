@@ -330,7 +330,7 @@ noinst_HEADERS = \
 	cmapparser.h \
 	genericparser.h
 
-pdftools_CXXFLAGS = $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
+pdftools_CXXFLAGS = 
 pdftools_LDADD = \
 	semantic/libsemantic.a \
 	epub/libepub.a \

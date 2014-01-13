@@ -15,5 +15,4 @@ noinst_HEADERS = \
 	context.h \
 	font.h
 
-libsemantic_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
-AM_CXXFLAGS = $(OPENMP_CXXFLAGS)
+libsemantic_a_CXXFLAGS = 

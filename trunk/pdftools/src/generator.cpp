@@ -12,10 +12,10 @@ Generator::~Generator()
 {
 }
 
-Generator *Generator::get_instance(const char *format)
+Generator *Generator::get_instance(const string& format)
 {
-    if (!strcmp("epub", format)) {
+    if (format == "epub") {
         return new EPUB;
     }
-    return NULL;
+    return nullptr;
 }

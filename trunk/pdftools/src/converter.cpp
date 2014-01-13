@@ -12,16 +12,10 @@
 
 using namespace std;
 
-Converter::Converter(const char *filein, const char *format)
+Converter::Converter(const string& filein, const string& format) : m_filein{filein},
+        m_format{format}, m_fileout{filein}, m_syntax_tree{nullptr}, m_document{nullptr}
 {
-    m_filein = filein;
     m_fileout = string(filein) + "." + format;
-    m_format = format;
-    m_syntax_tree = NULL;
-    m_document = NULL;
-
-
-    m_fileout = filein;
     size_t last_dot = m_fileout.find_last_of('.');
     if (last_dot != string::npos) {
         m_fileout = m_fileout.substr(0, last_dot);

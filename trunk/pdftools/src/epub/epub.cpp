@@ -1,21 +1,20 @@
 #include "epub.h"
 #include "config.h"
-#include "utils.h"
+#include "../utils.h"
 #include <cstring>
 #include <iostream>
 #include <sstream>
-#include "xml/xml.h"
-#include "html/html.h"
-#include "zip/zipfile.h"
-#include "semantic/outline.h"
-#include "semantic/document.h"
-#include "semantic/context.h"
-#include "semantic/page.h"
+#include "../xml/xml.h"
+#include "../html/html.h"
+#include "../zip/zipfile.h"
+#include "../semantic/outline.h"
+#include "../semantic/document.h"
+#include "../semantic/context.h"
+#include "../semantic/page.h"
 
 using namespace std;
 
-EPUB::EPUB() :
-Generator()
+EPUB::EPUB() : Generator()
 {
     m_zipfile = new ZipFile;
 }
@@ -71,7 +70,7 @@ void EPUB::generate_container()
     m_zipfile->add_source("META-INF/container.xml", content.c_str());
 }
 
-void EPUB::generate_content(const char* output)
+void EPUB::generate_content(const string& output)
 {
     XML xml;
     xml.start_document("1.0", "UTF-8");
@@ -205,7 +204,7 @@ void EPUB::generate_outline(XML *xml, Outline *outline)
     }
 }
 
-void EPUB::generate_toc(const char* output)
+void EPUB::generate_toc(const string& output)
 {
     Outline *outline = m_document->outline();
 
@@ -308,7 +307,7 @@ void EPUB::generate_page(Page *page)
     m_zipfile->add_source(page->link(), html.content().c_str());
 }
 
-bool EPUB::generate(Document* document, const char* output)
+bool EPUB::generate(Document* document, const string& output)
 {
     m_document = document;
     m_order = 1;

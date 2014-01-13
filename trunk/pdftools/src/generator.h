@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class Document;
 
 class Generator {
@@ -8,6 +10,6 @@ protected:
 
 public:
     virtual ~Generator();
-    static Generator *get_instance(const char *format);
-    virtual bool generate(Document *document, const char *output) = 0;
+    static Generator *get_instance(const std::string& format);
+    virtual bool generate(Document *document, const std::string& output) = 0;
 };

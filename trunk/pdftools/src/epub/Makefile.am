@@ -5,4 +5,4 @@ libepub_a_SOURCES = \
 noinst_HEADERS = \
 	epub.h
 
-libepub_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
+libepub_a_CXXFLAGS = 

@@ -1,7 +1,7 @@
 #include "paragraphglyph.h"
-#include "semantic/font.h"
-#include "html/html.h"
-#include "semantic/context.h"
+#include "../semantic/font.h"
+#include "../html/html.h"
+#include "../semantic/context.h"
 
 void ParagraphGlyph::start_glyph(Html *document)
 {

@@ -1,7 +1,7 @@
 #include "fontglyph.h"
-#include "semantic/font.h"
-#include "html/html.h"
-#include "semantic/context.h"
+#include "../semantic/font.h"
+#include "../html/html.h"
+#include "../semantic/context.h"
 
 FontGlyph::FontGlyph(string font, int size) : Glyph()
 {

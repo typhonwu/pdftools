@@ -7,5 +7,4 @@ noinst_HEADERS = \
 	graphicstate.h \
 	state.h
 
-libgraphics_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
-AM_CXXFLAGS = $(OPENMP_CXXFLAGS)
+libgraphics_a_CXXFLAGS = 

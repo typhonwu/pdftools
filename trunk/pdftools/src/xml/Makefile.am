@@ -5,4 +5,4 @@ libxml_a_SOURCES = \
 noinst_HEADERS = \
 	xml.h
 
-libxml_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
+libxml_a_CXXFLAGS = 

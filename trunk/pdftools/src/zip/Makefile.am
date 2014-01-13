@@ -5,4 +5,4 @@ libzip_a_SOURCES = \
 noinst_HEADERS = \
 	zipfile.h
 
-libzip_a_CXXFLAGS = -I.. $(OPENMP_CXXFLAGS) $(XML_CPPFLAGS)
+libzip_a_CXXFLAGS = 

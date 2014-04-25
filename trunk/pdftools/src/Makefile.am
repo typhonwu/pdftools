@@ -39,7 +39,7 @@ pdftools_LDADD = \
 	glyphs/libglyphs.a \
 	graphics/libgraphics.a \
 	nodes/libnodes.a \
-	$(XML_LIBS)
+	$(XML_LIBS) -liconv
 
 if HELP2MAN
 pdftools.1: pdftools$(EXEEXT) pdftools.h2m

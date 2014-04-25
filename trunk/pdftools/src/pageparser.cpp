@@ -106,8 +106,8 @@ RootNode *PageParser::parse()
                 next_token();
                 break;
             }
-            register int size = values.size();
-            for (register int loop = 0; loop < size; loop++) {
+            int size = values.size();
+            for (int loop = 0; loop < size; loop++) {
                 if (values[loop]) {
                     delete values[loop];
                 }

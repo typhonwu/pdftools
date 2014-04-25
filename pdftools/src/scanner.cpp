@@ -298,7 +298,7 @@ Token *Scanner::next_token()
                 save = false;
                 state = DONE;
 
-                register unsigned int loop;
+                unsigned int loop;
                 string string;
 
                 for (loop = 0; loop < token_string.length(); loop++) {

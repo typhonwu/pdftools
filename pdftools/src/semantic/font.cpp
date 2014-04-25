@@ -92,8 +92,8 @@ string Font::translate(string &value)
     const char *buffer = value.c_str();
     int length = value.size();
     for (int loop = 0; loop < length; loop++, buffer += size) {
-        register int f = memcmp(start, buffer, m_charmap_start.length());
-        register int s = memcmp(finish, buffer, m_charmap_finish.length());
+        int f = memcmp(start, buffer, m_charmap_start.length());
+        int s = memcmp(finish, buffer, m_charmap_finish.length());
         if (f <= 0 && s >= 0) {
             string c = string(buffer, size);
             ret += m_charmap[c];

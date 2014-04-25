@@ -12,28 +12,30 @@
 
 using namespace std;
 
-Converter::Converter(const string& filein, const string& format) : m_filein{filein},
-        m_format{format}, m_fileout{filein}, m_syntax_tree{nullptr}, m_document{nullptr}
+Converter::Converter(const string& filein, const string& fileout, const string& format) : m_filein(filein), m_format(format),
+    m_syntax_tree(nullptr), m_document(nullptr)
 {
-    m_fileout = string(filein) + "." + format;
-    size_t last_dot = m_fileout.find_last_of('.');
-    if (last_dot != string::npos) {
-        m_fileout = m_fileout.substr(0, last_dot);
+    if (fileout.empty()) {
+        m_fileout = filein;
+        auto last_dot = m_fileout.find_last_of('.');
+        if (last_dot != string::npos) {
+            m_fileout = m_fileout.substr(0, last_dot);
+        }
+        m_fileout += ".";
+        m_fileout += format;
+    } else {
+        m_fileout = fileout;
     }
-    m_fileout += ".";
-    m_fileout += format;
 }
 
-Converter::~Converter()
-{
+Converter::~Converter() {
     if (m_document) delete m_document;
     if (m_syntax_tree) delete m_syntax_tree;
 }
 
-void Converter::convert()
-{
-    Parser parser(m_filein);
-    Analyze analyze(m_filein);
+void Converter::convert() {
+    Parser parser(m_filein.c_str());
+    Analyze analyze(m_filein.c_str());
 
     if (!parser.is_valid()) {
         error_message(string(m_filein).append(" not found."));
@@ -53,7 +55,7 @@ void Converter::convert()
             verbose_message(msg.str());
 
             // Generate output file
-            Generator *instance = Generator::get_instance(m_format);
+            Generator *instance = Generator::get_instance(m_format.c_str());
             if (instance) {
                 if (!instance->generate(m_document, m_fileout.c_str())) {
                     error_message("Cannot generate output file");

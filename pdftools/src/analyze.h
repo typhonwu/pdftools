@@ -22,11 +22,11 @@ class Page;
 
 class Analyze {
 private:
+    const string m_filein;
     Document *m_document;
     RootNode *m_tree;
     Scanner *m_scanner;
     TreeNode *m_page_tree;
-    const string m_filein;
     map<string, TreeNode *> m_names;
 
 public:

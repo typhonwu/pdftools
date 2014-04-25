@@ -77,7 +77,7 @@ Page *Document::page(int id, int generation)
 {
     vector<Page *>::iterator i = m_pages.begin();
     while (i != m_pages.end()) {
-        register Page *page = *i;
+        Page *page = *i;
         if (page->id() == id && page->generation() == generation) {
             return page;
         }

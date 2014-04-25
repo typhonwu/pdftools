@@ -16,7 +16,7 @@ private:
     Document *m_document;
     
 public:
-    Converter(const string& filein, const string& format);
+    Converter(const string& filein, const string& fileout, const string& format);
     ~Converter();
     
     void convert();

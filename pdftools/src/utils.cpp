@@ -94,7 +94,7 @@ char *deflate(const char *raw, int size, int &writed)
     zstream.avail_in = size;
     zstream.next_in = (Bytef *) raw;
 
-    register int total = 0;
+    int total = 0;
     do {
         buffer_struct b;
         zstream.avail_out = MAX_BUFFER_SIZE;

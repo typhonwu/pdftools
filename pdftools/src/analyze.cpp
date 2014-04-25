@@ -340,7 +340,7 @@ Font *Analyze::analyze_font(MapNode *fontmap)
             font->set_name(name->name());
         }
     }
-    register Font *from_document = m_document->get_font(font->name().c_str());
+    Font *from_document = m_document->get_font(font->name().c_str());
     if (from_document) {
         delete font;
         return from_document;
